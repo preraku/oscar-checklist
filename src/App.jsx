@@ -154,7 +154,7 @@ function App() {
 
     return (
         <>
-            <h1>Oscar Checklist</h1>
+            <h1>Oscars Checklist</h1>
             <button onClick={clearWatched}>Clear All</button>
             <Stats
                 watchedMovies={watchedMovies}

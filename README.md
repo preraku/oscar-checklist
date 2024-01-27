@@ -1,4 +1,4 @@
-# Oscar Nominations
+# Oscar Nominations Checklist
 
 ## Set-up
 
