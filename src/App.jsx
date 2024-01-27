@@ -179,6 +179,18 @@ function App() {
                 * Barbie has two nominations for Best Original Song. They have
                 been combined here and are counting as one nomination.
             </p>
+            <footer>
+                <a
+                    href="https://github.com/preraku/oscar-checklist"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    <img
+                        src="https://img.shields.io/badge/View%20on%20GitHub-goldenrod?&logo=github&"
+                        alt="View on GitHub"
+                    />
+                </a>
+            </footer>
         </>
     )
 }
