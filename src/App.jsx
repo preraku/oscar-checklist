@@ -31,9 +31,15 @@ const Movie = ({ id, award, watchedMovies, toggleWatchedMovie }) => {
 }
 Movie.propTypes = proptypes.movie
 
-const Category = ({ name, nominees, watchedMovies, toggleWatchedMovie }) => {
+const Category = ({
+    id,
+    name,
+    nominees,
+    watchedMovies,
+    toggleWatchedMovie,
+}) => {
     return (
-        <div className="category">
+        <div className="category" id={id}>
             <h2>{name}</h2>
             <div className="movies-row">
                 {nominees.map(nominee => {
@@ -73,8 +79,9 @@ const Stats = ({ watchedMovies, nominationsCleared, isScrolled, divRef }) => {
                         top: "0",
                         width: "100%",
                         backgroundColor: "#242424",
-                        zIndex: "1000",
+                        zIndex: "998",
                         padding: "0",
+                        flex: "row",
                     }}
                 >
                     <p>
@@ -103,6 +110,7 @@ function App() {
     )
     const [isScrolled, setIsScrolled] = useState(false)
     const divRef = useRef(null)
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     useEffect(() => {
         const currentDiv = divRef.current
@@ -156,17 +164,36 @@ function App() {
         <>
             <h1>Oscars Checklist</h1>
             <button onClick={clearWatched}>Clear All</button>
+            <button
+                className="toc-button"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+                {isMenuOpen ? "Close" : "≡"}
+            </button>
             <Stats
                 watchedMovies={watchedMovies}
                 nominationsCleared={nominationsCleared}
                 isScrolled={isScrolled}
                 divRef={divRef}
             />
+            {isMenuOpen && (
+                <div className="toc" onClick={() => setIsMenuOpen(false)}>
+                    <h2>Table of Contents</h2>
+                    <ul style={{ listStyleType: "none" }}>
+                        {awards.map(award => (
+                            <li key={award.name}>
+                                <a href={`#${award.name}`}>{award.name}</a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
             <div>
                 {awards.map(award => {
                     return (
                         <Category
                             key={award.name}
+                            id={award.name}
                             name={award.name}
                             nominees={award.nominees}
                             watchedMovies={watchedMovies}

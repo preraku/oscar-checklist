@@ -1,5 +1,9 @@
 # Oscar Nominations Checklist
 
+## Live!
+
+[Oscar Nominations Checklist](https://preraku.github.io/oscar-checklist/)  
+
 ## Set-up
 
 1. Clone this repository

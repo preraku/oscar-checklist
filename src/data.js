@@ -1,3 +1,5 @@
+import mayDecemberPoster from './posters/may_december.jpg'
+
 const movies = [
     {
         id: 0,
@@ -99,7 +101,7 @@ const movies = [
         "Best Actor": "Colman Domingo",
         imdb: "https://www.imdb.com/title/tt23561246",
         watched: false,
-        poster: "https://lh3.googleusercontent.com/proxy/byx7lPZL0FXpRK-18GcmOqP5hNk16MvEpsSzZNzG4-S9cytIsOVvlxtOawpUKocWp39t5u3TSJOMjf8iUwUacaUML8U6pE0L",
+        poster: "http://www.impawards.com/2023/posters/rustin.jpg",
     },
     {
         id: 11,
@@ -148,7 +150,7 @@ const movies = [
         "International Feature": "Spain",
         imdb: "https://www.imdb.com/title/tt23561250",
         watched: false,
-        poster: "https://lh3.googleusercontent.com/proxy/tFP2Qvj4_VVd9dlCimclQt8iwOiFii2Wu34Cg-boj47Cw6axzUa5qVjduKcNkKpsmEAwcbAdpJFLts7H4RYaqPreNT1O5qquTAigc_wv5UUqlIQ4MIchQmyqSQZ9HBsNDuXV",
+        poster: "https://i.ebayimg.com/images/g/HQkAAOSwXxRlaIAA/s-l1200.webp",
     },
     {
         id: 17,
@@ -172,9 +174,8 @@ const movies = [
         title: "May December",
         imdb: "https://www.imdb.com/title/tt23561250",
         watched: false,
-        poster: "https://lh3.googleusercontent.com/proxy/1fyaeT9pCijHfdL1fvwX1fDnDS9ly-zLqb89IStKayA17Sn3XMBV_WQvrwAPsmJ1HMXLfRrdwOZNXzs5VinNsSStqTZutuRCLfk87EbihGEYyqs",
+        poster: mayDecemberPoster,
     },
-
     {
         id: 20,
         title: "The Boy and the Heron",
@@ -225,7 +226,7 @@ const movies = [
         title: "El Conde",
         imdb: "https://www.imdb.com/title/tt23561250",
         watched: false,
-        poster: "https://lh3.googleusercontent.com/proxy/sO0CCTVhleoTXYvXtBbb1-3NEqa8PekUCh4odmy1h8cdM2Y2j474_JTDC2AZKfLmXpK_mZfhEncd6azzK8V3HnTCBWzw-Vx3bP71DEnD5t2bYJEdgucrIc8",
+        poster: "http://www.impawards.com/intl/misc/2023/posters/el_conde_ver2.jpg",
     },
     {
         id: 27,
@@ -233,6 +234,7 @@ const movies = [
         "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: 'https://m.media-amazon.com/images/M/MV5BNjJlMGUwNmEtYjQ1YS00MzgxLWJhMTUtMTU2ZWEwZmYxMDZmXkEyXkFqcGdeQXVyMjMyMzI4MzY@._V1_.jpg',
     },
     {
         id: 28,
@@ -280,7 +282,7 @@ const movies = [
         "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
-        poster: "https://lh3.googleusercontent.com/proxy/Pp2HfgCtu1m-rHF51oNdpdCz2-rY153LXva-UD4mmPZX7Cdx5HBlD_ufNdIY7pqNlyz13k1skB_5J8kLyBR9wa4w0dfXL1mJjxoiX_zdWMLIyw7cqQcrHWAmq-60NcqH0A",
+        poster: "https://cdn.cinematerial.com/p/297x/xsk3nxgo/bobi-wine-ghetto-president-british-movie-poster-md.jpg?v=1691359278",
     },
     {
         id: 34,
