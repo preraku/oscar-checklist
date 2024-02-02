@@ -125,6 +125,8 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.9);
     z-index: 999;
+    max-height: 100%;
+    overflow-y: auto;
 }
 
 .header-buttons {
