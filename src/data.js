@@ -1,4 +1,4 @@
-import mayDecemberPoster from './posters/may_december.jpg'
+import mayDecemberPoster from "./posters/may_december.jpg"
 
 const movies = [
     {
@@ -234,7 +234,7 @@ const movies = [
         "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
-        poster: 'https://m.media-amazon.com/images/M/MV5BNjJlMGUwNmEtYjQ1YS00MzgxLWJhMTUtMTU2ZWEwZmYxMDZmXkEyXkFqcGdeQXVyMjMyMzI4MzY@._V1_.jpg',
+        poster: "https://m.media-amazon.com/images/M/MV5BNjJlMGUwNmEtYjQ1YS00MzgxLWJhMTUtMTU2ZWEwZmYxMDZmXkEyXkFqcGdeQXVyMjMyMzI4MzY@._V1_.jpg",
     },
     {
         id: 28,

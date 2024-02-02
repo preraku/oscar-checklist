@@ -111,6 +111,7 @@ function App() {
     const [isScrolled, setIsScrolled] = useState(false)
     const divRef = useRef(null)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [isCopied, setIsCopied] = useState(false)
 
     useEffect(() => {
         const currentDiv = divRef.current
@@ -160,10 +161,31 @@ function App() {
         localStorage.setItem("watchedMovies", JSON.stringify([]))
     }
 
+    const timeoutId = useRef(null)
+    const share = async () => {
+        const url = window.location.origin + window.location.pathname
+        const text =
+            `I've watched ${watchedMovies.size}/${movies.length} movies and ${nominationsCleared}/${totalNominations} nominations for the 2024 Oscars.\n` +
+            `How about you? ${url}`
+
+        navigator.clipboard.writeText(text)
+        setIsCopied(true)
+
+        clearTimeout(timeoutId.current)
+        timeoutId.current = setTimeout(() => {
+            setIsCopied(false)
+        }, 3000)
+    }
+
     return (
         <>
             <h1>Oscars Checklist</h1>
-            <button onClick={clearWatched}>Clear All</button>
+            <button className="header-buttons" onClick={clearWatched}>
+                Clear All
+            </button>
+            <button className="header-buttons" onClick={share}>
+                {isCopied ? "Copied! ✅" : "Copy and Share!"}
+            </button>
             <button
                 className="toc-button"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}

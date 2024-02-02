@@ -126,3 +126,7 @@
     background-color: rgba(0, 0, 0, 0.9);
     z-index: 999;
 }
+
+.header-buttons {
+    margin-inline: 0.5em;
+}

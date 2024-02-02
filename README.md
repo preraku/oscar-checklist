@@ -2,7 +2,7 @@
 
 ## Live!
 
-[Oscar Nominations Checklist](https://preraku.github.io/oscar-checklist/)  
+[Oscar Nominations Checklist](https://preraku.github.io/oscar-checklist/)
 
 ## Set-up
 
