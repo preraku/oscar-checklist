@@ -132,3 +132,7 @@
 .header-buttons {
     margin-inline: 0.5em;
 }
+
+.category-stats {
+    color: #888;
+}

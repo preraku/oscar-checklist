@@ -38,9 +38,18 @@ const Category = ({
     watchedMovies,
     toggleWatchedMovie,
 }) => {
+    const totalMoviesInCategory = nominees.length
+    const watchedMoviesInCategory = nominees.filter(movie =>
+        watchedMovies.has(movie),
+    ).length
     return (
         <div className="category" id={id}>
-            <h2>{name}</h2>
+            <h2>
+                {name}{" "}
+                <span className="category-stats">
+                    ({watchedMoviesInCategory}/{totalMoviesInCategory})
+                </span>
+            </h2>
             <div className="movies-row">
                 {nominees.map(nominee => {
                     return (
