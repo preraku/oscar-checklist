@@ -1,9 +1,12 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import "./App.css"
-import { movies, awards, awardsMap, totalNominations } from "./data"
+import { filmData } from "./data"
 import proptypes from "./proptypes"
 
-const Movie = ({ id, award, watchedMovies, toggleWatchedMovie }) => {
+// const API_URL = "http://localhost:8787"
+const API_URL = "https://my-app.preraku.workers.dev"
+
+const Movie = ({ id, award, movies, watchedMovies, toggleWatchedMovie }) => {
     const watched = watchedMovies.has(id)
     const watchedClass = watched ? "watched" : "unwatched"
     const movie = movies[id]
@@ -35,6 +38,7 @@ const Category = ({
     id,
     name,
     nominees,
+    movies,
     watchedMovies,
     toggleWatchedMovie,
 }) => {
@@ -57,6 +61,7 @@ const Category = ({
                             id={nominee}
                             key={`${name}:${movies[nominee].title}`}
                             award={name}
+                            movies={movies}
                             watchedMovies={watchedMovies}
                             toggleWatchedMovie={toggleWatchedMovie}
                         />
@@ -68,7 +73,14 @@ const Category = ({
 }
 Category.propTypes = proptypes.category
 
-const Stats = ({ watchedMovies, nominationsCleared, isScrolled, divRef }) => {
+const Stats = ({
+    movies,
+    totalNominations,
+    watchedMovies,
+    nominationsCleared,
+    isScrolled,
+    divRef,
+}) => {
     return (
         <>
             <div ref={divRef}>
@@ -108,19 +120,89 @@ const Stats = ({ watchedMovies, nominationsCleared, isScrolled, divRef }) => {
 }
 Stats.propTypes = proptypes.stats
 
-function App() {
-    const [watchedMovies, setWatchedMovies] = useState(
-        new Set(JSON.parse(localStorage.getItem("watchedMovies"))),
+const loadWatchedMovies = async year => {
+    if (!localStorage.getItem("token")) {
+        const watchedMovies = new Set(
+            JSON.parse(localStorage.getItem(`watchedMovies-${year}`)),
+        )
+        console.log("localwatchedMovies", watchedMovies)
+        return watchedMovies
+    }
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/v1/movies?` +
+                new URLSearchParams({
+                    year,
+                }),
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            },
+        )
+        const movies = await response.json()
+        return new Set(movies)
+    } catch (error) {
+        console.error("Error loading user movies:", error)
+        return new Set()
+    }
+}
+
+const pushMoviesToBackend = async (movies, year) => {
+    if (!localStorage.getItem("token")) return
+
+    try {
+        console.log(
+            "pushing movies to backend",
+            JSON.stringify({ movies, year }),
+        )
+        await fetch(`${API_URL}/api/v1/movies`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({ movies, year }),
+        })
+    } catch (error) {
+        console.error("Error syncing movies:", error)
+    }
+}
+
+function App({ year = "2024" }) {
+    const { movies, awards, awardsMap, totalNominations } = filmData[year]
+    const [watchedMovies, setWatchedMovies] = useState(new Set())
+    const [nominationsCleared, setNominationsCleared] = useState(0)
+    const [username, setUsername] = useState(
+        localStorage.getItem("username") || "",
     )
-    const [nominationsCleared, setNominationsCleared] = useState(
-        [...watchedMovies].reduce((acc, movieId) => {
-            return acc + awardsMap.get(movieId).length
-        }, 0),
-    )
+    const [token, setToken] = useState(localStorage.getItem("token") || "")
+    const [isLoginMode, setIsLoginMode] = useState(true)
+    const [error, setError] = useState("")
     const [isScrolled, setIsScrolled] = useState(false)
     const divRef = useRef(null)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [isAuthMenuOpen, setIsAuthMenuOpen] = useState(false)
     const [isCopied, setIsCopied] = useState(false)
+
+    const WATCHED_MOVIES_KEY = `watchedMovies-${year}`
+
+    const pullWatchedMovies = useCallback(async () => {
+        const movies = await loadWatchedMovies(year)
+        setWatchedMovies(movies)
+        setNominationsCleared(
+            [...movies].reduce((acc, movieId) => {
+                return acc + awardsMap.get(movieId).length
+            }, 0),
+        )
+    }, [awardsMap, year])
+
+    useEffect(() => {
+        pullWatchedMovies()
+    }, [pullWatchedMovies])
 
     useEffect(() => {
         const currentDiv = divRef.current
@@ -157,9 +239,11 @@ function App() {
                 )
             }
             localStorage.setItem(
-                "watchedMovies",
+                WATCHED_MOVIES_KEY,
                 JSON.stringify([...newWatchedMovies]),
             )
+            // push to backend
+            pushMoviesToBackend([...newWatchedMovies], year)
             return newWatchedMovies
         })
     }
@@ -167,7 +251,8 @@ function App() {
     const clearWatched = () => {
         setWatchedMovies(new Set())
         setNominationsCleared(0)
-        localStorage.setItem("watchedMovies", JSON.stringify([]))
+        localStorage.setItem(WATCHED_MOVIES_KEY, JSON.stringify([]))
+        pushMoviesToBackend([], year)
     }
 
     const timeoutId = useRef(null)
@@ -186,22 +271,133 @@ function App() {
         }, 3000)
     }
 
+    const handleAuth = async e => {
+        e.preventDefault()
+        const formData = new FormData(e.target)
+        const username = formData.get("username")
+        const password = formData.get("password")
+
+        try {
+            const endpoint = isLoginMode ? "/auth/login" : "/auth/signup"
+            const response = await fetch(`${API_URL}${endpoint}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+            })
+            const data = await response.json()
+
+            if (response.ok) {
+                setUsername(username)
+                setToken(data.token)
+                localStorage.setItem("username", username)
+                localStorage.setItem("token", data.token)
+                setError("")
+
+                if (isLoginMode) {
+                    // If logging in, fetch and update user's movies
+                    await pullWatchedMovies()
+                } else {
+                    // If signing up, push current movies to the backend
+                    await pushMoviesToBackend([...watchedMovies], year)
+                }
+            } else {
+                setError(data.message || "Authentication failed")
+            }
+        } catch (err) {
+            setError("Network error occurred")
+        }
+    }
+
+    const handleLogout = () => {
+        setUsername("")
+        setToken("")
+        setError("")
+        localStorage.removeItem("username")
+        localStorage.removeItem("token")
+        clearWatched()
+        setIsAuthMenuOpen(false)
+    }
+
     return (
         <>
             <h1>Oscars Checklist</h1>
-            <button className="header-buttons" onClick={clearWatched}>
-                Clear All
-            </button>
-            <button className="header-buttons" onClick={share}>
-                {isCopied ? "Copied! ✅" : "Copy and Share!"}
-            </button>
+            <div className="header-controls">
+                {token ? (
+                    <>
+                        <button
+                            className="header-buttons"
+                            onClick={handleLogout}
+                        >
+                            Logout {username}
+                        </button>
+                    </>
+                ) : (
+                    <button
+                        className="header-buttons"
+                        onClick={() => setIsAuthMenuOpen(!isAuthMenuOpen)}
+                    >
+                        Login to Save
+                    </button>
+                )}
+                <button className="header-buttons" onClick={clearWatched}>
+                    Clear All
+                </button>
+                <button className="header-buttons" onClick={share}>
+                    {isCopied ? "Copied! ✅" : "Copy and Share!"}
+                </button>
+            </div>
+            {isAuthMenuOpen && !token && (
+                <div className="auth-modal">
+                    <div className="auth-modal-content">
+                        <button
+                            className="close-button"
+                            onClick={() => setIsAuthMenuOpen(false)}
+                        >
+                            ×
+                        </button>
+                        <h2>{isLoginMode ? "Login" : "Sign Up"}</h2>
+                        {error && <p className="error">{error}</p>}
+                        <form onSubmit={handleAuth}>
+                            <input
+                                type="text"
+                                name="username"
+                                placeholder="Username"
+                                required
+                            />
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Password"
+                                required
+                            />
+                            <button type="submit">
+                                {isLoginMode ? "Login" : "Sign Up"}
+                            </button>
+                        </form>
+                        <button
+                            onClick={() => setIsLoginMode(!isLoginMode)}
+                            className="toggle-auth"
+                        >
+                            {isLoginMode
+                                ? "Need an account? Sign up"
+                                : "Have an account? Login"}
+                        </button>
+                    </div>
+                </div>
+            )}
+
             <button
                 className="toc-button"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
                 {isMenuOpen ? "Close" : "≡"}
             </button>
+
             <Stats
+                movies={movies}
+                totalNominations={totalNominations}
                 watchedMovies={watchedMovies}
                 nominationsCleared={nominationsCleared}
                 isScrolled={isScrolled}
@@ -227,6 +423,7 @@ function App() {
                             id={award.name}
                             name={award.name}
                             nominees={award.nominees}
+                            movies={movies}
                             watchedMovies={watchedMovies}
                             toggleWatchedMovie={toggleWatchedMovie}
                         />
@@ -252,5 +449,7 @@ function App() {
         </>
     )
 }
+
+App.propTypes = proptypes.app
 
 export default App

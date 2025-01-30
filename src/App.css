@@ -136,3 +136,78 @@
 .category-stats {
     color: #888;
 }
+
+.auth-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.auth-modal-content {
+    background-color: #242424;
+    padding: 2rem;
+    border-radius: 8px;
+    position: relative;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auth-modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.auth-modal-content input {
+    padding: 0.75rem;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #1a1a1a;
+    color: white;
+}
+
+.auth-modal-content button {
+    padding: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #fff;
+    padding: 0.5rem;
+}
+
+.close-button:hover {
+    color: #646cff;
+}
+
+.toggle-auth {
+    margin-top: 1rem;
+    background: none;
+    border: none;
+    color: #646cff;
+    cursor: pointer;
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.error {
+    color: #ff4444;
+    margin-bottom: 1rem;
+    text-align: center;
+}

@@ -1,6 +1,27 @@
 import mayDecemberPoster from "./posters/may_december.jpg"
 
-const movies = [
+const getMovieToNominationsMap = awardsList => {
+    const awardsMap = new Map()
+    awardsList.forEach(award => {
+        award.nominees.forEach(nominee => {
+            if (awardsMap.has(nominee)) {
+                awardsMap.get(nominee).push(award.name)
+            } else {
+                awardsMap.set(nominee, [award.name])
+            }
+        })
+    })
+
+    return awardsMap
+}
+
+const getTotalNominations = awardsList => {
+    return awardsList.reduce((acc, award) => {
+        return acc + award.nominees.length
+    }, 0)
+}
+
+const movies2024 = [
     {
         id: 0,
         title: "American Fiction",
@@ -425,7 +446,7 @@ const movies = [
     },
 ]
 
-const awards = [
+const awards2024 = [
     { id: 0, name: "Best Picture", nominees: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
     { id: 1, name: "Best Director", nominees: [1, 4, 6, 8, 9] },
     { id: 2, name: "Best Actor", nominees: [0, 3, 5, 6, 10] },
@@ -451,19 +472,13 @@ const awards = [
     { id: 22, name: "Live Action Short", nominees: [48, 49, 50, 51, 52] },
 ]
 
-const awardsMap = new Map()
-awards.forEach(award => {
-    award.nominees.forEach(nominee => {
-        if (awardsMap.has(nominee)) {
-            awardsMap.get(nominee).push(award.name)
-        } else {
-            awardsMap.set(nominee, [award.name])
-        }
-    })
-})
+const filmData = {
+    2024: {
+        movies: movies2024,
+        awards: awards2024,
+        awardsMap: getMovieToNominationsMap(awards2024),
+        totalNominations: getTotalNominations(awards2024),
+    },
+}
 
-const totalNominations = awards.reduce((acc, award) => {
-    return acc + award.nominees.length
-}, 0)
-
-export { movies, awards, awardsMap, totalNominations }
+export { filmData }
