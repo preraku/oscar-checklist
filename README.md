@@ -7,11 +7,15 @@
 ## Set-up
 
 1. Clone this repository
-2. You will need Node.js installed on your machine. If you do not have it, you can download it [here](https://nodejs.org/en/download/package-manager/).
+2. Install bun. https://bun.sh/docs/installation
 3. `cd oscar-checklist`
-4. Run `npm install`
-5. Run `npm run dev`
-6. Open [localhost:5173](http://localhost:5173/) in your browser
+4. _Optional Step to work with the development backend_: Change the `API_URL` in `src/App.jsx` to `http://localhost:8787`
+5. Run `bun install`
+6. Run `bun run dev`
+7. Open [localhost:5173](http://localhost:5173/) in your browser
+
+> [!TIP]
+> npm is perfectly valid and can be used instead of bun wherever bun is mentioned.
 
 ## About
 
