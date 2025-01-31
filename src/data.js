@@ -476,7 +476,7 @@ const movies2025 = [
     {
         id: 0,
         title: "The Brutalist",
-        poster: "",
+        poster: "src/posters/2025/The Brutalist.jpg",
         "Actor in a Leading Role": "Adrien Brody",
         "Actor in a Supporting Role": "Guy Pearce",
         "Actress in a Supporting Role": "Felicity Jones",
@@ -492,7 +492,7 @@ const movies2025 = [
     {
         id: 1,
         title: "A Complete Unknown",
-        poster: "",
+        poster: "src/posters/2025/A Complete Unknown.jpg",
         "Actor in a Leading Role": "Timothée Chalamet",
         "Actor in a Supporting Role": "Edward Norton",
         "Actress in a Supporting Role": "Monica Barbaro",
@@ -505,7 +505,7 @@ const movies2025 = [
     {
         id: 2,
         title: "Sing Sing",
-        poster: "",
+        poster: "src/posters/2025/Sing Sing.jpg",
         "Actor in a Leading Role": "Colman Domingo",
         "Music (Original Song)*": "Like a Bird",
         "Writing (Adapted Screenplay)":
@@ -514,7 +514,7 @@ const movies2025 = [
     {
         id: 3,
         title: "Conclave",
-        poster: "",
+        poster: "src/posters/2025/Conclave.jpg",
         "Actor in a Leading Role": "Ralph Fiennes",
         "Actress in a Supporting Role": "Isabella Rossellini",
         "Costume Design": "Lisy Christl",
@@ -527,14 +527,14 @@ const movies2025 = [
     {
         id: 4,
         title: "The Apprentice",
-        poster: "",
+        poster: "src/posters/2025/The Apprentice.jpg",
         "Actor in a Leading Role": "Sebastian Stan",
         "Actor in a Supporting Role": "Jeremy Strong",
     },
     {
         id: 5,
         title: "Anora",
-        poster: "",
+        poster: "src/posters/2025/Anora.jpg",
         "Actor in a Supporting Role": "Yura Borisov",
         "Actress in a Leading Role": "Mikey Madison",
         Directing: "Sean Baker",
@@ -544,14 +544,14 @@ const movies2025 = [
     {
         id: 6,
         title: "A Real Pain",
-        poster: "",
+        poster: "src/posters/2025/A Real Pain.jpg",
         "Actor in a Supporting Role": "Kieran Culkin",
         "Writing (Original Screenplay)": "Written by Jesse Eisenberg",
     },
     {
         id: 7,
         title: "Wicked",
-        poster: "",
+        poster: "src/posters/2025/Wicked.jpg",
         "Actress in a Leading Role": "Cynthia Erivo",
         "Actress in a Supporting Role": "Ariana Grande",
         "Costume Design": "Paul Tazewell",
@@ -567,7 +567,7 @@ const movies2025 = [
     {
         id: 8,
         title: "Emilia Pérez",
-        poster: "",
+        poster: "src/posters/2025/Emilia Pérez.jpg",
         "Actress in a Leading Role": "Karla Sofía Gascón",
         "Actress in a Supporting Role": "Zoe Saldaña",
         Cinematography: "Paul Guilhaume",
@@ -585,7 +585,7 @@ const movies2025 = [
     {
         id: 9,
         title: "The Substance",
-        poster: "",
+        poster: "src/posters/2025/The Substance.jpg",
         "Actress in a Leading Role": "Demi Moore",
         Directing: "Coralie Fargeat",
         "Makeup and Hairstyling":
@@ -595,14 +595,14 @@ const movies2025 = [
     {
         id: 10,
         title: "I'm Still Here",
-        poster: "",
+        poster: "src/posters/2025/Im Still Here.jpg",
         "Actress in a Leading Role": "Fernanda Torres",
         "International Feature Film": "Brazil",
     },
     {
         id: 11,
         title: "Flow",
-        poster: "",
+        poster: "src/posters/2025/Flow.jpg",
         "Animated Feature Film":
             "Gints Zilbalodis, Matīss Kaža, Ron Dyens and Gregory Zalcman",
         "International Feature Film": "Latvia",
@@ -610,26 +610,26 @@ const movies2025 = [
     {
         id: 12,
         title: "Inside Out 2",
-        poster: "",
+        poster: "src/posters/2025/Inside Out 2.jpg",
         "Animated Feature Film": "Kelsey Mann and Mark Nielsen",
     },
     {
         id: 13,
         title: "Memoir of a Snail",
-        poster: "",
+        poster: "src/posters/2025/Memoir of a Snail.jpg",
         "Animated Feature Film": "Adam Elliot and Liz Kearney",
     },
     {
         id: 14,
         title: "Wallace & Gromit: Vengeance Most Fowl",
-        poster: "",
+        poster: "src/posters/2025/Wallace  Gromit Vengeance Most Fowl.jpg",
         "Animated Feature Film":
             "Nick Park, Merlin Crossingham and Richard Beek",
     },
     {
         id: 15,
         title: "The Wild Robot",
-        poster: "",
+        poster: "src/posters/2025/The Wild Robot.jpg",
         "Animated Feature Film": "Chris Sanders and Jeff Hermann",
         "Music (Original Score)": "Kris Bowers",
         Sound: "Randy Thom, Brian Chumney, Gary A. Rizzo and Leff Lefferts",
@@ -637,37 +637,37 @@ const movies2025 = [
     {
         id: 16,
         title: "Beautiful Men",
-        poster: "",
+        poster: "src/posters/2025/Beautiful Men.jpg",
         "Animated Short Film": "Nicolas Keppens and Brecht Van Elslande",
     },
     {
         id: 17,
         title: "In the Shadow of the Cypress",
-        poster: "",
+        poster: "src/posters/2025/In the Shadow of the Cypress.jpg",
         "Animated Short Film": "Shirin Sohani and Hossein Molayemi",
     },
     {
         id: 18,
         title: "Magic Candies",
-        poster: "",
+        poster: "src/posters/2025/Magic Candies.jpg",
         "Animated Short Film": "Daisuke Nishio and Takashi Washio",
     },
     {
         id: 19,
         title: "Wander to Wonder",
-        poster: "",
+        poster: "src/posters/2025/Wander to Wonder.jpg",
         "Animated Short Film": "Nina Gantz and Stienette Bosklopper",
     },
     {
         id: 20,
         title: "Yuck!",
-        poster: "",
+        poster: "src/posters/2025/Yuck.jpg",
         "Animated Short Film": "Loïc Espuche and Juliette Marquet",
     },
     {
         id: 21,
         title: "Dune: Part Two",
-        poster: "",
+        poster: "src/posters/2025/Dune Part Two.jpg",
         Cinematography: "Greig Fraser",
         "Production Design":
             "Production Design: Patrice Vermette; Set Decoration: Shane Vieau",
@@ -678,13 +678,13 @@ const movies2025 = [
     {
         id: 22,
         title: "Maria",
-        poster: "",
+        poster: "src/posters/2025/Maria.jpg",
         Cinematography: "Ed Lachman",
     },
     {
         id: 23,
         title: "Nosferatu",
-        poster: "",
+        poster: "src/posters/2025/Nosferatu.jpg",
         Cinematography: "Jarin Blaschke",
         "Costume Design": "Linda Muir",
         "Makeup and Hairstyling":
@@ -695,167 +695,167 @@ const movies2025 = [
     {
         id: 24,
         title: "Gladiator II",
-        poster: "",
+        poster: "src/posters/2025/Gladiator II.jpg",
         "Costume Design": "Janty Yates and Dave Crossman",
     },
     {
         id: 25,
         title: "Black Box Diaries",
-        poster: "",
+        poster: "src/posters/2025/Black Box Diaries.jpg",
         "Documentary Feature Film": "Shiori Ito, Eric Nyari and Hanna Aqvilin",
     },
     {
         id: 26,
         title: "No Other Land",
-        poster: "",
+        poster: "src/posters/2025/No Other Land.jpg",
         "Documentary Feature Film":
             "Basel Adra, Rachel Szor, Hamdan Ballal and Yuval Abraham",
     },
     {
         id: 27,
         title: "Porcelain War",
-        poster: "",
+        poster: "src/posters/2025/Porcelain War.jpg",
         "Documentary Feature Film":
             "Brendan Bellomo, Slava Leontyev, Aniela Sidorska and Paula DuPre' Pesmen",
     },
     {
         id: 28,
         title: "Soundtrack to a Coup d'Etat",
-        poster: "",
+        poster: "src/posters/2025/Soundtrack to a Coup dEtat.jpg",
         "Documentary Feature Film":
             "Johan Grimonprez, Daan Milius and Rémi Grellety",
     },
     {
         id: 29,
         title: "Sugarcane",
-        poster: "",
+        poster: "src/posters/2025/Sugarcane.jpg",
         "Documentary Feature Film": "Nominees to be determined",
     },
     {
         id: 30,
         title: "Death by Numbers",
-        poster: "",
+        poster: "src/posters/2025/Death by Numbers.jpg",
         "Documentary Short Film": "Kim A. Snyder and Janique L. Robillard",
     },
     {
         id: 31,
         title: "I Am Ready, Warden",
-        poster: "",
+        poster: "src/posters/2025/I Am Ready Warden.jpg",
         "Documentary Short Film": "Smriti Mundhra and Maya Gnyp",
     },
     {
         id: 32,
         title: "Incident",
-        poster: "",
+        poster: "src/posters/2025/Incident.jpg",
         "Documentary Short Film": "Bill Morrison and Jamie Kalven",
     },
     {
         id: 33,
         title: "Instruments of a Beating Heart",
-        poster: "",
+        poster: "src/posters/2025/Instruments of a Beating Heart.jpg",
         "Documentary Short Film": "Ema Ryan Yamazaki and Eric Nyari",
     },
     {
         id: 34,
         title: "The Only Girl in the Orchestra",
-        poster: "",
+        poster: "src/posters/2025/The Only Girl in the Orchestra.jpg",
         "Documentary Short Film": "Molly O’Brien and Lisa Remington",
     },
     {
         id: 35,
         title: "The Girl with the Needle",
-        poster: "",
+        poster: "src/posters/2025/The Girl with the Needle.jpg",
         "International Feature Film": "Denmark",
     },
     {
         id: 36,
         title: "The Seed of the Sacred Fig",
-        poster: "",
+        poster: "src/posters/2025/The Seed of the Sacred Fig.jpg",
         "International Feature Film": "Germany",
     },
     {
         id: 37,
         title: "A Different Man",
-        poster: "",
+        poster: "src/posters/2025/A Different Man.jpg",
         "Makeup and Hairstyling":
             "Mike Marino, David Presto and Crystal Jurado",
     },
     {
         id: 38,
         title: "Nickel Boys",
-        poster: "",
+        poster: "src/posters/2025/Nickel Boys.jpg",
         "Writing (Adapted Screenplay)":
             "Screenplay by RaMell Ross & Joslyn Barnes",
     },
     {
         id: 39,
         title: "A Lien",
-        poster: "",
+        poster: "src/posters/2025/A Lien.jpg",
         "Live Action Short Film": "Sam Cutler-Kreutz and David Cutler-Kreutz",
     },
     {
         id: 40,
         title: "Anuja",
-        poster: "",
+        poster: "src/posters/2025/Anuja.jpg",
         "Live Action Short Film": "Adam J. Graves and Suchitra Mattai",
     },
     {
         id: 41,
         title: "I'm Not a Robot",
-        poster: "",
+        poster: "src/posters/2025/Im Not a Robot.jpg",
         "Live Action Short Film": "Victoria Warmerdam and Trent",
     },
     {
         id: 42,
         title: "The Last Ranger",
-        poster: "",
+        poster: "src/posters/2025/The Last Ranger.jpg",
         "Live Action Short Film": "Cindy Lee and Darwin Shaw",
     },
     {
         id: 43,
         title: "The Man Who Could Not Remain Silent",
-        poster: "",
+        poster: "src/posters/2025/The Man Who Could Not Remain Silent.jpg",
         "Live Action Short Film": "Nebojša Slijepčević and Danijel Pek",
     },
     {
         id: 44,
         title: "Alien: Romulus",
-        poster: "",
+        poster: "src/posters/2025/Alien Romulus.jpg",
         "Visual Effects":
             "Eric Barba, Nelson Sepulveda-Fauser, Daniel Macarin and Shane Mahan",
     },
     {
         id: 45,
         title: "Better Man",
-        poster: "",
+        poster: "src/posters/2025/Better Man.jpg",
         "Visual Effects":
             "Luke Millar, David Clayton, Keith Herft and Peter Stubbs",
     },
     {
         id: 46,
         title: "Kingdom of the Planet of the Apes",
-        poster: "",
+        poster: "src/posters/2025/Kingdom of the Planet of the Apes.jpg",
         "Visual Effects":
             "Erik Winquist, Stephen Unterfranz, Paul Story and Rodney Burke",
     },
     {
         id: 47,
         title: "September 5",
-        poster: "",
+        poster: "src/posters/2025/September 5.jpg",
         "Writing (Original Screenplay)":
             "Written by Moritz Binder, Tim Fehlbaum; Co-Written by Alex David",
     },
     {
         id: 48,
         title: "Elton John: Never Too Late",
-        poster: "",
+        poster: "src/posters/2025/Elton John Never Too Late.jpg",
         "Music (Original Song*":
             "Never Too Late - Music and Lyric by Elton John, Brandi Carlile, Andrew Watt and Bernie Taupin",
     },
     {
         id: 49,
         title: "The Six Triple Eight",
-        poster: "",
+        poster: "src/posters/2025/The Six Triple Eight.jpg",
         "Music (Original Song)*":
             "The Journey - Music and Lyric by Diane Warren",
     },
