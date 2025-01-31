@@ -4,7 +4,7 @@ import App from "./App.jsx"
 import { Routes, Route, HashRouter } from "react-router"
 import "./index.css"
 
-const years = ["2023", "2024"]
+const years = ["2024", "2025"]
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>

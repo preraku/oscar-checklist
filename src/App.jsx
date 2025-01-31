@@ -172,7 +172,12 @@ const pushMoviesToBackend = async (movies, year) => {
     }
 }
 
-function App({ year = "2024" }) {
+const originalSongDisclaimers = {
+    2024: "Barbie has two nominations for Best Original Song. They have been combined here and are counting as one nomination.",
+    2025: "Emilia Pérez has two nominations for Best Original Song. They have been combined here and are counting as one nomination.",
+}
+
+function App({ year = "2025" }) {
     const { movies, awards, awardsMap, totalNominations } = filmData[year]
     const [watchedMovies, setWatchedMovies] = useState(new Set())
     const [nominationsCleared, setNominationsCleared] = useState(0)
@@ -439,10 +444,7 @@ function App({ year = "2024" }) {
                     )
                 })}
             </div>
-            <p>
-                * Barbie has two nominations for Best Original Song. They have
-                been combined here and are counting as one nomination.
-            </p>
+            <p>{originalSongDisclaimers[year]}</p>
             <footer>
                 <a
                     href="https://github.com/preraku/oscar-checklist"

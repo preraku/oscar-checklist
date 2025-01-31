@@ -472,12 +472,525 @@ const awards2024 = [
     { id: 22, name: "Live Action Short", nominees: [48, 49, 50, 51, 52] },
 ]
 
+const movies2025 = [
+    {
+        id: 0,
+        title: "The Brutalist",
+        poster: "",
+        "Actor in a Leading Role": "Adrien Brody",
+        "Actor in a Supporting Role": "Guy Pearce",
+        "Actress in a Supporting Role": "Felicity Jones",
+        Cinematography: "Lol Crawley",
+        Directing: "Brady Corbet",
+        "Film Editing": "David Jancso",
+        "Music (Original Score)": "Daniel Blumberg",
+        "Production Design":
+            "Production Design: Judy Becker; Set Decoration: Patricia Cuccia",
+        "Writing (Original Screenplay)":
+            "Written by Brady Corbet, Mona Fastvold",
+    },
+    {
+        id: 1,
+        title: "A Complete Unknown",
+        poster: "",
+        "Actor in a Leading Role": "Timothée Chalamet",
+        "Actor in a Supporting Role": "Edward Norton",
+        "Actress in a Supporting Role": "Monica Barbaro",
+        "Costume Design": "Arianne Phillips",
+        Directing: "James Mangold",
+        Sound: "Tod A. Maitland, Donald Sylvester, Ted Caplan, Paul Massey and David Giammarco",
+        "Writing (Adapted Screenplay)":
+            "Screenplay by James Mangold and Jay Cocks",
+    },
+    {
+        id: 2,
+        title: "Sing Sing",
+        poster: "",
+        "Actor in a Leading Role": "Colman Domingo",
+        "Music (Original Song)*": "Like a Bird",
+        "Writing (Adapted Screenplay)":
+            'Screenplay by Clint Bentley, Greg Kwedar; Story by Clint Bentley, Greg Kwedar, Clarence Maclin, John "Divine G" Whitfield',
+    },
+    {
+        id: 3,
+        title: "Conclave",
+        poster: "",
+        "Actor in a Leading Role": "Ralph Fiennes",
+        "Actress in a Supporting Role": "Isabella Rossellini",
+        "Costume Design": "Lisy Christl",
+        "Film Editing": "Nick Emerson",
+        "Music (Original Score)": "Volker Bertelmann",
+        "Production Design":
+            "Production Design: Suzie Davies; Set Decoration: Cynthia Sleiter",
+        "Writing (Adapted Screenplay)": "Screenplay by Peter Straughan",
+    },
+    {
+        id: 4,
+        title: "The Apprentice",
+        poster: "",
+        "Actor in a Leading Role": "Sebastian Stan",
+        "Actor in a Supporting Role": "Jeremy Strong",
+    },
+    {
+        id: 5,
+        title: "Anora",
+        poster: "",
+        "Actor in a Supporting Role": "Yura Borisov",
+        "Actress in a Leading Role": "Mikey Madison",
+        Directing: "Sean Baker",
+        "Film Editing": "Sean Baker",
+        "Writing (Original Screenplay)": "Written by Sean Baker",
+    },
+    {
+        id: 6,
+        title: "A Real Pain",
+        poster: "",
+        "Actor in a Supporting Role": "Kieran Culkin",
+        "Writing (Original Screenplay)": "Written by Jesse Eisenberg",
+    },
+    {
+        id: 7,
+        title: "Wicked",
+        poster: "",
+        "Actress in a Leading Role": "Cynthia Erivo",
+        "Actress in a Supporting Role": "Ariana Grande",
+        "Costume Design": "Paul Tazewell",
+        "Film Editing": "Myron Kerstein",
+        "Makeup and Hairstyling": "Frances Hannon, Laura Blount and Sarah Nuth",
+        "Music (Original Score)": "John Powell and Stephen Schwartz",
+        "Production Design":
+            "Production Design: Nathan Crowley; Set Decoration: Lee Sandales",
+        Sound: "Simon Hayes, Nancy Nugent Title, Jack Dolman, Andy Nelson and John Marquis",
+        "Visual Effects":
+            "Pablo Helman, Jonathan Fawkner, David Shirk and Paul Corbould",
+    },
+    {
+        id: 8,
+        title: "Emilia Pérez",
+        poster: "",
+        "Actress in a Leading Role": "Karla Sofía Gascón",
+        "Actress in a Supporting Role": "Zoe Saldaña",
+        Cinematography: "Paul Guilhaume",
+        Directing: "Jacques Audiard",
+        "Film Editing": "Juliette Welfling",
+        "International Feature Film": "France",
+        "Makeup and Hairstyling":
+            "Julia Floch Carbonel, Emmanuel Janvier and Jean-Christophe Spadaccini",
+        "Music (Original Score)": "Clément Ducol and Camille",
+        "Music (Original Song)*": "El Mal, Mi Camino*",
+        Sound: "Erwan Kerzanet, Aymeric Devoldère, Maxence Dussère, Cyril Holtz and Niels Barletta",
+        "Writing (Adapted Screenplay)":
+            "Screenplay by Jacques Audiard; In collaboration with Thomas Bidegain, Léa Mysius and Nicolas Livecchi",
+    },
+    {
+        id: 9,
+        title: "The Substance",
+        poster: "",
+        "Actress in a Leading Role": "Demi Moore",
+        Directing: "Coralie Fargeat",
+        "Makeup and Hairstyling":
+            "Pierre-Olivier Persin, Stéphanie Guillon and Marilyne Scarselli",
+        "Writing (Original Screenplay)": "Written by Coralie Fargeat",
+    },
+    {
+        id: 10,
+        title: "I'm Still Here",
+        poster: "",
+        "Actress in a Leading Role": "Fernanda Torres",
+        "International Feature Film": "Brazil",
+    },
+    {
+        id: 11,
+        title: "Flow",
+        poster: "",
+        "Animated Feature Film":
+            "Gints Zilbalodis, Matīss Kaža, Ron Dyens and Gregory Zalcman",
+        "International Feature Film": "Latvia",
+    },
+    {
+        id: 12,
+        title: "Inside Out 2",
+        poster: "",
+        "Animated Feature Film": "Kelsey Mann and Mark Nielsen",
+    },
+    {
+        id: 13,
+        title: "Memoir of a Snail",
+        poster: "",
+        "Animated Feature Film": "Adam Elliot and Liz Kearney",
+    },
+    {
+        id: 14,
+        title: "Wallace & Gromit: Vengeance Most Fowl",
+        poster: "",
+        "Animated Feature Film":
+            "Nick Park, Merlin Crossingham and Richard Beek",
+    },
+    {
+        id: 15,
+        title: "The Wild Robot",
+        poster: "",
+        "Animated Feature Film": "Chris Sanders and Jeff Hermann",
+        "Music (Original Score)": "Kris Bowers",
+        Sound: "Randy Thom, Brian Chumney, Gary A. Rizzo and Leff Lefferts",
+    },
+    {
+        id: 16,
+        title: "Beautiful Men",
+        poster: "",
+        "Animated Short Film": "Nicolas Keppens and Brecht Van Elslande",
+    },
+    {
+        id: 17,
+        title: "In the Shadow of the Cypress",
+        poster: "",
+        "Animated Short Film": "Shirin Sohani and Hossein Molayemi",
+    },
+    {
+        id: 18,
+        title: "Magic Candies",
+        poster: "",
+        "Animated Short Film": "Daisuke Nishio and Takashi Washio",
+    },
+    {
+        id: 19,
+        title: "Wander to Wonder",
+        poster: "",
+        "Animated Short Film": "Nina Gantz and Stienette Bosklopper",
+    },
+    {
+        id: 20,
+        title: "Yuck!",
+        poster: "",
+        "Animated Short Film": "Loïc Espuche and Juliette Marquet",
+    },
+    {
+        id: 21,
+        title: "Dune: Part Two",
+        poster: "",
+        Cinematography: "Greig Fraser",
+        "Production Design":
+            "Production Design: Patrice Vermette; Set Decoration: Shane Vieau",
+        Sound: "Gareth John, Richard King, Ron Bartlett and Doug Hemphill",
+        "Visual Effects":
+            "Paul Lambert, Stephen James, Rhys Salcombe and Gerd Nefzer",
+    },
+    {
+        id: 22,
+        title: "Maria",
+        poster: "",
+        Cinematography: "Ed Lachman",
+    },
+    {
+        id: 23,
+        title: "Nosferatu",
+        poster: "",
+        Cinematography: "Jarin Blaschke",
+        "Costume Design": "Linda Muir",
+        "Makeup and Hairstyling":
+            "David White, Traci Loader and Suzanne Stokes-Munton",
+        "Production Design":
+            "Production Design: Craig Lathrop; Set Decoration: Beatrice Brentnerová",
+    },
+    {
+        id: 24,
+        title: "Gladiator II",
+        poster: "",
+        "Costume Design": "Janty Yates and Dave Crossman",
+    },
+    {
+        id: 25,
+        title: "Black Box Diaries",
+        poster: "",
+        "Documentary Feature Film": "Shiori Ito, Eric Nyari and Hanna Aqvilin",
+    },
+    {
+        id: 26,
+        title: "No Other Land",
+        poster: "",
+        "Documentary Feature Film":
+            "Basel Adra, Rachel Szor, Hamdan Ballal and Yuval Abraham",
+    },
+    {
+        id: 27,
+        title: "Porcelain War",
+        poster: "",
+        "Documentary Feature Film":
+            "Brendan Bellomo, Slava Leontyev, Aniela Sidorska and Paula DuPre' Pesmen",
+    },
+    {
+        id: 28,
+        title: "Soundtrack to a Coup d'Etat",
+        poster: "",
+        "Documentary Feature Film":
+            "Johan Grimonprez, Daan Milius and Rémi Grellety",
+    },
+    {
+        id: 29,
+        title: "Sugarcane",
+        poster: "",
+        "Documentary Feature Film": "Nominees to be determined",
+    },
+    {
+        id: 30,
+        title: "Death by Numbers",
+        poster: "",
+        "Documentary Short Film": "Kim A. Snyder and Janique L. Robillard",
+    },
+    {
+        id: 31,
+        title: "I Am Ready, Warden",
+        poster: "",
+        "Documentary Short Film": "Smriti Mundhra and Maya Gnyp",
+    },
+    {
+        id: 32,
+        title: "Incident",
+        poster: "",
+        "Documentary Short Film": "Bill Morrison and Jamie Kalven",
+    },
+    {
+        id: 33,
+        title: "Instruments of a Beating Heart",
+        poster: "",
+        "Documentary Short Film": "Ema Ryan Yamazaki and Eric Nyari",
+    },
+    {
+        id: 34,
+        title: "The Only Girl in the Orchestra",
+        poster: "",
+        "Documentary Short Film": "Molly O’Brien and Lisa Remington",
+    },
+    {
+        id: 35,
+        title: "The Girl with the Needle",
+        poster: "",
+        "International Feature Film": "Denmark",
+    },
+    {
+        id: 36,
+        title: "The Seed of the Sacred Fig",
+        poster: "",
+        "International Feature Film": "Germany",
+    },
+    {
+        id: 37,
+        title: "A Different Man",
+        poster: "",
+        "Makeup and Hairstyling":
+            "Mike Marino, David Presto and Crystal Jurado",
+    },
+    {
+        id: 38,
+        title: "Nickel Boys",
+        poster: "",
+        "Writing (Adapted Screenplay)":
+            "Screenplay by RaMell Ross & Joslyn Barnes",
+    },
+    {
+        id: 39,
+        title: "A Lien",
+        poster: "",
+        "Live Action Short Film": "Sam Cutler-Kreutz and David Cutler-Kreutz",
+    },
+    {
+        id: 40,
+        title: "Anuja",
+        poster: "",
+        "Live Action Short Film": "Adam J. Graves and Suchitra Mattai",
+    },
+    {
+        id: 41,
+        title: "I'm Not a Robot",
+        poster: "",
+        "Live Action Short Film": "Victoria Warmerdam and Trent",
+    },
+    {
+        id: 42,
+        title: "The Last Ranger",
+        poster: "",
+        "Live Action Short Film": "Cindy Lee and Darwin Shaw",
+    },
+    {
+        id: 43,
+        title: "The Man Who Could Not Remain Silent",
+        poster: "",
+        "Live Action Short Film": "Nebojša Slijepčević and Danijel Pek",
+    },
+    {
+        id: 44,
+        title: "Alien: Romulus",
+        poster: "",
+        "Visual Effects":
+            "Eric Barba, Nelson Sepulveda-Fauser, Daniel Macarin and Shane Mahan",
+    },
+    {
+        id: 45,
+        title: "Better Man",
+        poster: "",
+        "Visual Effects":
+            "Luke Millar, David Clayton, Keith Herft and Peter Stubbs",
+    },
+    {
+        id: 46,
+        title: "Kingdom of the Planet of the Apes",
+        poster: "",
+        "Visual Effects":
+            "Erik Winquist, Stephen Unterfranz, Paul Story and Rodney Burke",
+    },
+    {
+        id: 47,
+        title: "September 5",
+        poster: "",
+        "Writing (Original Screenplay)":
+            "Written by Moritz Binder, Tim Fehlbaum; Co-Written by Alex David",
+    },
+    {
+        id: 48,
+        title: "Elton John: Never Too Late",
+        poster: "",
+        "Music (Original Song*":
+            "Never Too Late - Music and Lyric by Elton John, Brandi Carlile, Andrew Watt and Bernie Taupin",
+    },
+    {
+        id: 49,
+        title: "The Six Triple Eight",
+        poster: "",
+        "Music (Original Song)*":
+            "The Journey - Music and Lyric by Diane Warren",
+    },
+]
+
+const awards2025 = [
+    {
+        id: 0,
+        name: "Best Picture",
+        nominees: [5, 0, 1, 3, 21, 8, 10, 38, 9, 7],
+    },
+    {
+        id: 1,
+        name: "Actor in a Leading Role",
+        nominees: [0, 1, 2, 3, 4],
+    },
+    {
+        id: 2,
+        name: "Actor in a Supporting Role",
+        nominees: [5, 6, 1, 0, 4],
+    },
+    {
+        id: 3,
+        name: "Actress in a Leading Role",
+        nominees: [7, 8, 5, 9, 10],
+    },
+    {
+        id: 4,
+        name: "Actress in a Supporting Role",
+        nominees: [1, 7, 0, 3, 8],
+    },
+    {
+        id: 5,
+        name: "Animated Feature Film",
+        nominees: [11, 12, 13, 14, 15],
+    },
+    {
+        id: 6,
+        name: "Animated Short Film",
+        nominees: [16, 17, 18, 19, 20],
+    },
+    {
+        id: 7,
+        name: "Cinematography",
+        nominees: [0, 21, 8, 22, 23],
+    },
+    {
+        id: 8,
+        name: "Costume Design",
+        nominees: [1, 3, 24, 23, 7],
+    },
+    {
+        id: 9,
+        name: "Directing",
+        nominees: [5, 0, 1, 8, 9],
+    },
+    {
+        id: 10,
+        name: "Documentary Feature Film",
+        nominees: [25, 26, 27, 28, 29],
+    },
+    {
+        id: 11,
+        name: "Documentary Short Film",
+        nominees: [30, 31, 32, 33, 34],
+    },
+    {
+        id: 12,
+        name: "Film Editing",
+        nominees: [5, 0, 3, 8, 7],
+    },
+    {
+        id: 13,
+        name: "International Feature Film",
+        nominees: [10, 35, 8, 36, 11],
+    },
+    {
+        id: 14,
+        name: "Makeup and Hairstyling",
+        nominees: [37, 8, 23, 9, 7],
+    },
+    {
+        id: 15,
+        name: "Music (Original Score)",
+        nominees: [0, 3, 8, 7, 15],
+    },
+    {
+        id: 16,
+        name: "Production Design",
+        nominees: [0, 3, 21, 23, 7],
+    },
+    {
+        id: 17,
+        name: "Live Action Short Film",
+        nominees: [39, 40, 41, 42, 43],
+    },
+    {
+        id: 18,
+        name: "Sound",
+        nominees: [1, 21, 8, 7, 15],
+    },
+    {
+        id: 19,
+        name: "Visual Effects",
+        nominees: [44, 45, 21, 46, 7],
+    },
+    {
+        id: 20,
+        name: "Writing (Adapted Screenplay)",
+        nominees: [1, 3, 8, 38, 2],
+    },
+    {
+        id: 21,
+        name: "Writing (Original Screenplay)",
+        nominees: [5, 0, 6, 47, 9],
+    },
+    {
+        id: 22,
+        name: "Music (Original Song)*",
+        nominees: [8, 48, 2, 49],
+    },
+]
+
 const filmData = {
     2024: {
         movies: movies2024,
         awards: awards2024,
         awardsMap: getMovieToNominationsMap(awards2024),
         totalNominations: getTotalNominations(awards2024),
+    },
+    2025: {
+        movies: movies2025,
+        awards: awards2025,
+        awardsMap: getMovieToNominationsMap(awards2025),
+        totalNominations: getTotalNominations(awards2025),
     },
 }
 
