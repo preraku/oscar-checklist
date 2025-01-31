@@ -359,20 +359,29 @@ function App({ year = "2024" }) {
                         </button>
                         <h2>{isLoginMode ? "Login" : "Sign Up"}</h2>
                         {error && <p className="error">{error}</p>}
-                        <form onSubmit={handleAuth}>
+                        <form onSubmit={handleAuth} id="auth-form">
                             <input
                                 type="text"
+                                id="username"
                                 name="username"
+                                autoComplete="username"
+                                autoCapitalize="none"
                                 placeholder="Username"
                                 required
                             />
                             <input
                                 type="password"
+                                id="password"
                                 name="password"
                                 placeholder="Password"
+                                autoComplete={
+                                    isLoginMode
+                                        ? "current-password"
+                                        : "new-password"
+                                }
                                 required
                             />
-                            <button type="submit">
+                            <button type="submit" form="auth-form">
                                 {isLoginMode ? "Login" : "Sign Up"}
                             </button>
                         </form>
