@@ -1,10 +1,8 @@
 import requests
-from bs4 import BeautifulSoup
-import json
-import time
+import sys
 
 
-def scrape_oscars(url):
+def scrape_oscars(url, year):
     headers = {
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
         "Accept-Encoding": "gzip, deflate, br, zstd",
@@ -31,49 +29,16 @@ def scrape_oscars(url):
     except requests.RequestException as e:
         print(f"Error fetching the page: {e}")
         return None
-    # Save the response to a file
-    with open("response.html", "w", encoding="utf-8") as f:
+
+    with open(f"response_{year}.html", "w", encoding="utf-8") as f:
         f.write(response.text)
-
-    soup = BeautifulSoup(response.text, "html.parser")
-
-    categories = soup.find_all("div", class_="view-grouping")
-    oscars_data = []
-
-    for category in categories:
-        category_name_tag = category.find("div", class_="view-grouping-header")
-        if not category_name_tag:
-            continue
-        category_name = category_name_tag.get_text(strip=True)
-
-        nominees = []
-        for nominee in category.find_all("div", class_="views-row"):
-            nominee_name_tag = nominee.find("div", class_="views-field-title")
-            movie_name_tag = nominee.find(
-                "div", class_="views-field-field-film-title")
-
-            if not nominee_name_tag:
-                continue
-
-            nominee_name = nominee_name_tag.get_text(strip=True)
-            movie_name = movie_name_tag.get_text(
-                strip=True) if movie_name_tag else ""
-
-            nominees.append({"nominee": nominee_name, "movie": movie_name})
-
-        if nominees:
-            oscars_data.append(
-                {"category": category_name, "nominees": nominees})
-
-    return oscars_data
+    print(f"Response saved to response_{year}.html")
 
 
-url = "https://www.oscars.org/oscars/ceremonies/2025"
-oscars_data = scrape_oscars(url)
+year = int(sys.argv[1])
+if not year:
+    print("Please provide a year")
+    sys.exit(1)
 
-if oscars_data:
-    with open("oscars_202.json", "w", encoding="utf-8") as f:
-        json.dump(oscars_data, f, indent=4, ensure_ascii=False)
-    print("Oscars data saved to oscars_202.json")
-
-print("Done!")
+url = f"https://www.oscars.org/oscars/ceremonies/{year}"
+scrape_oscars(url, year)

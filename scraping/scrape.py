@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import json
+import sys
 
 
 def clean_text(text):
@@ -32,8 +33,8 @@ awards_to_ignore = set(
 # I do not want to add the nominee to the movie data.
 
 
-def scrape_oscars():
-    with open("response.html", "r", encoding="utf-8") as f:
+def scrape_oscars(year):
+    with open(f"response_{year}.html", "r", encoding="utf-8") as f:
         response = f.read()
 
     soup = BeautifulSoup(response, "html.parser")
@@ -71,6 +72,7 @@ def scrape_oscars():
         for nominee in nominees:
             nominee_div = nominee.find(
                 'div', class_='field--name-field-award-entities').find('div', class_='field__item')
+
             nominee_name = clean_text(nominee_div.get_text(strip=True))
             film_name = clean_text(nominee.find_all('div', class_='field--name-field-award-film')[
                 0].get_text(strip=True))
@@ -87,23 +89,29 @@ def scrape_oscars():
                 }
             else:
                 film_id = movie_name_to_id[film_name]
+
             movie_data = movie_id_to_movie_data[film_id]
+
             if category_name != "Best Picture":
                 movie_data[category_name] = nominee_name
             award_name_to_award_data[category_name]['nominees'].append(film_id)
+
     movie_list = []
     for movie_data in movie_id_to_movie_data.values():
         movie_list.append(movie_data)
+
     awards_list = []
     for award_data in award_name_to_award_data.values():
         awards_list.append(award_data)
+
     return movie_list, awards_list
 
 
-data = scrape_oscars()
-with open("oscars_2025.json", "w", encoding="utf-8") as f:
+year = int(sys.argv[1])
+data = scrape_oscars(year)
+with open(f"oscars_{year}.json", "w", encoding="utf-8") as f:
     json.dump(data, f, indent=4, ensure_ascii=False)
-print(f"""Oscars data saved to oscars_2025.json
+print(f"""Oscars data saved to oscars_{year}.json
 You will have to manually add {awards_to_ignore}.
 Please also check the nominees for Best Picture.
       """)
