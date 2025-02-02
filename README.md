@@ -9,7 +9,7 @@
 1. Clone this repository
 2. Install bun. https://bun.sh/docs/installation
 3. `cd oscar-checklist`
-4. _Optional Step to work with the development backend_: Change the `API_URL` in `src/App.jsx` to `http://localhost:8787`
+4. _Optional Step to work with the development backend_: Change the `API_URL` in `src/App.tsx` to `http://localhost:8787`
 5. Run `bun install`
 6. Run `bun run dev`
 7. Open [localhost:5173](http://localhost:5173/) in your browser

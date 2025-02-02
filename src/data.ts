@@ -1,21 +1,24 @@
 import mayDecemberPoster from "../public/posters/2024/may_december.jpg"
 
-const getMovieToNominationsMap = awardsList => {
-    const awardsMap = new Map()
+const getMovieToNominationsMap = (
+    awardsList: Award[],
+): Map<number, string[]> => {
+    const movieToNomsMap = new Map<number, string[]>()
     awardsList.forEach(award => {
         award.nominees.forEach(nominee => {
-            if (awardsMap.has(nominee)) {
-                awardsMap.get(nominee).push(award.name)
+            const nominations = movieToNomsMap.get(nominee)
+            if (nominations) {
+                nominations.push(award.name)
             } else {
-                awardsMap.set(nominee, [award.name])
+                movieToNomsMap.set(nominee, [award.name])
             }
         })
     })
 
-    return awardsMap
+    return movieToNomsMap
 }
 
-const getTotalNominations = awardsList => {
+const getTotalNominations = (awardsList: Award[]) => {
     return awardsList.reduce((acc, award) => {
         return acc + award.nominees.length
     }, 0)
@@ -23,8 +26,51 @@ const getTotalNominations = awardsList => {
 
 const POSTERS_URL = `${import.meta.env.BASE_URL}posters`
 
+export type Movie = {
+    id: number
+    title: string
+    imdb?: string // Unused
+    watched?: boolean // Unused
+    poster: string | null
+    "Actor in a Leading Role"?: string
+    "Actor in a Supporting Role"?: string
+    "Actress in a Leading Role"?: string
+    "Actress in a Supporting Role"?: string
+    "Animated Feature Film"?: string
+    "Animated Short Film"?: string
+    Cinematography?: string
+    "Costume Design"?: string
+    Directing?: string
+    "Documentary Feature Film"?: string
+    "Documentary Short Film"?: string
+    "Film Editing"?: string
+    "International Feature Film"?: string
+    "Makeup and Hairstyling"?: string
+    "Music (Original Score)"?: string
+    "Production Design"?: string
+    "Live Action Short Film"?: string
+    Sound?: string
+    "Visual Effects"?: string
+    "Writing (Adapted Screenplay)"?: string
+    "Writing (Original Screenplay)"?: string
+    "Music (Original Song)*"?: string
+    "Best Director"?: string
+    "Best Actor"?: string
+    "Best Actress"?: string
+    "Best Supporting Actor"?: string
+    "Best Supporting Actress"?: string
+    "Original Screenplay"?: string
+    "Original Song*"?: string
+    "International Feature"?: string
+}
 
-const movies2024 = [
+type Award = {
+    id: number
+    name: string
+    nominees: number[]
+}
+
+const movies2024: Movie[] = [
     {
         id: 0,
         title: "American Fiction",
@@ -48,7 +94,7 @@ const movies2024 = [
         title: "Barbie",
         "Best Supporting Actor": "Ryan Gosling",
         "Best Supporting Actress": "America Ferrera",
-        "Original Song*": "I’m Just Ken & What Was I Made For?*",
+        "Original Song*": "I'm Just Ken & What Was I Made For?*",
         imdb: "https://www.imdb.com/title/tt23561238",
         watched: false,
         poster: "https://m.media-amazon.com/images/I/71BgdzmFDAL._AC_UF894,1000_QL80_.jpg",
@@ -57,7 +103,7 @@ const movies2024 = [
         id: 3,
         title: "The Holdovers",
         "Best Actor": "Paul Giamatti",
-        "Best Supporting Actress": "Da’Vine Joy Randolph",
+        "Best Supporting Actress": "Da'Vine Joy Randolph",
         imdb: "",
         poster: "https://m.media-amazon.com/images/M/MV5BNDc2MzNkMjMtZDY5NC00NmQ0LWI1NjctZjRhNWIzZjc4MGRiXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_FMjpg_UX1000_.jpg",
         watched: false,
@@ -188,7 +234,6 @@ const movies2024 = [
         id: 18,
         title: "American Symphony",
         "Original Song*": "It Never Went Away",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://m.media-amazon.com/images/M/MV5BOWI1MzYxYjEtMzkwNS00ZGU4LWFjZGUtMDM3OGY3MTM5MGY4XkEyXkFqcGdeQXVyMTUzOTczNzYx._V1_.jpg",
@@ -203,7 +248,6 @@ const movies2024 = [
     {
         id: 20,
         title: "The Boy and the Heron",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://cdn.posteritati.com/posters/000/000/069/999/the-boy-and-the-heron-md-web.jpg",
@@ -218,7 +262,6 @@ const movies2024 = [
     {
         id: 22,
         title: "Nimona",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://preview.redd.it/okay-never-mind-i-found-the-nimona-movie-poster-on-twitter-v0-13wjp5ntb9wa1.jpg?width=640&crop=smart&auto=webp&s=126ee7d5da9dc362e50e20008f23b95a90d74524",
@@ -233,7 +276,6 @@ const movies2024 = [
     {
         id: 24,
         title: "Robot Dreams",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://cdn.cinematerial.com/p/297x/onq8r4xm/robot-dreams-spanish-movie-poster-md.jpg?v=1698772003",
@@ -255,7 +297,6 @@ const movies2024 = [
     {
         id: 27,
         title: "Golda",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://m.media-amazon.com/images/M/MV5BNjJlMGUwNmEtYjQ1YS00MzgxLWJhMTUtMTU2ZWEwZmYxMDZmXkEyXkFqcGdeQXVyMjMyMzI4MzY@._V1_.jpg",
@@ -263,7 +304,6 @@ const movies2024 = [
     {
         id: 28,
         title: "The Creator",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://i.etsystatic.com/27062086/r/il/4397ff/5332652257/il_570xN.5332652257_p2fd.jpg",
@@ -271,7 +311,6 @@ const movies2024 = [
     {
         id: 29,
         title: "Mission Impossible — Dead Reckoning Part One",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://i.ebayimg.com/images/g/N0AAAOSwAwtklta6/s-l1200.webp",
@@ -279,7 +318,6 @@ const movies2024 = [
     {
         id: 30,
         title: "Godzilla Minus One",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://upload.wikimedia.org/wikipedia/en/e/e0/Godzilla_Minus_One_Poster.jpeg",
@@ -287,7 +325,6 @@ const movies2024 = [
     {
         id: 31,
         title: "Guardians of the Galaxy Vol. 3",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://preview.redd.it/made-a-gotg3-poster-recently-wanted-a-more-retro-style-v0-84sh42npn8za1.png?width=640&crop=smart&auto=webp&s=af1f132fe69b62fde6e58f1b1f229d91b4ba0401",
@@ -295,15 +332,13 @@ const movies2024 = [
     {
         id: 32,
         title: "Indiana Jones and the Dial of Destiny",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://media.wdwnt.com/2022/12/Indiana-Jones-5.jpg",
     },
     {
         id: 33,
-        title: "Bobi Wine: The People’s President",
-        "International Feature": "United Kingdom",
+        title: "Bobi Wine: The People's President",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://cdn.cinematerial.com/p/297x/xsk3nxgo/bobi-wine-ghetto-president-british-movie-poster-md.jpg?v=1691359278",
@@ -311,7 +346,6 @@ const movies2024 = [
     {
         id: 34,
         title: "The Eternal Memory",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://s3.amazonaws.com/nightjarprod/content/uploads/sites/130/2023/06/29184206/eternal-memory-poster.jpeg",
@@ -319,7 +353,6 @@ const movies2024 = [
     {
         id: 35,
         title: "Four Daughters",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://www.marinarts.org/wp-content/uploads/sites/www.marinarts.org/images/2023/11/Four-Daughters.jpg",
@@ -327,7 +360,6 @@ const movies2024 = [
     {
         id: 36,
         title: "To Kill a Tiger",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://d3lzcn6mbbadaf.cloudfront.net/media/details/ANI-20240124031415.jpg",
@@ -335,7 +367,6 @@ const movies2024 = [
     {
         id: 37,
         title: "20 Days in Mariupol",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://upload.wikimedia.org/wikipedia/en/thumb/b/be/20_Days_in_Mariupol_poster.jpg/220px-20_Days_in_Mariupol_poster.jpg",
@@ -343,7 +374,6 @@ const movies2024 = [
     {
         id: 38,
         title: "Letter to a Pig",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://upload.wikimedia.org/wikipedia/en/thumb/2/24/Letter_to_a_Pig_Film_Poster.jpg/220px-Letter_to_a_Pig_Film_Poster.jpg",
@@ -351,7 +381,6 @@ const movies2024 = [
     {
         id: 39,
         title: "Ninety-Five Senses",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
         poster: "https://www.indieactivity.com/wp-content/uploads/2023/10/ninety-five-senses.jpg",
@@ -359,97 +388,97 @@ const movies2024 = [
     {
         id: 40,
         title: "Our Uniform",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: null,
     },
     {
         id: 41,
         title: "Pachyderme",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: null,
     },
     {
         id: 42,
         title: "War Is Over! Inspired by the Music of John & Yoko",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: null,
     },
     {
         id: 43,
         title: "The ABCs of Book Banning",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: null,
     },
     {
         id: 44,
         title: "The Barber of Little Rock",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: null,
     },
     {
         id: 45,
         title: "Island in Between",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: null,
     },
     {
         id: 46,
         title: "The Last Repair Shop",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: null,
     },
     {
         id: 47,
         title: "Nai Nai & Wai Po",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: null,
     },
     {
         id: 48,
         title: "The After",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: null,
     },
     {
         id: 49,
         title: "Invincible",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: null,
     },
     {
         id: 50,
         title: "Knight of Fortune",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: null,
     },
     {
         id: 51,
         title: "Red, White and Blue",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: null,
     },
     {
         id: 52,
         title: "The Wonderful Story of Henry Sugar",
-        "International Feature": "United Kingdom",
         imdb: "https://www.imdb.com/title/tt23561249",
         watched: false,
+        poster: null,
     },
 ]
 
-const awards2024 = [
+const awards2024: Award[] = [
     { id: 0, name: "Best Picture", nominees: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
     { id: 1, name: "Best Director", nominees: [1, 4, 6, 8, 9] },
     { id: 2, name: "Best Actor", nominees: [0, 3, 5, 6, 10] },
@@ -477,7 +506,7 @@ const awards2024 = [
 
 const POSTERS_URL_2025 = `${POSTERS_URL}/2025`
 
-const movies2025 = [
+const movies2025: Movie[] = [
     {
         id: 0,
         title: "The Brutalist",
@@ -764,7 +793,7 @@ const movies2025 = [
         id: 34,
         title: "The Only Girl in the Orchestra",
         poster: `${POSTERS_URL_2025}/The Only Girl in the Orchestra.jpg`,
-        "Documentary Short Film": "Molly O’Brien and Lisa Remington",
+        "Documentary Short Film": "Molly O'Brien and Lisa Remington",
     },
     {
         id: 35,
@@ -854,7 +883,7 @@ const movies2025 = [
         id: 48,
         title: "Elton John: Never Too Late",
         poster: `${POSTERS_URL_2025}/Elton John Never Too Late.jpg`,
-        "Music (Original Song*":
+        "Music (Original Song)*":
             "Never Too Late - Music and Lyric by Elton John, Brandi Carlile, Andrew Watt and Bernie Taupin",
     },
     {
@@ -866,7 +895,7 @@ const movies2025 = [
     },
 ]
 
-const awards2025 = [
+const awards2025: Award[] = [
     {
         id: 0,
         name: "Best Picture",
@@ -984,17 +1013,24 @@ const awards2025 = [
     },
 ]
 
-const filmData = {
+type AnnualFilmData = {
+    movies: Movie[]
+    awards: Award[]
+    movieToNomsMap: Map<number, string[]>
+    totalNominations: number
+}
+
+const filmData: Record<string, AnnualFilmData> = {
     2024: {
         movies: movies2024,
         awards: awards2024,
-        awardsMap: getMovieToNominationsMap(awards2024),
+        movieToNomsMap: getMovieToNominationsMap(awards2024),
         totalNominations: getTotalNominations(awards2024),
     },
     2025: {
         movies: movies2025,
         awards: awards2025,
-        awardsMap: getMovieToNominationsMap(awards2025),
+        movieToNomsMap: getMovieToNominationsMap(awards2025),
         totalNominations: getTotalNominations(awards2025),
     },
 }

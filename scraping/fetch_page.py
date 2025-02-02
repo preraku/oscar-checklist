@@ -30,7 +30,7 @@ def scrape_oscars(url, year):
         print(f"Error fetching the page: {e}")
         return None
 
-    with open(f"response_{year}.html", "w", encoding="utf-8") as f:
+    with open(f"scraping/output/response_{year}.html", "w", encoding="utf-8") as f:
         f.write(response.text)
     print(f"Response saved to response_{year}.html")
 

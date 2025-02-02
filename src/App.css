@@ -211,3 +211,9 @@
     margin-bottom: 1rem;
     text-align: center;
 }
+
+.category-icon {
+    display: inline-block;
+    fill: #ffcc00;
+    transform: translateY(-0.1em);
+}
