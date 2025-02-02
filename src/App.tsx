@@ -1,12 +1,21 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import "./App.css"
-import { filmData } from "./data"
-import proptypes from "./proptypes"
+import { filmData } from "./data.ts"
+import type { Movie } from "./data.ts"
+
 
 // const API_URL = "http://localhost:8787"
 const API_URL = "https://my-app.preraku.workers.dev"
 
-const Movie = ({ id, award, movies, watchedMovies, toggleWatchedMovie }) => {
+type MovieProps = {
+    id: number
+    award: string
+    movies: Movie[]
+    watchedMovies: Set<number>
+    toggleWatchedMovie: (id: number) => void
+}
+
+const Movie = ({ id, award, movies, watchedMovies, toggleWatchedMovie }: MovieProps) => {
     const watched = watchedMovies.has(id)
     const watchedClass = watched ? "watched" : "unwatched"
     const movie = movies[id]
@@ -27,12 +36,20 @@ const Movie = ({ id, award, movies, watchedMovies, toggleWatchedMovie }) => {
                         className="poster"
                     />
                 )}
-                {award in movie && <p>{movie[award]}</p>}
+                {award in movie && <p>{movie[award as keyof Movie]}</p>}
             </div>
         </label>
     )
 }
-Movie.propTypes = proptypes.movie
+
+type CategoryProps = {
+    id: string
+    name: string
+    nominees: number[]
+    movies: Movie[]
+    watchedMovies: Set<number>
+    toggleWatchedMovie: (id: number) => void
+}
 
 const Category = ({
     id,
@@ -41,7 +58,7 @@ const Category = ({
     movies,
     watchedMovies,
     toggleWatchedMovie,
-}) => {
+}: CategoryProps) => {
     const totalMoviesInCategory = nominees.length
     const watchedMoviesInCategory = nominees.filter(movie =>
         watchedMovies.has(movie),
@@ -49,7 +66,18 @@ const Category = ({
     return (
         <div className="category" id={id}>
             <h2>
-                {name}{" "}
+                <img 
+                    src="/oscar-checklist/oscar_gold.svg" 
+                    alt="" 
+                    className="category-icon"
+                    style={{
+                        height: "1em",
+                        width: "auto",
+                        marginRight: "0.5em",
+                        verticalAlign: "middle"
+                    }}
+                />
+                {`for ${name} `}
                 <span className="category-stats">
                     ({watchedMoviesInCategory}/{totalMoviesInCategory})
                 </span>
@@ -71,7 +99,15 @@ const Category = ({
         </div>
     )
 }
-Category.propTypes = proptypes.category
+
+type StatsProps = {
+    movies: Movie[]
+    totalNominations: number
+    watchedMovies: Set<number>
+    nominationsCleared: number
+    isScrolled: boolean
+    divRef: React.RefObject<HTMLDivElement> 
+}
 
 const Stats = ({
     movies,
@@ -80,7 +116,7 @@ const Stats = ({
     nominationsCleared,
     isScrolled,
     divRef,
-}) => {
+}: StatsProps) => {
     return (
         <>
             <div ref={divRef}>
@@ -118,14 +154,12 @@ const Stats = ({
         </>
     )
 }
-Stats.propTypes = proptypes.stats
 
-const loadWatchedMovies = async year => {
+const loadWatchedMovies = async (year: string): Promise<Set<number>> => {
     if (!localStorage.getItem("token")) {
-        const watchedMovies = new Set(
-            JSON.parse(localStorage.getItem(`watchedMovies-${year}`)),
-        )
-        console.log("localwatchedMovies", watchedMovies)
+        const localMovies = localStorage.getItem(`watchedMovies-${year}`)
+        if (!localMovies) return new Set()
+        const watchedMovies = new Set(JSON.parse(localMovies) as number[])
         return watchedMovies
     }
 
@@ -151,14 +185,10 @@ const loadWatchedMovies = async year => {
     }
 }
 
-const pushMoviesToBackend = async (movies, year) => {
+const pushMoviesToBackend = async (movies: number[], year: string) => {
     if (!localStorage.getItem("token")) return
 
     try {
-        console.log(
-            "pushing movies to backend",
-            JSON.stringify({ movies, year }),
-        )
         await fetch(`${API_URL}/api/v1/movies`, {
             method: "POST",
             headers: {
@@ -172,14 +202,18 @@ const pushMoviesToBackend = async (movies, year) => {
     }
 }
 
-const originalSongDisclaimers = {
+const originalSongDisclaimers: Record<string, string> = {
     2024: "Barbie has two nominations for Best Original Song. They have been combined here and are counting as one nomination.",
     2025: "Emilia Pérez has two nominations for Best Original Song. They have been combined here and are counting as one nomination.",
 }
 
-function App({ year = "2025" }) {
-    const { movies, awards, awardsMap, totalNominations } = filmData[year]
-    const [watchedMovies, setWatchedMovies] = useState(new Set())
+type AppProps = {
+    year?: string
+}
+
+function App({ year = "2025" }: AppProps) {
+    const { movies, awards, movieToNomsMap, totalNominations } = filmData[year]
+    const [watchedMovies, setWatchedMovies] = useState<Set<number>>(new Set())
     const [nominationsCleared, setNominationsCleared] = useState(0)
     const [username, setUsername] = useState(
         localStorage.getItem("username") || "",
@@ -200,10 +234,10 @@ function App({ year = "2025" }) {
         setWatchedMovies(movies)
         setNominationsCleared(
             [...movies].reduce((acc, movieId) => {
-                return acc + awardsMap.get(movieId).length
+                return acc + (movieToNomsMap.get(movieId)!.length)
             }, 0),
         )
-    }, [awardsMap, year])
+    }, [movieToNomsMap, year])
 
     useEffect(() => {
         pullWatchedMovies()
@@ -229,18 +263,18 @@ function App({ year = "2025" }) {
         }
     }, [])
 
-    const toggleWatchedMovie = id => {
+    const toggleWatchedMovie = (id: number) => {
         setWatchedMovies(prev => {
             const newWatchedMovies = new Set(prev)
             if (newWatchedMovies.has(id)) {
                 newWatchedMovies.delete(id)
                 setNominationsCleared(
-                    nominationsCleared - awardsMap.get(id).length,
+                    nominationsCleared - movieToNomsMap.get(id)!.length,
                 )
             } else {
                 newWatchedMovies.add(id)
                 setNominationsCleared(
-                    nominationsCleared + awardsMap.get(id).length,
+                    nominationsCleared + movieToNomsMap.get(id)!.length,
                 )
             }
             localStorage.setItem(
@@ -260,7 +294,7 @@ function App({ year = "2025" }) {
         pushMoviesToBackend([], year)
     }
 
-    const timeoutId = useRef(null)
+    const timeoutId = useRef<number | null>(null)
     const share = async () => {
         const url = window.location.origin + window.location.pathname
         const text =
@@ -270,15 +304,17 @@ function App({ year = "2025" }) {
         navigator.clipboard.writeText(text)
         setIsCopied(true)
 
-        clearTimeout(timeoutId.current)
+        if (timeoutId.current !== null) {
+            clearTimeout(timeoutId.current)
+        }
         timeoutId.current = setTimeout(() => {
             setIsCopied(false)
         }, 3000)
     }
 
-    const handleAuth = async e => {
+    const handleAuth = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const formData = new FormData(e.target)
+        const formData = new FormData(e.target as HTMLFormElement)
         const username = formData.get("username")
         const password = formData.get("password")
 
@@ -294,9 +330,9 @@ function App({ year = "2025" }) {
             const data = await response.json()
 
             if (response.ok) {
-                setUsername(username)
+                setUsername(username as string)
                 setToken(data.token)
-                localStorage.setItem("username", username)
+                localStorage.setItem("username", username as string)
                 localStorage.setItem("token", data.token)
                 setError("")
 
@@ -310,8 +346,8 @@ function App({ year = "2025" }) {
             } else {
                 setError(data.message || "Authentication failed")
             }
-        } catch (err) {
-            setError("Network error occurred")
+        } catch {
+            setError("Network error occurred") 
         }
     }
 
@@ -460,7 +496,5 @@ function App({ year = "2025" }) {
         </>
     )
 }
-
-App.propTypes = proptypes.app
 
 export default App

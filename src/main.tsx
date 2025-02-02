@@ -1,12 +1,14 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
-import App from "./App.jsx"
+import App from "./App.tsx"
 import { Routes, Route, HashRouter } from "react-router"
 import "./index.css"
 
 const years = ["2024", "2025"]
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+const root = document.getElementById("root");
+if (!root) throw new Error("Root element not found");
+ReactDOM.createRoot(root).render(
     <React.StrictMode>
         <HashRouter>
             <Routes>

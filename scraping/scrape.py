@@ -34,7 +34,7 @@ awards_to_ignore = set(
 
 
 def scrape_oscars(year):
-    with open(f"response_{year}.html", "r", encoding="utf-8") as f:
+    with open(f"scraping/output/response_{year}.html", "r", encoding="utf-8") as f:
         response = f.read()
 
     soup = BeautifulSoup(response, "html.parser")
@@ -109,9 +109,9 @@ def scrape_oscars(year):
 
 year = int(sys.argv[1])
 data = scrape_oscars(year)
-with open(f"oscars_{year}.json", "w", encoding="utf-8") as f:
+with open(f"scraping/output/oscars_{year}.json", "w", encoding="utf-8") as f:
     json.dump(data, f, indent=4, ensure_ascii=False)
-print(f"""Oscars data saved to oscars_{year}.json
+print(f"""Oscars data saved to scraping/output/oscars_{year}.json
 You will have to manually add {awards_to_ignore}.
 Please also check the nominees for Best Picture.
       """)
