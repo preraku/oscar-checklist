@@ -459,7 +459,25 @@ function App({ year = "2025" }: AppProps) {
                     <ul style={{ listStyleType: "none" }}>
                         {awards.map(award => (
                             <li key={award.name}>
-                                <a href={`#${award.name}`}>{award.name}</a>
+                                <a
+                                    role="button"
+                                    href={`#${award.name}`}
+                                    onClick={event => {
+                                        event.preventDefault()
+                                        const target =
+                                            document.getElementById(
+                                                award.name,
+                                            )
+                                        if (target) {
+                                            target.scrollIntoView({
+                                                behavior: "smooth",
+                                            })
+                                        }
+                                        setIsMenuOpen(false)
+                                    }}
+                                >
+                                    {award.name}
+                                </a>
                             </li>
                         ))}
                     </ul>
