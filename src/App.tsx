@@ -223,7 +223,6 @@ function App({ year = "2025" }: AppProps) {
     const [error, setError] = useState("")
     const [isScrolled, setIsScrolled] = useState(false)
     const divRef = useRef(null)
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [isAuthMenuOpen, setIsAuthMenuOpen] = useState(false)
     const [isCopied, setIsCopied] = useState(false)
 
@@ -438,13 +437,6 @@ function App({ year = "2025" }: AppProps) {
                 </div>
             )}
 
-            <button
-                className="toc-button"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-                {isMenuOpen ? "Close" : "≡"}
-            </button>
-
             <Stats
                 movies={movies}
                 totalNominations={totalNominations}
@@ -453,36 +445,6 @@ function App({ year = "2025" }: AppProps) {
                 isScrolled={isScrolled}
                 divRef={divRef}
             />
-            {isMenuOpen && (
-                <div className="toc" onClick={() => setIsMenuOpen(false)}>
-                    <h2>Table of Contents</h2>
-                    <ul style={{ listStyleType: "none" }}>
-                        {awards.map(award => (
-                            <li key={award.name}>
-                                <a
-                                    role="button"
-                                    href={`#${award.name}`}
-                                    onClick={event => {
-                                        event.preventDefault()
-                                        const target =
-                                            document.getElementById(
-                                                award.name,
-                                            )
-                                        if (target) {
-                                            target.scrollIntoView({
-                                                behavior: "smooth",
-                                            })
-                                        }
-                                        setIsMenuOpen(false)
-                                    }}
-                                >
-                                    {award.name}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
             <div>
                 {awards.map(award => {
                     return (
