@@ -1,4 +1,11 @@
-import { useState, useRef, useEffect, useCallback } from "react"
+import {
+    useState,
+    useRef,
+    useEffect,
+    useCallback,
+    useMemo,
+    useLayoutEffect,
+} from "react"
 import "./App.css"
 import { filmData } from "./data.ts"
 import type { Movie } from "./data.ts"
@@ -6,6 +13,13 @@ import type { Movie } from "./data.ts"
 
 // const API_URL = "http://localhost:8787"
 const API_URL = "https://my-app.preraku.workers.dev"
+
+const slugify = (value: string) => {
+    return value
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "")
+}
 
 type MovieProps = {
     id: number
@@ -119,39 +133,96 @@ const Stats = ({
 }: StatsProps) => {
     return (
         <>
-            <div ref={divRef}>
+            <div ref={divRef} className="stats-row">
                 <p>
-                    Total Movies: {movies.length} - Movies Watched:{" "}
-                    {watchedMovies.size}
+                    Movies Watched: {watchedMovies.size}/{movies.length}
                 </p>
                 <p>
-                    Total Nominations*: {totalNominations} - Nominations
-                    Watched: {nominationsCleared}
+                    Nominations Watched*: {nominationsCleared}/
+                    {totalNominations}
                 </p>
             </div>
             {isScrolled && (
-                <div
-                    style={{
-                        position: "fixed",
-                        top: "0",
-                        width: "100%",
-                        backgroundColor: "#242424",
-                        zIndex: "998",
-                        padding: "0",
-                        flex: "row",
-                    }}
-                >
+                <div className="stats-row floating-stats">
                     <p>
-                        Total Movies: {movies.length} - Movies Watched:{" "}
-                        {watchedMovies.size}
+                        Movies Watched: {watchedMovies.size}/{movies.length}
                     </p>
                     <p>
-                        Total Nominations*: {totalNominations} - Nominations
-                        Watched: {nominationsCleared}
+                        Nominations Watched*: {nominationsCleared}/
+                        {totalNominations}
                     </p>
                 </div>
             )}
         </>
+    )
+}
+
+type TableOfContentsProps = {
+    awards: {
+        id: string
+        name: string
+        count: number
+    }[]
+    activeAwardId: string
+    onJump: (id: string) => void
+    onClose: () => void
+    showCloseButton: boolean
+}
+
+const TableOfContents = ({
+    awards,
+    activeAwardId,
+    onJump,
+    onClose,
+    showCloseButton,
+}: TableOfContentsProps) => {
+    return (
+        <aside className="toc-card" aria-label="Awards table of contents">
+            <div className="toc-header">
+                <span className="toc-icon">★</span>
+                <div>
+                    <p className="toc-label-heading">Jump to an award</p>
+                    <p className="toc-label-subtitle">
+                        Smooth scroll &amp; highlights
+                    </p>
+                </div>
+                {showCloseButton && (
+                    <button
+                        type="button"
+                        className="toc-close"
+                        onClick={onClose}
+                        aria-label="Hide awards list"
+                    >
+                        ×
+                    </button>
+                )}
+            </div>
+            <ul className="toc-list">
+                {awards.map((award, index) => (
+                    <li
+                        key={award.id}
+                        className={`toc-item ${
+                            activeAwardId === award.id ? "active" : ""
+                        }`}
+                        style={{ animationDelay: `${index * 45}ms` }}
+                    >
+                        <button
+                            type="button"
+                            onClick={() => onJump(award.id)}
+                            aria-current={
+                                activeAwardId === award.id ? "true" : undefined
+                            }
+                        >
+                            <span className="toc-bullet" aria-hidden="true" />
+                            <span className="toc-item-name">{award.name}</span>
+                            <span className="toc-count">
+                                {award.count} noms
+                            </span>
+                        </button>
+                    </li>
+                ))}
+            </ul>
+        </aside>
     )
 }
 
@@ -213,6 +284,15 @@ type AppProps = {
 
 function App({ year = "2025" }: AppProps) {
     const { movies, awards, movieToNomsMap, totalNominations } = filmData[year]
+    const awardSections = useMemo(
+        () =>
+            awards.map(award => ({
+                id: `award-${slugify(award.name)}`,
+                name: award.name,
+                count: award.nominees.length,
+            })),
+        [awards],
+    )
     const [watchedMovies, setWatchedMovies] = useState<Set<number>>(new Set())
     const [nominationsCleared, setNominationsCleared] = useState(0)
     const [username, setUsername] = useState(
@@ -225,6 +305,18 @@ function App({ year = "2025" }: AppProps) {
     const divRef = useRef(null)
     const [isAuthMenuOpen, setIsAuthMenuOpen] = useState(false)
     const [isCopied, setIsCopied] = useState(false)
+    const [activeAwardId, setActiveAwardId] = useState(
+        awardSections[0]?.id ?? "",
+    )
+    const [isMobileView, setIsMobileView] = useState(() => {
+        if (typeof window === "undefined") return false
+        return window.innerWidth <= 960
+    })
+    const [isTocOpen, setIsTocOpen] = useState(() => {
+        if (typeof window === "undefined") return true
+        return window.innerWidth > 960
+    })
+    const headerRef = useRef<HTMLDivElement | null>(null)
 
     const WATCHED_MOVIES_KEY = `watchedMovies-${year}`
 
@@ -242,13 +334,78 @@ function App({ year = "2025" }: AppProps) {
         pullWatchedMovies()
     }, [pullWatchedMovies])
 
+    useLayoutEffect(() => {
+        const setHeaderHeight = () => {
+            const height = headerRef.current?.offsetHeight ?? 0
+            document.documentElement.style.setProperty(
+                "--header-height",
+                `${height}px`,
+            )
+        }
+
+        setHeaderHeight()
+        window.addEventListener("resize", setHeaderHeight)
+        return () => window.removeEventListener("resize", setHeaderHeight)
+    }, [])
+
+    useEffect(() => {
+        const handleResize = () => {
+            const mobile = window.innerWidth <= 960
+            setIsMobileView(mobile)
+            if (mobile && isTocOpen) {
+                setIsTocOpen(false)
+            }
+        }
+
+        window.addEventListener("resize", handleResize)
+        return () => window.removeEventListener("resize", handleResize)
+    }, [isTocOpen])
+
+    useEffect(() => {
+        if (!awardSections.length) return
+        const observer = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setActiveAwardId(entry.target.id)
+                    }
+                })
+            },
+            {
+                rootMargin: "0px 0px -40% 0px",
+                threshold: [0],
+            },
+        )
+
+        awardSections.forEach(section => {
+            const element = document.getElementById(section.id)
+            if (element) observer.observe(element)
+        })
+
+        return () => observer.disconnect()
+    }, [awardSections])
+
+    useEffect(() => {
+        if (!awardSections.length) return
+        const hash = window.location.hash.replace("#", "")
+        if (!hash) {
+            setActiveAwardId(awardSections[0].id)
+            return
+        }
+        const target = document.getElementById(hash)
+        if (target) {
+            setActiveAwardId(hash)
+            target.scrollIntoView({ behavior: "smooth", block: "start" })
+        }
+    }, [awardSections])
+
     useEffect(() => {
         const currentDiv = divRef.current
         const observer = new IntersectionObserver(
             ([entry]) => {
                 setIsScrolled(!entry.isIntersecting)
             },
-            { threshold: 1 },
+            { threshold: 0 },
         )
 
         if (currentDiv) {
@@ -261,6 +418,13 @@ function App({ year = "2025" }: AppProps) {
             }
         }
     }, [])
+
+    useEffect(() => {
+        document.documentElement.style.setProperty(
+            "--floating-stats-offset",
+            isScrolled ? "64px" : "0px",
+        )
+    }, [isScrolled])
 
     const toggleWatchedMovie = (id: number) => {
         setWatchedMovies(prev => {
@@ -297,7 +461,7 @@ function App({ year = "2025" }: AppProps) {
     const share = async () => {
         const url = window.location.origin + window.location.pathname
         const text =
-            `I've watched ${watchedMovies.size}/${movies.length} movies and ${nominationsCleared}/${totalNominations} nominations for the 2024 Oscars.\n` +
+            `I've watched ${watchedMovies.size}/${movies.length} movies and ${nominationsCleared}/${totalNominations} nominations for the ${year} Oscars.\n` +
             `How about you? ${url}`
 
         navigator.clipboard.writeText(text)
@@ -360,34 +524,57 @@ function App({ year = "2025" }: AppProps) {
         setIsAuthMenuOpen(false)
     }
 
+    const jumpToAward = (id: string) => {
+        const target = document.getElementById(id)
+        if (!target) return
+        target.scrollIntoView({ behavior: "smooth", block: "start" })
+        setActiveAwardId(id)
+        window.history.replaceState(null, "", `#${id}`)
+        if (isMobileView) {
+            setIsTocOpen(false)
+        }
+    }
+
+    const toggleToc = () => setIsTocOpen(prev => !prev)
+
     return (
-        <>
-            <h1>Oscars Checklist</h1>
-            <div className="header-controls">
-                {token ? (
-                    <>
+        <div className="page-shell">
+            <header className="page-header" ref={headerRef}>
+                <div className="title-stack">
+                    <h1>Oscars Checklist</h1>
+                    <p className="page-subtitle">
+                        Jump to any category, keep track, share your progress.
+                    </p>
+                </div>
+                <div className="header-controls">
+                    {token ? (
+                        <>
+                            <button
+                                className="header-buttons"
+                                onClick={handleLogout}
+                            >
+                                Logout {username}
+                            </button>
+                        </>
+                    ) : (
                         <button
                             className="header-buttons"
-                            onClick={handleLogout}
+                            onClick={() => setIsAuthMenuOpen(!isAuthMenuOpen)}
                         >
-                            Logout {username}
+                            Login to Save
                         </button>
-                    </>
-                ) : (
-                    <button
-                        className="header-buttons"
-                        onClick={() => setIsAuthMenuOpen(!isAuthMenuOpen)}
-                    >
-                        Login to Save
+                    )}
+                    <button className="header-buttons" onClick={toggleToc}>
+                        {isTocOpen ? "Hide Awards List" : "Show Awards List"}
                     </button>
-                )}
-                <button className="header-buttons" onClick={clearWatched}>
-                    Clear All
-                </button>
-                <button className="header-buttons" onClick={share}>
-                    {isCopied ? "Copied! ✅" : "Copy and Share!"}
-                </button>
-            </div>
+                    <button className="header-buttons" onClick={clearWatched}>
+                        Clear All
+                    </button>
+                    <button className="header-buttons" onClick={share}>
+                        {isCopied ? "Copied! ✅" : "Copy and Share!"}
+                    </button>
+                </div>
+            </header>
             {isAuthMenuOpen && !token && (
                 <div className="auth-modal">
                     <div className="auth-modal-content">
@@ -437,43 +624,69 @@ function App({ year = "2025" }: AppProps) {
                 </div>
             )}
 
-            <Stats
-                movies={movies}
-                totalNominations={totalNominations}
-                watchedMovies={watchedMovies}
-                nominationsCleared={nominationsCleared}
-                isScrolled={isScrolled}
-                divRef={divRef}
-            />
-            <div>
-                {awards.map(award => {
-                    return (
-                        <Category
-                            key={award.name}
-                            id={award.name}
-                            name={award.name}
-                            nominees={award.nominees}
-                            movies={movies}
-                            watchedMovies={watchedMovies}
-                            toggleWatchedMovie={toggleWatchedMovie}
-                        />
-                    )
-                })}
-            </div>
-            <p>{originalSongDisclaimers[year]}</p>
-            <footer>
-                <a
-                    href="https://github.com/preraku/oscar-checklist"
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    <img
-                        src="https://img.shields.io/badge/View%20on%20GitHub-goldenrod?&logo=github&"
-                        alt="View on GitHub"
+            <div className={`app-shell ${isTocOpen ? "with-toc" : "no-toc"}`}>
+                {isTocOpen && (
+                    <TableOfContents
+                        awards={awardSections}
+                        activeAwardId={activeAwardId}
+                        onJump={jumpToAward}
+                        onClose={() => setIsTocOpen(false)}
+                        showCloseButton={isMobileView}
                     />
-                </a>
-            </footer>
-        </>
+                )}
+                <main className="content-area">
+                    <div className="toc-toggle-row">
+                        <button className="toc-toggle" onClick={toggleToc}>
+                            {isTocOpen ? "Hide awards list" : "Show awards list"}
+                        </button>
+                    </div>
+                    <Stats
+                        movies={movies}
+                        totalNominations={totalNominations}
+                        watchedMovies={watchedMovies}
+                        nominationsCleared={nominationsCleared}
+                        isScrolled={isScrolled}
+                        divRef={divRef}
+                    />
+                    <div className="categories">
+                        {awards.map((award, index) => {
+                            const section = awardSections[index]
+                            return (
+                                <Category
+                                    key={section.id}
+                                    id={section.id}
+                                    name={award.name}
+                                    nominees={award.nominees}
+                                    movies={movies}
+                                    watchedMovies={watchedMovies}
+                                    toggleWatchedMovie={toggleWatchedMovie}
+                                />
+                            )
+                        })}
+                    </div>
+                    <p className="disclaimer">
+                        {originalSongDisclaimers[year]}
+                    </p>
+                    <footer>
+                        <a
+                            href="https://github.com/preraku/oscar-checklist"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <img
+                                src="https://img.shields.io/badge/View%20on%20GitHub-goldenrod?&logo=github&"
+                                alt="View on GitHub"
+                            />
+                        </a>
+                    </footer>
+                </main>
+            </div>
+            {!isTocOpen && (
+                <button className="toc-fab" onClick={() => setIsTocOpen(true)}>
+                    Awards
+                </button>
+            )}
+        </div>
     )
 }
 

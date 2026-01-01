@@ -1,4 +1,6 @@
 :root {
+    --floating-stats-offset: 0px;
+    --header-height: 0px;
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
@@ -7,6 +9,7 @@
     color: rgba(255, 255, 255, 0.87);
     background-color: #242424;
     background-color: #202020;
+    scroll-behavior: smooth;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -27,13 +30,12 @@ li {
 }
 
 a:hover {
-    color: #535bf2;
+    color: #ffcc00;
 }
 
 body {
     margin: 0;
-    display: flex;
-    place-items: center;
+    display: block;
     min-width: 320px;
     min-height: 100vh;
 }
