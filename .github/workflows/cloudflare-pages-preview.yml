@@ -1,7 +1,7 @@
 name: Deploy PR preview to Cloudflare Pages
 
 on:
-  pull_request_target:
+  pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
@@ -42,7 +42,16 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run build
+        env:
+          VITE_BASE: /
+        run: npm run build -- --base=/
+
+      - name: Debug build output
+        run: |
+          echo "---- dist/index.html (head) ----"
+          sed -n '1,20p' dist/index.html
+          echo "---- dist/assets ----"
+          ls -la dist/assets || true
 
       - name: Validate Cloudflare secrets
         run: |
