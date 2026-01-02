@@ -40,6 +40,8 @@ jobs:
             - name: Install dependencies
               run: npm install
             - name: Build
+              env:
+                  VITE_BASE: /oscar-checklist/
               run: npm run build
             - name: Setup Pages
               uses: actions/configure-pages@v4
