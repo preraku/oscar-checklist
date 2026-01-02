@@ -64,17 +64,6 @@ jobs:
             exit 1
           fi
 
-      - name: Validate Cloudflare secrets
-        run: |
-          if [ -z "${CLOUDFLARE_API_TOKEN}" ]; then
-            echo "Missing CLOUDFLARE_API_TOKEN secret."
-            exit 1
-          fi
-          if [ -z "${CLOUDFLARE_ACCOUNT_ID}" ]; then
-            echo "Missing CLOUDFLARE_ACCOUNT_ID secret."
-            exit 1
-          fi
-
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
