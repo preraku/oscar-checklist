@@ -42,9 +42,7 @@ jobs:
         run: npm install
 
       - name: Build
-        env:
-          VITE_BASE: /
-        run: npm run build
+        run: npm run build -- --base=/
 
       - name: Validate Cloudflare secrets
         run: |
