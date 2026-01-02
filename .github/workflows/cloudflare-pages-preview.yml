@@ -1,0 +1,78 @@
+name: Deploy PR preview to Cloudflare Pages
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: cf-pages-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: ${{ vars.CF_NODE_VERSION || '22' }}
+  CF_PROJECT_NAME: ${{ vars.CF_PAGES_PROJECT_NAME || 'oscar-checklist' }}
+
+jobs:
+  deploy:
+    if: contains(fromJson(vars.CF_TRUSTED_ACTORS || '["preraku"]'), github.event.pull_request.user.login)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: >-
+            pages deploy dist
+            --project-name ${{ env.CF_PROJECT_NAME }}
+            --branch pr-${{ github.event.pull_request.number }}
+            --commit-hash ${{ github.event.pull_request.head.sha }}
+            --commit-message "PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
+
+      - name: Compute preview URL
+        id: preview
+        run: |
+          if [ -n "${{ vars.CF_PAGES_PREVIEW_DOMAIN }}" ]; then
+            echo "url=https://pr-${{ github.event.pull_request.number }}.${{ vars.CF_PAGES_PREVIEW_DOMAIN }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "url=https://pr-${{ github.event.pull_request.number }}.${{ env.CF_PROJECT_NAME }}.pages.dev" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Comment PR with preview URL
+        uses: peter-evans/find-comment@v3
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: "<!-- cf-pages-preview -->"
+
+      - name: Comment PR with preview URL
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          body: |
+            <!-- cf-pages-preview -->
+            Cloudflare Pages preview: ${{ steps.preview.outputs.url }}
+          edit-mode: replace

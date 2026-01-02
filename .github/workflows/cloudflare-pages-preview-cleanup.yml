@@ -1,0 +1,100 @@
+name: Cleanup Cloudflare Pages previews
+
+on:
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CF_PROJECT_NAME: ${{ vars.CF_PAGES_PROJECT_NAME || 'oscar-checklist' }}
+  PREVIEW_RETENTION_DAYS: ${{ vars.CF_PAGES_PREVIEW_RETENTION_DAYS || '90' }}
+  PREVIEW_BRANCH_PREFIX: ${{ vars.CF_PAGES_PREVIEW_BRANCH_PREFIX || 'pr-' }}
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old preview deployments
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          python - <<'PY'
+          import datetime as dt
+          import json
+          import os
+          import sys
+          import urllib.parse
+          import urllib.request
+
+          token = os.environ.get("CF_API_TOKEN")
+          account_id = os.environ.get("CF_ACCOUNT_ID")
+          project = os.environ.get("CF_PROJECT_NAME")
+          retention_days = int(os.environ.get("PREVIEW_RETENTION_DAYS", "90"))
+          branch_prefix = os.environ.get("PREVIEW_BRANCH_PREFIX", "pr-")
+
+          if not token or not account_id or not project:
+              print("Missing CF_API_TOKEN, CF_ACCOUNT_ID, or CF_PROJECT_NAME.", file=sys.stderr)
+              sys.exit(1)
+
+          base = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/pages/projects/{project}/deployments"
+          headers = {"Authorization": f"Bearer {token}"}
+          cutoff = dt.datetime.utcnow() - dt.timedelta(days=retention_days)
+
+          def request_json(url, method="GET"):
+              req = urllib.request.Request(url, method=method, headers=headers)
+              with urllib.request.urlopen(req) as resp:
+                  return json.load(resp)
+
+          deployments = []
+          page = 1
+          while True:
+              url = base + "?" + urllib.parse.urlencode({"page": page, "per_page": 25})
+              data = request_json(url)
+              deployments.extend(data.get("result", []))
+              info = data.get("result_info") or {}
+              total_pages = info.get("total_pages") or page
+              if page >= total_pages:
+                  break
+              page += 1
+
+          def parse_time(item):
+              for key in ("created_on", "created_at"):
+                  value = item.get(key)
+                  if value:
+                      try:
+                          return dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+                      except ValueError:
+                          continue
+              return None
+
+          def get_branch(item):
+              trigger = item.get("deployment_trigger") or {}
+              meta = trigger.get("metadata") or {}
+              return meta.get("branch")
+
+          to_delete = []
+          for item in deployments:
+              branch = get_branch(item)
+              if not branch or not branch.startswith(branch_prefix):
+                  continue
+              created = parse_time(item)
+              if not created:
+                  continue
+              if created.replace(tzinfo=None) < cutoff:
+                  deployment_id = item.get("id") or item.get("deployment_id")
+                  if deployment_id:
+                      to_delete.append(deployment_id)
+
+          if not to_delete:
+              print("No preview deployments to delete.")
+              sys.exit(0)
+
+          for deployment_id in to_delete:
+              url = f"{base}/{deployment_id}"
+              request_json(url, method="DELETE")
+              print(f"Deleted deployment {deployment_id}")
+          PY
