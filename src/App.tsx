@@ -135,20 +135,20 @@ const Stats = ({
         <>
             <div ref={divRef} className="stats-row">
                 <p>
-                    Movies Watched: {watchedMovies.size}/{movies.length}
+                    Movies Seen: {watchedMovies.size}/{movies.length}
                 </p>
                 <p>
-                    Nominations Watched*: {nominationsCleared}/
+                    Nominations Seen*: {nominationsCleared}/
                     {totalNominations}
                 </p>
             </div>
             {isScrolled && (
                 <div className="stats-row floating-stats">
                     <p>
-                        Movies Watched: {watchedMovies.size}/{movies.length}
+                        Movies Seen: {watchedMovies.size}/{movies.length}
                     </p>
                     <p>
-                        Nominations Watched*: {nominationsCleared}/
+                        Nominations Seen*: {nominationsCleared}/
                         {totalNominations}
                     </p>
                 </div>
@@ -180,12 +180,7 @@ const TableOfContents = ({
         <aside className="toc-card" aria-label="Awards table of contents">
             <div className="toc-header">
                 <span className="toc-icon">★</span>
-                <div>
-                    <p className="toc-label-heading">Jump to an award</p>
-                    <p className="toc-label-subtitle">
-                        Smooth scroll &amp; highlights
-                    </p>
-                </div>
+                <p className="toc-label-heading">Jump to an award</p>
                 {showCloseButton && (
                     <button
                         type="button"
@@ -215,9 +210,6 @@ const TableOfContents = ({
                         >
                             <span className="toc-bullet" aria-hidden="true" />
                             <span className="toc-item-name">{award.name}</span>
-                            <span className="toc-count">
-                                {award.count} noms
-                            </span>
                         </button>
                     </li>
                 ))}
@@ -542,9 +534,6 @@ function App({ year = "2025" }: AppProps) {
             <header className="page-header" ref={headerRef}>
                 <div className="title-stack">
                     <h1>Oscars Checklist</h1>
-                    <p className="page-subtitle">
-                        Jump to any category, keep track, share your progress.
-                    </p>
                 </div>
                 <div className="header-controls">
                     {token ? (
@@ -635,11 +624,6 @@ function App({ year = "2025" }: AppProps) {
                     />
                 )}
                 <main className="content-area">
-                    <div className="toc-toggle-row">
-                        <button className="toc-toggle" onClick={toggleToc}>
-                            {isTocOpen ? "Hide awards list" : "Show awards list"}
-                        </button>
-                    </div>
                     <Stats
                         movies={movies}
                         totalNominations={totalNominations}
@@ -664,9 +648,11 @@ function App({ year = "2025" }: AppProps) {
                             )
                         })}
                     </div>
-                    <p className="disclaimer">
-                        {originalSongDisclaimers[year]}
-                    </p>
+                    {originalSongDisclaimers[year] && (
+                        <p className="disclaimer">
+                            *{originalSongDisclaimers[year]}
+                        </p>
+                    )}
                     <footer>
                         <a
                             href="https://github.com/preraku/oscar-checklist"

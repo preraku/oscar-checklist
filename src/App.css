@@ -98,13 +98,21 @@
 .watched {
     color: #b5f5d6;
     text-decoration: line-through;
-    background-color: #1f3b1d;
+    background: linear-gradient(
+        145deg,
+        rgba(46, 106, 64, 0.9),
+        rgba(24, 74, 44, 0.92)
+    );
     border-color: #2f7541;
 }
 
-/* .watched:hover {
-  background-color: rgba(166, 27, 27, 0.819);
-  border-color: #646cff;
+ .watched:hover {
+    background: linear-gradient(
+        145deg,
+        rgba(63, 134, 81, 0.95),
+        rgba(34, 92, 55, 0.96)
+    );
+    border-color: #6ab37b;
 }
 
 .unwatched:hover {
@@ -472,17 +480,19 @@
     align-items: center;
     gap: 1.25rem;
     flex-wrap: wrap;
-    padding: 0.75rem 1rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px dashed #3a2b1f;
+    padding: 0.95rem 1.25rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid #3f2e21;
     border-radius: 12px;
-    font-size: 0.95rem;
+    font-size: 1.1rem;
+    font-weight: 600;
     justify-content: center;
     text-align: center;
 }
 
 .stats-row p {
     margin: 0;
+    letter-spacing: 0.01em;
 }
 
 .floating-stats {
