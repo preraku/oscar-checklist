@@ -684,7 +684,9 @@ function App({ year = "2025" }: AppProps) {
 
     const timeoutId = useRef<number | null>(null)
     const share = async () => {
-        const url = window.location.origin + window.location.pathname
+        const baseUrl = window.location.origin + window.location.pathname
+        const normalizedBaseUrl = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`
+        const url = `${normalizedBaseUrl}#/years/${year}`
         const text =
             `I've watched ${watchedMovies.size}/${movies.length} movies and ${nominationsCleared}/${totalNominations} nominations for the ${year} Oscars.\n` +
             `How about you? ${url}`
