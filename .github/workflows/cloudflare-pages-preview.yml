@@ -53,6 +53,13 @@ jobs:
           echo "---- dist/assets ----"
           ls -la dist/assets || true
 
+      - name: Verify preview base
+        run: |
+          if grep -q "/oscar-checklist/assets/" dist/index.html; then
+            echo "Build used /oscar-checklist/ base; preview will be broken."
+            exit 1
+          fi
+
       - name: Validate Cloudflare secrets
         run: |
           if [ -z "${CLOUDFLARE_API_TOKEN}" ]; then
