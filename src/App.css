@@ -83,6 +83,16 @@
     justify-content: flex-start;
 }
 
+.app-shell.with-toc .movies-row {
+    gap: 0.75rem;
+}
+
+.app-shell.with-toc .movie-box {
+    flex: 1 1 140px;
+    max-width: 160px;
+    padding: 0.75rem;
+}
+
 .poster {
     width: 40%;
     height: auto;
