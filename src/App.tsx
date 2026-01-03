@@ -22,6 +22,18 @@ const slugify = (value: string) => {
         .replace(/(^-|-$)/g, "")
 }
 
+const getAwardFromUrl = () => {
+    if (typeof window === "undefined") return ""
+    const params = new URLSearchParams(window.location.search)
+    return params.get("award") ?? ""
+}
+
+const setAwardInUrl = (id: string) => {
+    const url = new URL(window.location.href)
+    url.searchParams.set("award", id)
+    window.history.replaceState(null, "", url.toString())
+}
+
 type MovieProps = {
     id: number
     award: string
@@ -546,16 +558,18 @@ function App({ year = "2025" }: AppProps) {
 
     useEffect(() => {
         if (!awardSections.length) return
-        const hash = window.location.hash.replace("#", "")
-        if (!hash) {
+        const awardFromUrl = getAwardFromUrl()
+        if (!awardFromUrl) {
             setActiveAwardId(awardSections[0].id)
             return
         }
-        const target = document.getElementById(hash)
+        const target = document.getElementById(awardFromUrl)
         if (target) {
-            setActiveAwardId(hash)
+            setActiveAwardId(awardFromUrl)
             target.scrollIntoView({ behavior: "smooth", block: "start" })
+            return
         }
+        setActiveAwardId(awardSections[0].id)
     }, [awardSections])
 
     useEffect(() => {
@@ -688,7 +702,7 @@ function App({ year = "2025" }: AppProps) {
         if (!target) return
         target.scrollIntoView({ behavior: "smooth", block: "start" })
         setActiveAwardId(id)
-        window.history.replaceState(null, "", `#${id}`)
+        setAwardInUrl(id)
         if (isMobileView) {
             setIsTocOpen(false)
         }
