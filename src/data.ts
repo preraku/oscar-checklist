@@ -1035,4 +1035,9 @@ const filmData: Record<string, AnnualFilmData> = {
     },
 }
 
-export { filmData }
+const availableYears = Object.keys(filmData)
+    .map(Number)
+    .sort((a, b) => b - a)
+    .map(String)
+
+export { availableYears, filmData }
