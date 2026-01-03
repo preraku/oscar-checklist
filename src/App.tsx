@@ -5,6 +5,7 @@ import {
     useCallback,
     useMemo,
     useLayoutEffect,
+    type CSSProperties,
 } from "react"
 import "./App.css"
 import { filmData } from "./data.ts"
@@ -131,26 +132,192 @@ const Stats = ({
     isScrolled,
     divRef,
 }: StatsProps) => {
+    const createConfettiPieces = (count: number, palette: string[]) => {
+        return Array.from({ length: count }, (_, index) => {
+            const angle = Math.random() * Math.PI * 2
+            const distance = 16 + Math.random() * 22
+            const x = Math.cos(angle) * distance
+            const y = Math.sin(angle) * distance
+            const rotate = -40 + Math.random() * 80
+            const delay = Math.random() * 180
+            const color = palette[index % palette.length]
+
+            return {
+                id: index,
+                style: {
+                    "--x": `${x.toFixed(1)}px`,
+                    "--y": `${y.toFixed(1)}px`,
+                    "--r": `${rotate.toFixed(1)}deg`,
+                    "--d": `${delay.toFixed(0)}ms`,
+                    "--c": color,
+                } as CSSProperties,
+            }
+        })
+    }
+
+    const [movieBurst, setMovieBurst] = useState(0)
+    const [movieBurstMode, setMovieBurstMode] = useState<
+        "static" | "floating" | null
+    >(null)
+    const [nominationsBurst, setNominationsBurst] = useState(0)
+    const [nominationsBurstMode, setNominationsBurstMode] = useState<
+        "static" | "floating" | null
+    >(null)
+    const prevMoviesRef = useRef(watchedMovies.size)
+    const prevNominationsRef = useRef(nominationsCleared)
+    const hasInitializedRef = useRef(false)
+    const movieBurstTimeout = useRef<number | null>(null)
+    const nominationsBurstTimeout = useRef<number | null>(null)
+
+    useEffect(() => {
+        if (!hasInitializedRef.current) {
+            hasInitializedRef.current = true
+            prevMoviesRef.current = watchedMovies.size
+            prevNominationsRef.current = nominationsCleared
+            return
+        }
+
+        if (watchedMovies.size > prevMoviesRef.current) {
+            setMovieBurst(prev => prev + 1)
+            setMovieBurstMode(isScrolled ? "floating" : "static")
+        }
+        if (nominationsCleared > prevNominationsRef.current) {
+            setNominationsBurst(prev => prev + 1)
+            setNominationsBurstMode(isScrolled ? "floating" : "static")
+        }
+
+        prevMoviesRef.current = watchedMovies.size
+        prevNominationsRef.current = nominationsCleared
+    }, [watchedMovies.size, nominationsCleared])
+
+    const showConfetti = isScrolled ? "floating" : "static"
+    const showStatic = showConfetti === "static"
+    const showFloating = showConfetti === "floating"
+
+    useEffect(() => {
+        if (movieBurst <= 0) return
+        if (movieBurstTimeout.current) {
+            window.clearTimeout(movieBurstTimeout.current)
+        }
+        movieBurstTimeout.current = window.setTimeout(() => {
+            setMovieBurstMode(null)
+        }, 900)
+        return () => {
+            if (movieBurstTimeout.current) {
+                window.clearTimeout(movieBurstTimeout.current)
+            }
+        }
+    }, [movieBurst])
+
+    useEffect(() => {
+        if (nominationsBurst <= 0) return
+        if (nominationsBurstTimeout.current) {
+            window.clearTimeout(nominationsBurstTimeout.current)
+        }
+        nominationsBurstTimeout.current = window.setTimeout(() => {
+            setNominationsBurstMode(null)
+        }, 900)
+        return () => {
+            if (nominationsBurstTimeout.current) {
+                window.clearTimeout(nominationsBurstTimeout.current)
+            }
+        }
+    }, [nominationsBurst])
+
+    const moviePieces = useMemo(
+        () =>
+            createConfettiPieces(10, [
+                "#ffe46b",
+                "#7dffb1",
+                "#ffc36a",
+                "#8fffd2",
+                "#ffdd84",
+            ]),
+        [movieBurst],
+    )
+    const nominationsPieces = useMemo(
+        () =>
+            createConfettiPieces(11, [
+                "#ff9f93",
+                "#ffd86b",
+                "#88a9ff",
+                "#ff8a80",
+                "#ffbf59",
+                "#7ea7ff",
+            ]),
+        [nominationsBurst],
+    )
+
+    const renderStat = (
+        label: string,
+        valueText: string,
+        burstCount: number,
+        confettiClass: string,
+        pieces: { id: number; style: React.CSSProperties }[],
+    ) => (
+        <p className="stat-metric">
+            <span className="stat-label">{label}</span>{" "}
+            <span className="stat-value">
+                {valueText}
+                {burstCount > 0 && (
+                    <span
+                        key={`${confettiClass}-${burstCount}`}
+                        className={`confetti-burst ${confettiClass}`}
+                        aria-hidden="true"
+                    >
+                        {pieces.map(piece => (
+                            <span
+                                key={piece.id}
+                                className="confetti-piece"
+                                style={piece.style}
+                            />
+                        ))}
+                    </span>
+                )}
+            </span>
+        </p>
+    )
+
     return (
         <>
             <div ref={divRef} className="stats-row">
-                <p>
-                    Movies Seen: {watchedMovies.size}/{movies.length}
-                </p>
-                <p>
-                    Nominations Seen*: {nominationsCleared}/
-                    {totalNominations}
-                </p>
+                {renderStat(
+                    "Movies Seen:",
+                    `${watchedMovies.size}/${movies.length}`,
+                    showStatic && movieBurstMode === "static" ? movieBurst : 0,
+                    "confetti-movies",
+                    moviePieces,
+                )}
+                {renderStat(
+                    "Nominations Seen*:",
+                    `${nominationsCleared}/${totalNominations}`,
+                    showStatic && nominationsBurstMode === "static"
+                        ? nominationsBurst
+                        : 0,
+                    "confetti-noms",
+                    nominationsPieces,
+                )}
             </div>
             {isScrolled && (
                 <div className="stats-row floating-stats">
-                    <p>
-                        Movies Seen: {watchedMovies.size}/{movies.length}
-                    </p>
-                    <p>
-                        Nominations Seen*: {nominationsCleared}/
-                        {totalNominations}
-                    </p>
+                    {renderStat(
+                        "Movies Seen:",
+                        `${watchedMovies.size}/${movies.length}`,
+                        showFloating && movieBurstMode === "floating"
+                            ? movieBurst
+                            : 0,
+                        "confetti-movies",
+                        moviePieces,
+                    )}
+                    {renderStat(
+                        "Nominations Seen*:",
+                        `${nominationsCleared}/${totalNominations}`,
+                        showFloating && nominationsBurstMode === "floating"
+                            ? nominationsBurst
+                            : 0,
+                        "confetti-noms",
+                        nominationsPieces,
+                    )}
                 </div>
             )}
         </>
