@@ -135,13 +135,6 @@
   max-width: 1280px;
 } */
 
-.category::before {
-    content: "";
-    display: block;
-    visibility: hidden;
-    height: 96px;
-    margin: -96px 0 0;
-}
 
 .header-buttons {
     margin: 0;
@@ -459,6 +452,7 @@
 
 .category {
     padding-top: 0.5rem;
+    scroll-margin-top: calc(var(--floating-stats-height, 64px) + 0.25rem);
 }
 
 .category h2 {

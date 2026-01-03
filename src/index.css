@@ -1,5 +1,6 @@
 :root {
     --floating-stats-offset: 0px;
+    --floating-stats-height: 64px;
     --header-height: 0px;
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
