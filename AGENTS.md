@@ -29,9 +29,10 @@
 
 ## Testing Guidelines
 
-- There are no automated tests yet; rely on manual QA of the checklist flow.
+- End-to-end tests live in `tests/e2e` and run via Playwright.
+- Install browser binaries once with `bunx playwright install`.
+- Run the suite with `bun run test:e2e` (spins up `bun run dev` for the web server).
 - Use `bun run lint` to validate syntax and catch unused vars before pushing.
-- When you add tests, name them to mirror the module they cover (e.g., `App.test.tsx`) and document how to run them here.
 
 ## Commit & Pull Request Guidelines
 
