@@ -6,6 +6,7 @@ const BASE_URL = `http://127.0.0.1:${PORT}`
 export default defineConfig({
     testDir: "tests/e2e",
     retries: process.env.CI ? 2 : 0,
+    reporter: [["list"], ["html", { open: "never" }]],
     use: {
         baseURL: BASE_URL,
         permissions: ["clipboard-read", "clipboard-write"],
