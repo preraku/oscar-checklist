@@ -449,6 +449,11 @@ const originalSongDisclaimers: Record<string, string> = {
     2025: "Emilia Pérez has two nominations for Best Original Song. They have been combined here and are counting as one nomination.",
 }
 
+const availableYears = Object.keys(filmData)
+    .map(Number)
+    .sort((a, b) => b - a)
+    .map(String)
+
 type AppProps = {
     year?: string
 }
@@ -487,7 +492,9 @@ function App({ year = "2025" }: AppProps) {
         if (typeof window === "undefined") return true
         return window.innerWidth > 960
     })
+    const [isYearMenuOpen, setIsYearMenuOpen] = useState(false)
     const headerRef = useRef<HTMLDivElement | null>(null)
+    const yearSelectorRef = useRef<HTMLDivElement | null>(null)
 
     const WATCHED_MOVIES_KEY = `watchedMovies-${year}`
 
@@ -518,6 +525,32 @@ function App({ year = "2025" }: AppProps) {
         window.addEventListener("resize", setHeaderHeight)
         return () => window.removeEventListener("resize", setHeaderHeight)
     }, [])
+
+    useEffect(() => {
+        if (!isYearMenuOpen || typeof document === "undefined") return
+
+        const handlePointerDown = (event: PointerEvent) => {
+            const target = event.target as Node | null
+            if (!target) return
+            if (!yearSelectorRef.current?.contains(target)) {
+                setIsYearMenuOpen(false)
+            }
+        }
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                setIsYearMenuOpen(false)
+            }
+        }
+
+        document.addEventListener("pointerdown", handlePointerDown)
+        document.addEventListener("keydown", handleKeyDown)
+
+        return () => {
+            document.removeEventListener("pointerdown", handlePointerDown)
+            document.removeEventListener("keydown", handleKeyDown)
+        }
+    }, [isYearMenuOpen])
 
     useEffect(() => {
         const handleResize = () => {
@@ -709,6 +742,11 @@ function App({ year = "2025" }: AppProps) {
     }
 
     const toggleToc = () => setIsTocOpen(prev => !prev)
+    const handleYearSelect = (selectedYear: string) => {
+        setIsYearMenuOpen(false)
+        if (selectedYear === year) return
+        window.location.hash = `/years/${selectedYear}`
+    }
 
     return (
         <div className="page-shell">
@@ -723,7 +761,7 @@ function App({ year = "2025" }: AppProps) {
                                 className="header-buttons"
                                 onClick={handleLogout}
                             >
-                                Logout {username}
+                                Logout
                             </button>
                         </>
                     ) : (
@@ -734,14 +772,54 @@ function App({ year = "2025" }: AppProps) {
                             Login to Save
                         </button>
                     )}
+                    <div className="year-selector" ref={yearSelectorRef}>
+                        <button
+                            className="header-buttons"
+                            onClick={() =>
+                                setIsYearMenuOpen(prev => !prev)
+                            }
+                            aria-haspopup="listbox"
+                            aria-expanded={isYearMenuOpen}
+                        >
+                            Year: {year}
+                        </button>
+                        {isYearMenuOpen && (
+                            <div
+                                className="year-menu"
+                                role="listbox"
+                                aria-label="Select awards year"
+                            >
+                                {availableYears.map(availableYear => (
+                                    <button
+                                        key={availableYear}
+                                        type="button"
+                                        className={`year-option ${
+                                            availableYear === year
+                                                ? "active"
+                                                : ""
+                                        }`}
+                                        role="option"
+                                        aria-selected={
+                                            availableYear === year
+                                        }
+                                        onClick={() =>
+                                            handleYearSelect(availableYear)
+                                        }
+                                    >
+                                        {availableYear}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                     <button className="header-buttons" onClick={toggleToc}>
                         {isTocOpen ? "Hide Awards List" : "Show Awards List"}
                     </button>
                     <button className="header-buttons" onClick={clearWatched}>
-                        Clear All
+                        Reset
                     </button>
                     <button className="header-buttons" onClick={share}>
-                        {isCopied ? "Copied! ✅" : "Copy and Share!"}
+                        {isCopied ? "Copied! ✅" : "Share!"}
                     </button>
                 </div>
             </header>
