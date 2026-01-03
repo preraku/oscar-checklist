@@ -134,6 +134,7 @@ type StatsProps = {
     nominationsCleared: number
     isScrolled: boolean
     divRef: React.RefObject<HTMLDivElement> 
+    suppressConfetti: boolean
 }
 
 const Stats = ({
@@ -143,6 +144,7 @@ const Stats = ({
     nominationsCleared,
     isScrolled,
     divRef,
+    suppressConfetti,
 }: StatsProps) => {
     const createConfettiPieces = (count: number, palette: string[]) => {
         return Array.from({ length: count }, (_, index) => {
@@ -178,14 +180,29 @@ const Stats = ({
     const prevMoviesRef = useRef(watchedMovies.size)
     const prevNominationsRef = useRef(nominationsCleared)
     const hasInitializedRef = useRef(false)
+    const prevSuppressConfettiRef = useRef(suppressConfetti)
     const movieBurstTimeout = useRef<number | null>(null)
     const nominationsBurstTimeout = useRef<number | null>(null)
 
     useEffect(() => {
+        if (suppressConfetti) {
+            hasInitializedRef.current = true
+            prevMoviesRef.current = watchedMovies.size
+            prevNominationsRef.current = nominationsCleared
+            prevSuppressConfettiRef.current = suppressConfetti
+            return
+        }
+        if (prevSuppressConfettiRef.current) {
+            prevSuppressConfettiRef.current = suppressConfetti
+            prevMoviesRef.current = watchedMovies.size
+            prevNominationsRef.current = nominationsCleared
+            return
+        }
         if (!hasInitializedRef.current) {
             hasInitializedRef.current = true
             prevMoviesRef.current = watchedMovies.size
             prevNominationsRef.current = nominationsCleared
+            prevSuppressConfettiRef.current = suppressConfetti
             return
         }
 
@@ -200,7 +217,8 @@ const Stats = ({
 
         prevMoviesRef.current = watchedMovies.size
         prevNominationsRef.current = nominationsCleared
-    }, [watchedMovies.size, nominationsCleared])
+        prevSuppressConfettiRef.current = suppressConfetti
+    }, [watchedMovies.size, nominationsCleared, suppressConfetti])
 
     const showConfetti = isScrolled ? "floating" : "static"
     const showStatic = showConfetti === "static"
@@ -478,6 +496,7 @@ function App({ year = "2025" }: AppProps) {
     const [isLoginMode, setIsLoginMode] = useState(true)
     const [error, setError] = useState("")
     const [isScrolled, setIsScrolled] = useState(false)
+    const [isHydrating, setIsHydrating] = useState(true)
     const divRef = useRef(null)
     const [isAuthMenuOpen, setIsAuthMenuOpen] = useState(false)
     const [isCopied, setIsCopied] = useState(false)
@@ -499,13 +518,18 @@ function App({ year = "2025" }: AppProps) {
     const WATCHED_MOVIES_KEY = `watchedMovies-${year}`
 
     const pullWatchedMovies = useCallback(async () => {
-        const movies = await loadWatchedMovies(year)
-        setWatchedMovies(movies)
-        setNominationsCleared(
-            [...movies].reduce((acc, movieId) => {
-                return acc + (movieToNomsMap.get(movieId)!.length)
-            }, 0),
-        )
+        setIsHydrating(true)
+        try {
+            const movies = await loadWatchedMovies(year)
+            setWatchedMovies(movies)
+            setNominationsCleared(
+                [...movies].reduce((acc, movieId) => {
+                    return acc + (movieToNomsMap.get(movieId)!.length)
+                }, 0),
+            )
+        } finally {
+            setIsHydrating(false)
+        }
     }, [movieToNomsMap, year])
 
     useEffect(() => {
@@ -890,6 +914,7 @@ function App({ year = "2025" }: AppProps) {
                         nominationsCleared={nominationsCleared}
                         isScrolled={isScrolled}
                         divRef={divRef}
+                        suppressConfetti={isHydrating}
                     />
                     <div className="categories">
                         {awards.map((award, index) => {
