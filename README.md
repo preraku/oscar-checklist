@@ -20,3 +20,10 @@
 ## About
 
 This is a simple checklist app that allows users to check off movies they have seen that were nominated for an Oscar. Your watched movies are saved in local storage, so you can come back to the site and see what you have left to watch.
+
+## Tests
+
+1. Install dependencies: `bun install`
+2. Install Playwright browsers (one-time): `bunx playwright install`
+3. Run the end-to-end suite: `bun run test:e2e`
+4. View the HTML report: `bunx playwright show-report`
