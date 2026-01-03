@@ -8,7 +8,7 @@ import {
     type CSSProperties,
 } from "react"
 import "./App.css"
-import { filmData } from "./data.ts"
+import { availableYears, filmData } from "./data.ts"
 import type { Movie } from "./data.ts"
 
 
@@ -466,11 +466,6 @@ const originalSongDisclaimers: Record<string, string> = {
     2024: "Barbie has two nominations for Best Original Song. They have been combined here and are counting as one nomination.",
     2025: "Emilia Pérez has two nominations for Best Original Song. They have been combined here and are counting as one nomination.",
 }
-
-const availableYears = Object.keys(filmData)
-    .map(Number)
-    .sort((a, b) => b - a)
-    .map(String)
 
 type AppProps = {
     year?: string
