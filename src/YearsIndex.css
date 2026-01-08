@@ -7,15 +7,15 @@
 
 .years-index__header p {
     margin: 0.5rem 0 0;
-    color: #c7b89b;
+    color: #6b6157;
 }
 
 .years-index__section {
-    border: 1px solid #3a2b1f;
-    border-radius: 16px;
+    border: 1px solid #eadcc7;
+    border-radius: 18px;
     padding: 1.5rem;
-    background: linear-gradient(160deg, #2a2018 0%, #1a1a1a 100%);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+    background: #fffaf3;
+    box-shadow: 0 18px 26px rgba(24, 17, 10, 0.12);
 }
 
 .years-index__list {
@@ -31,18 +31,18 @@
     display: block;
     text-align: center;
     padding: 0.75rem 1rem;
-    border-radius: 12px;
-    border: 1px solid #3a2b1f;
-    color: #f6e4c8;
-    background: linear-gradient(135deg, #2a2018 0%, #1a1a1a 100%);
+    border-radius: 14px;
+    border: 1px solid #eadcc7;
+    color: #2b2118;
+    background: linear-gradient(130deg, #fff7e8 0%, #f1e3d0 100%);
     text-decoration: none;
     transition: transform 180ms ease, box-shadow 200ms ease,
         border-color 200ms ease;
 }
 
 .years-index__link:hover {
-    border-color: #ffcc00;
-    color: #ffcc00;
+    border-color: #d19a2a;
+    color: #b06f12;
     transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 18px rgba(24, 17, 10, 0.16);
 }
