@@ -7,10 +7,8 @@ import {
     useLayoutEffect,
     type CSSProperties,
 } from "react"
-import "./App.css"
 import { availableYears, filmData } from "./data.ts"
 import type { Movie } from "./data.ts"
-
 
 // const API_URL = "http://localhost:8787"
 const API_URL = "https://my-app.preraku.workers.dev"
@@ -44,26 +42,39 @@ type MovieProps = {
 
 const Movie = ({ id, award, movies, watchedMovies, toggleWatchedMovie }: MovieProps) => {
     const watched = watchedMovies.has(id)
-    const watchedClass = watched ? "watched" : "unwatched"
     const movie = movies[id]
+    const baseClasses =
+        "group flex flex-[1_1_180px] flex-col gap-2 rounded-[18px] border px-4 py-4 text-left shadow-[0_14px_24px_rgba(34,24,16,0.12)] transition duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_18px_32px_rgba(34,24,16,0.18)] max-w-[230px] min-[961px]:flex-[1_1_150px] min-[961px]:max-w-[175px]"
+    const unwatchedClasses =
+        "border-[color:var(--border)] bg-[linear-gradient(180deg,#fff8ed_0%,#f3e7d6_100%)] text-[color:var(--ink)] hover:border-[#d8b070] dark:border-[#3a2e22] dark:bg-[linear-gradient(180deg,#2a2219_0%,#201913_100%)] dark:text-[#f1e8dc] dark:hover:border-[#7a5b2b]"
+    const watchedClasses =
+        "border-[#9cc4aa] bg-[linear-gradient(180deg,#e3f3ea_0%,#d4eadf_100%)] text-[#1f5a3a] line-through hover:border-[#6fb08e] dark:border-[#2f4a3a] dark:bg-[linear-gradient(180deg,#23382c_0%,#1c2c22_100%)] dark:text-[#bde1c8] dark:hover:border-[#3b5c48]"
+
     return (
-        <label className={`movie-box ${watchedClass}`}>
-            <div>
+        <label className={`${baseClasses} ${watched ? watchedClasses : unwatchedClasses}`}>
+            <div className="flex flex-col gap-2">
                 <input
                     type="checkbox"
                     checked={watched}
                     onChange={() => toggleWatchedMovie(id)}
                     aria-label={`Toggle ${movie.title} as watched`}
+                    className="h-4 w-4 accent-[color:var(--accent)]"
                 />
-                <h3>{movie.title}</h3>
+                <h3 className="text-[1.05rem] text-[color:var(--ink)] dark:text-[#f4ede3]">
+                    {movie.title}
+                </h3>
                 {movie.poster && (
                     <img
                         src={movie.poster}
                         alt={`${movie.title} poster`}
-                        className="poster"
+                        className="w-[44%] rounded-[10px] border-2 border-[#e1d2bf] shadow-[0_8px_16px_rgba(25,18,12,0.15)] transition duration-200 ease-out group-hover:scale-[1.04] dark:border-[#3a2e22] dark:shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
                     />
                 )}
-                {award in movie && <p>{movie[award as keyof Movie]}</p>}
+                {award in movie && (
+                    <p className="text-sm text-[color:var(--muted)] dark:text-[#c0b4a5]">
+                        {movie[award as keyof Movie]}
+                    </p>
+                )}
             </div>
         </label>
     )
@@ -91,25 +102,22 @@ const Category = ({
         watchedMovies.has(movie),
     ).length
     return (
-        <div className="category" id={id}>
-            <h2>
-                <img 
-                    src="/oscar-checklist/oscar_gold.svg" 
-                    alt="" 
-                    className="category-icon"
-                    style={{
-                        height: "1em",
-                        width: "auto",
-                        marginRight: "0.5em",
-                        verticalAlign: "middle"
-                    }}
+        <div
+            className="scroll-mt-[calc(var(--floating-stats-height,64px)+0.25rem)] pt-2"
+            id={id}
+        >
+            <h2 className="mb-3 flex items-center gap-2 text-[1.45rem]">
+                <img
+                    src="/oscar-checklist/oscar_gold.svg"
+                    alt=""
+                    className="h-[1em] w-auto translate-y-[-0.1em]"
                 />
                 {`for ${name} `}
-                <span className="category-stats">
+                <span className="text-sm text-[color:var(--muted)] dark:text-[#c0b4a5]">
                     ({watchedMoviesInCategory}/{totalMoviesInCategory})
                 </span>
             </h2>
-            <div className="movies-row">
+            <div className="flex flex-wrap gap-4 min-[961px]:gap-3 max-[960px]:justify-center">
                 {nominees.map(nominee => {
                     return (
                         <Movie
@@ -133,7 +141,7 @@ type StatsProps = {
     watchedMovies: Set<number>
     nominationsCleared: number
     isScrolled: boolean
-    divRef: React.RefObject<HTMLDivElement> 
+    divRef: React.RefObject<HTMLDivElement>
     suppressConfetti: boolean
 }
 
@@ -285,9 +293,11 @@ const Stats = ({
         confettiClass: string,
         pieces: { id: number; style: React.CSSProperties }[],
     ) => (
-        <p className="stat-metric">
-            <span className="stat-label">{label}</span>{" "}
-            <span className="stat-value">
+        <p className="flex items-center gap-2 text-sm font-semibold text-[color:var(--ink)] sm:text-base">
+            <span className="text-[color:var(--muted)] dark:text-[#d6c9b7]">
+                {label}
+            </span>{" "}
+            <span className="relative inline-flex items-center gap-1">
                 {valueText}
                 {burstCount > 0 && (
                     <span
@@ -310,7 +320,10 @@ const Stats = ({
 
     return (
         <>
-            <div ref={divRef} className="stats-row">
+            <div
+                ref={divRef}
+                className="flex flex-wrap items-center justify-center gap-5 rounded-2xl border border-[color:var(--border)] bg-[linear-gradient(120deg,#fff5e6_0%,#f7e7cc_100%)] px-5 py-4 text-center shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)] dark:bg-[linear-gradient(120deg,#2b2219_0%,#241b14_100%)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]"
+            >
                 {renderStat(
                     "Movies Seen:",
                     `${watchedMovies.size}/${movies.length}`,
@@ -329,7 +342,7 @@ const Stats = ({
                 )}
             </div>
             {isScrolled && (
-                <div className="stats-row floating-stats">
+                <div className="fixed left-0 top-0 z-[998] flex w-full flex-wrap items-center justify-center gap-5 border-b border-[color:var(--border)] bg-[rgba(255,248,236,0.96)] px-4 py-3 text-center shadow-[0_10px_16px_rgba(28,19,12,0.12)] dark:bg-[rgba(27,21,16,0.96)] dark:shadow-[0_10px_16px_rgba(0,0,0,0.45)]">
                     {renderStat(
                         "Movies Seen:",
                         `${watchedMovies.size}/${movies.length}`,
@@ -374,14 +387,21 @@ const TableOfContents = ({
     showCloseButton,
 }: TableOfContentsProps) => {
     return (
-        <aside className="toc-card" aria-label="Awards table of contents">
-            <div className="toc-header">
-                <span className="toc-icon">★</span>
-                <p className="toc-label-heading">Jump to an award</p>
+        <aside
+            className="sticky top-[calc(1rem+var(--floating-stats-offset,0px))] max-h-[calc(100vh-var(--floating-stats-offset,0px)-2rem)] overflow-auto rounded-[18px] border border-[color:var(--border)] bg-[color:var(--card)] p-4 shadow-[0_18px_26px_rgba(28,19,12,0.14)] animate-float-in"
+            aria-label="Awards table of contents"
+        >
+            <div className="mb-3 flex items-center gap-3">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-[radial-gradient(circle,#f4c977_0%,#d19a2a_100%)] font-semibold text-[#2c2014] shadow-[0_0_18px_rgba(209,154,42,0.4)]">
+                    ★
+                </span>
+                <p className="m-0 font-semibold text-[color:var(--ink)]">
+                    Jump to an award
+                </p>
                 {showCloseButton && (
                     <button
                         type="button"
-                        className="toc-close"
+                        className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-[10px] border border-[color:var(--border)] bg-white/70 text-lg leading-none text-[color:var(--ink)] transition hover:border-[color:var(--accent)] dark:bg-[rgba(32,25,19,0.8)]"
                         onClick={onClose}
                         aria-label="Hide awards list"
                     >
@@ -389,27 +409,38 @@ const TableOfContents = ({
                     </button>
                 )}
             </div>
-            <ul className="toc-list">
-                {awards.map((award, index) => (
-                    <li
-                        key={award.id}
-                        className={`toc-item ${
-                            activeAwardId === award.id ? "active" : ""
-                        }`}
-                        style={{ animationDelay: `${index * 45}ms` }}
-                    >
-                        <button
-                            type="button"
-                            onClick={() => onJump(award.id)}
-                            aria-current={
-                                activeAwardId === award.id ? "true" : undefined
-                            }
+            <ul className="m-0 flex list-none flex-col gap-2 p-0">
+                {awards.map((award, index) => {
+                    const isActive = activeAwardId === award.id
+                    return (
+                        <li
+                            key={award.id}
+                            className="animate-fade-up"
+                            style={{ animationDelay: `${index * 45}ms` }}
                         >
-                            <span className="toc-bullet" aria-hidden="true" />
-                            <span className="toc-item-name">{award.name}</span>
-                        </button>
-                    </li>
-                ))}
+                            <button
+                                type="button"
+                                onClick={() => onJump(award.id)}
+                                aria-current={isActive ? "true" : undefined}
+                                className={`flex w-full items-center gap-3 rounded-xl border px-3 py-3 text-left transition duration-200 ease-out ${
+                                    isActive
+                                        ? "border-[color:var(--accent)] bg-[rgba(209,154,42,0.18)] shadow-[0_12px_20px_rgba(30,21,13,0.16)] dark:bg-[rgba(240,179,79,0.16)]"
+                                        : "border-transparent bg-[rgba(249,240,228,0.7)] hover:translate-x-1 hover:border-[#d19a2a] hover:bg-[rgba(247,231,204,0.9)] hover:shadow-[0_10px_18px_rgba(30,21,13,0.12)] dark:bg-[rgba(32,25,19,0.75)] dark:hover:border-[#b07b2c] dark:hover:bg-[rgba(54,41,29,0.85)] dark:hover:shadow-[0_10px_18px_rgba(0,0,0,0.4)]"
+                                }`}
+                            >
+                                <span
+                                    className={`h-3 w-3 rounded-full bg-[linear-gradient(145deg,#f1bf63,#d47c2d)] shadow-[0_0_10px_rgba(209,154,42,0.6)] transition-transform ${
+                                        isActive ? "scale-110" : "scale-90"
+                                    }`}
+                                    aria-hidden="true"
+                                />
+                                <span className="flex-1 font-semibold text-[color:var(--ink)] dark:text-[#f1e8dc]">
+                                    {award.name}
+                                </span>
+                            </button>
+                        </li>
+                    )
+                })}
             </ul>
         </aside>
     )
@@ -669,7 +700,6 @@ function App({ year = "2025" }: AppProps) {
                 WATCHED_MOVIES_KEY,
                 JSON.stringify([...newWatchedMovies]),
             )
-            // push to backend
             pushMoviesToBackend([...newWatchedMovies], year)
             return newWatchedMovies
         })
@@ -727,17 +757,15 @@ function App({ year = "2025" }: AppProps) {
                 setError("")
 
                 if (isLoginMode) {
-                    // If logging in, fetch and update user's movies
                     await pullWatchedMovies()
                 } else {
-                    // If signing up, push current movies to the backend
                     await pushMoviesToBackend([...watchedMovies], year)
                 }
             } else {
                 setError(data.message || "Authentication failed")
             }
         } catch {
-            setError("Network error occurred") 
+            setError("Network error occurred")
         }
     }
 
@@ -769,33 +797,37 @@ function App({ year = "2025" }: AppProps) {
         window.location.hash = `/years/${selectedYear}`
     }
 
+    const headerButtonClass =
+        "rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-sm font-semibold text-[color:var(--ink)] shadow-[0_10px_18px_rgba(21,14,8,0.12)] transition duration-200 ease-out hover:-translate-y-0.5 hover:border-[color:var(--accent)] hover:shadow-[0_14px_24px_rgba(21,14,8,0.16)]"
+
     return (
-        <div className="page-shell">
-            <header className="page-header" ref={headerRef}>
-                <div className="title-stack">
-                    <h1>Oscars Checklist</h1>
+        <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 px-4 py-6 text-left sm:px-6">
+            <header
+                className="relative flex flex-col gap-4 overflow-hidden rounded-[20px] border border-[color:var(--border)] bg-[linear-gradient(140deg,#fffaf2_0%,#f5e7d5_100%)] p-5 shadow-[0_24px_36px_rgba(27,18,11,0.16)] dark:bg-[linear-gradient(140deg,#2a2219_0%,#19130e_100%)]"
+                ref={headerRef}
+            >
+                <div className="pointer-events-none absolute -right-20 -top-28 h-60 w-60 rounded-full bg-[radial-gradient(circle,rgba(210,155,42,0.3),transparent_70%)] opacity-80" />
+                <div className="relative z-10">
+                    <h1 className="m-0 text-[clamp(2.2rem,3vw,3rem)]">
+                        Oscars Checklist
+                    </h1>
                 </div>
-                <div className="header-controls">
+                <div className="relative z-10 flex flex-wrap items-center gap-3">
                     {token ? (
-                        <>
-                            <button
-                                className="header-buttons"
-                                onClick={handleLogout}
-                            >
-                                Logout
-                            </button>
-                        </>
+                        <button className={headerButtonClass} onClick={handleLogout}>
+                            Logout
+                        </button>
                     ) : (
                         <button
-                            className="header-buttons"
+                            className={headerButtonClass}
                             onClick={() => setIsAuthMenuOpen(!isAuthMenuOpen)}
                         >
                             Login to Save
                         </button>
                     )}
-                    <div className="year-selector" ref={yearSelectorRef}>
+                    <div className="relative" ref={yearSelectorRef}>
                         <button
-                            className="header-buttons"
+                            className={headerButtonClass}
                             onClick={() =>
                                 setIsYearMenuOpen(prev => !prev)
                             }
@@ -806,7 +838,7 @@ function App({ year = "2025" }: AppProps) {
                         </button>
                         {isYearMenuOpen && (
                             <div
-                                className="year-menu"
+                                className="absolute right-0 top-[calc(100%+0.5rem)] z-20 grid min-w-[8rem] gap-1 rounded-[14px] border border-[color:var(--border)] bg-[color:var(--card)] p-1.5 shadow-[0_18px_26px_rgba(30,21,13,0.16)]"
                                 role="listbox"
                                 aria-label="Select awards year"
                             >
@@ -814,15 +846,13 @@ function App({ year = "2025" }: AppProps) {
                                     <button
                                         key={availableYear}
                                         type="button"
-                                        className={`year-option ${
+                                        className={`w-full rounded-[10px] border px-3 py-2 text-left text-sm transition ${
                                             availableYear === year
-                                                ? "active"
-                                                : ""
+                                                ? "border-[color:var(--accent)] bg-[rgba(209,154,42,0.12)] text-[color:var(--accent-ink)]"
+                                                : "border-transparent text-[color:var(--ink)] hover:border-[color:var(--accent)] hover:text-[color:var(--accent-ink)]"
                                         }`}
                                         role="option"
-                                        aria-selected={
-                                            availableYear === year
-                                        }
+                                        aria-selected={availableYear === year}
                                         onClick={() =>
                                             handleYearSelect(availableYear)
                                         }
@@ -833,29 +863,35 @@ function App({ year = "2025" }: AppProps) {
                             </div>
                         )}
                     </div>
-                    <button className="header-buttons" onClick={toggleToc}>
+                    <button className={headerButtonClass} onClick={toggleToc}>
                         {isTocOpen ? "Hide Awards List" : "Show Awards List"}
                     </button>
-                    <button className="header-buttons" onClick={clearWatched}>
+                    <button className={headerButtonClass} onClick={clearWatched}>
                         Reset
                     </button>
-                    <button className="header-buttons" onClick={share}>
+                    <button className={headerButtonClass} onClick={share}>
                         {isCopied ? "Copied! ✅" : "Share!"}
                     </button>
                 </div>
             </header>
             {isAuthMenuOpen && !token && (
-                <div className="auth-modal">
-                    <div className="auth-modal-content">
+                <div className="fixed inset-0 z-[999] flex items-center justify-center bg-[rgba(18,12,8,0.55)] px-4 dark:bg-[rgba(6,4,2,0.7)]">
+                    <div className="relative w-full max-w-[420px] rounded-[20px] border border-[color:var(--border)] bg-[color:var(--card)] p-8 shadow-[0_24px_44px_rgba(20,14,8,0.25)] dark:shadow-[0_24px_44px_rgba(0,0,0,0.55)]">
                         <button
-                            className="close-button"
+                            className="absolute right-4 top-4 rounded-full p-2 text-xl text-[color:var(--ink)] transition hover:text-[color:var(--accent)]"
                             onClick={() => setIsAuthMenuOpen(false)}
                         >
                             ×
                         </button>
-                        <h2>{isLoginMode ? "Login" : "Sign Up"}</h2>
-                        {error && <p className="error">{error}</p>}
-                        <form onSubmit={handleAuth} id="auth-form">
+                        <h2 className="mb-4 text-2xl">
+                            {isLoginMode ? "Login" : "Sign Up"}
+                        </h2>
+                        {error && (
+                            <p className="mb-4 text-center text-sm text-[#c43f2b] dark:text-[#ff9b87]">
+                                {error}
+                            </p>
+                        )}
+                        <form onSubmit={handleAuth} id="auth-form" className="flex flex-col gap-4">
                             <input
                                 type="text"
                                 id="username"
@@ -864,6 +900,7 @@ function App({ year = "2025" }: AppProps) {
                                 autoCapitalize="none"
                                 placeholder="Username"
                                 required
+                                className="rounded-xl border border-[color:var(--border-strong)] bg-[color:var(--input-bg)] px-4 py-3 text-sm text-[color:var(--ink)]"
                             />
                             <input
                                 type="password"
@@ -876,14 +913,19 @@ function App({ year = "2025" }: AppProps) {
                                         : "new-password"
                                 }
                                 required
+                                className="rounded-xl border border-[color:var(--border-strong)] bg-[color:var(--input-bg)] px-4 py-3 text-sm text-[color:var(--ink)]"
                             />
-                            <button type="submit" form="auth-form">
+                            <button
+                                type="submit"
+                                form="auth-form"
+                                className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-3 text-sm font-semibold text-[color:var(--ink)] shadow-[0_10px_18px_rgba(21,14,8,0.12)] transition hover:-translate-y-0.5 hover:border-[color:var(--accent)]"
+                            >
                                 {isLoginMode ? "Login" : "Sign Up"}
                             </button>
                         </form>
                         <button
                             onClick={() => setIsLoginMode(!isLoginMode)}
-                            className="toggle-auth"
+                            className="mt-4 w-full text-sm font-medium text-[#2e6f78] transition hover:text-[color:var(--accent)] dark:text-[#8ec7cf]"
                         >
                             {isLoginMode
                                 ? "Need an account? Sign up"
@@ -893,7 +935,13 @@ function App({ year = "2025" }: AppProps) {
                 </div>
             )}
 
-            <div className={`app-shell ${isTocOpen ? "with-toc" : "no-toc"}`}>
+            <div
+                className={`grid gap-5 ${
+                    isTocOpen
+                        ? "grid-cols-[minmax(240px,280px)_1fr]"
+                        : "grid-cols-1"
+                } max-[960px]:grid-cols-1`}
+            >
                 {isTocOpen && (
                     <TableOfContents
                         awards={awardSections}
@@ -903,7 +951,7 @@ function App({ year = "2025" }: AppProps) {
                         showCloseButton={isMobileView}
                     />
                 )}
-                <main className="content-area">
+                <main className="flex flex-col gap-6 rounded-[20px] border border-[color:var(--border)] bg-[color:var(--card)] p-6 shadow-[0_20px_30px_rgba(24,17,10,0.12)]">
                     <Stats
                         movies={movies}
                         totalNominations={totalNominations}
@@ -913,7 +961,7 @@ function App({ year = "2025" }: AppProps) {
                         divRef={divRef}
                         suppressConfetti={isHydrating}
                     />
-                    <div className="categories">
+                    <div className="flex flex-col gap-6">
                         {awards.map((award, index) => {
                             const section = awardSections[index]
                             return (
@@ -930,11 +978,11 @@ function App({ year = "2025" }: AppProps) {
                         })}
                     </div>
                     {originalSongDisclaimers[year] && (
-                        <p className="disclaimer">
+                        <p className="m-0 text-sm text-[color:var(--muted)] dark:text-[#c0b4a5]">
                             *{originalSongDisclaimers[year]}
                         </p>
                     )}
-                    <footer>
+                    <footer className="text-center">
                         <a
                             href="https://github.com/preraku/oscar-checklist"
                             target="_blank"
@@ -949,7 +997,10 @@ function App({ year = "2025" }: AppProps) {
                 </main>
             </div>
             {!isTocOpen && (
-                <button className="toc-fab" onClick={() => setIsTocOpen(true)}>
+                <button
+                    className="fixed bottom-4 right-4 z-[997] inline-flex items-center rounded-full border border-[color:var(--accent)] bg-[color:var(--card)] px-4 py-2 text-sm font-semibold text-[color:var(--ink)] shadow-[0_16px_24px_rgba(24,17,10,0.14)] transition hover:-translate-y-0.5 hover:border-[color:var(--accent-ink)] max-[960px]:inline-flex min-[961px]:hidden"
+                    onClick={() => setIsTocOpen(true)}
+                >
                     Awards
                 </button>
             )}

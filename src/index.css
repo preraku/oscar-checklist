@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Space+Grotesk:wght@400;500;600&display=swap");
+@import "tailwindcss";
 
 :root {
     --accent: #d19a2a;
@@ -7,46 +8,10 @@
     --muted: #6b6157;
     --paper: #f6f1e9;
     --card: #fffaf3;
-    --floating-stats-offset: 0px;
-    --floating-stats-height: 64px;
-    --header-height: 0px;
-    font-family: "Space Grotesk", "Segoe UI", sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
-    color-scheme: light;
-    color: var(--ink);
-    background-color: var(--paper);
-    scroll-behavior: smooth;
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-a {
-    font-weight: 500;
-    color: #3f3730;
-    text-decoration: none;
-}
-
-a:hover {
-    color: var(--accent-ink);
-}
-
-li {
-    margin-bottom: 0.5em;
-}
-
-body {
-    margin: 0;
-    display: block;
-    min-width: 320px;
-    min-height: 100vh;
-    background: radial-gradient(
+    --border: #eadcc7;
+    --border-strong: #d9c9b3;
+    --input-bg: #fffdf9;
+    --page-bg: radial-gradient(
             circle at 10% 10%,
             rgba(209, 154, 42, 0.18),
             transparent 45%
@@ -57,61 +22,24 @@ body {
             transparent 55%
         ),
         linear-gradient(160deg, #f9f2e7 0%, #f1e6d8 100%);
-    color: var(--ink);
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image: radial-gradient(
+    --page-overlay: radial-gradient(
         circle at 30% 80%,
         rgba(210, 100, 74, 0.08),
         transparent 55%
     );
-    pointer-events: none;
-    z-index: -1;
-}
-
-h1,
-h2,
-h3 {
-    font-family: "Fraunces", "Times New Roman", serif;
-    letter-spacing: -0.01em;
-    color: #1f1a14;
-}
-
-h1 {
-    font-size: clamp(2.4rem, 3.5vw, 3.4rem);
-    line-height: 1.1;
-}
-
-button {
-    border-radius: 12px;
-    border: 1px solid transparent;
-    padding: 0.6em 1.2em;
-    font-size: 0.95em;
-    font-weight: 600;
-    font-family: inherit;
-    background-color: var(--card);
-    cursor: pointer;
-    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    --floating-stats-offset: 0px;
+    --floating-stats-height: 64px;
+    --header-height: 0px;
+    font-family: "Space Grotesk", "Segoe UI", sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    color-scheme: light;
     color: var(--ink);
-    box-shadow: 0 8px 14px rgba(24, 17, 10, 0.1);
-}
-
-button:hover {
-    border-color: var(--accent);
-    transform: translateY(-1px);
-}
-
-button:focus,
-button:focus-visible,
-.year-option:focus-visible,
-.toc-item button:focus-visible,
-.years-index__link:focus-visible {
-    outline: 2px solid rgba(209, 154, 42, 0.6);
-    outline-offset: 2px;
+    background-color: var(--paper);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -122,27 +50,10 @@ button:focus-visible,
         --muted: #c0b4a5;
         --paper: #15110c;
         --card: #1f1a14;
-        color-scheme: dark;
-        color: var(--ink);
-        background-color: var(--paper);
-    }
-
-    h1,
-    h2,
-    h3 {
-        color: #f4ede3;
-    }
-
-    a {
-        color: #e9dcc8;
-    }
-
-    a:hover {
-        color: var(--accent);
-    }
-
-    body {
-        background: radial-gradient(
+        --border: #3a2e22;
+        --border-strong: #4a3a2a;
+        --input-bg: #1a1510;
+        --page-bg: radial-gradient(
                 circle at 10% 10%,
                 rgba(209, 154, 42, 0.12),
                 transparent 45%
@@ -153,32 +64,101 @@ button:focus-visible,
                 transparent 55%
             ),
             linear-gradient(160deg, #1a140e 0%, #110d09 100%);
-        color: var(--ink);
-    }
-
-    body::before {
-        background-image: radial-gradient(
+        --page-overlay: radial-gradient(
             circle at 30% 80%,
             rgba(210, 100, 74, 0.12),
             transparent 55%
         );
-    }
-
-    button {
-        background-color: #2a2219;
+        color-scheme: dark;
         color: var(--ink);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
+        background-color: var(--paper);
+    }
+}
+
+@layer base {
+    * {
+        box-sizing: border-box;
     }
 
-    button:hover {
-        border-color: var(--accent);
+    html {
+        scroll-behavior: smooth;
     }
 
-    button:focus,
-    button:focus-visible,
-    .year-option:focus-visible,
-    .toc-item button:focus-visible,
-    .years-index__link:focus-visible {
-        outline-color: rgba(240, 179, 79, 0.65);
+    body {
+        margin: 0;
+        min-width: 320px;
+        min-height: 100vh;
+        color: var(--ink);
+        background: var(--page-bg);
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: var(--page-overlay);
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    a {
+        font-weight: 500;
+        color: var(--ink);
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: var(--accent);
+    }
+
+    h1,
+    h2,
+    h3 {
+        font-family: "Fraunces", "Times New Roman", serif;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+    }
+}
+
+.confetti-burst {
+    position: absolute;
+    inset: -0.9rem -1.1rem;
+    pointer-events: none;
+    display: block;
+    z-index: 2;
+}
+
+.confetti-piece {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    opacity: 0;
+    animation: confetti-pop 850ms ease-out forwards;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    background: var(--c, #ffffff);
+    animation-delay: var(--d, 0ms);
+}
+
+@keyframes confetti-pop {
+    0% {
+        transform: translate(-50%, -50%) scale(0.7);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(
+                calc(-50% + var(--x)),
+                calc(-50% + var(--y))
+            )
+            rotate(var(--r))
+            scale(1.15);
+        opacity: 0;
     }
 }
