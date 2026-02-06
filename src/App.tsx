@@ -67,6 +67,9 @@ const Movie = ({ id, award, movies, watchedMovies, toggleWatchedMovie }: MoviePr
                     <img
                         src={movie.poster}
                         alt={`${movie.title} poster`}
+                        onError={event => {
+                            event.currentTarget.style.display = "none"
+                        }}
                         className="w-[44%] rounded-[10px] border-2 border-[#e1d2bf] shadow-[0_8px_16px_rgba(25,18,12,0.15)] transition duration-200 ease-out group-hover:scale-[1.04] dark:border-[#3a2e22] dark:shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
                     />
                 )}
