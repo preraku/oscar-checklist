@@ -1,11 +1,15 @@
 import mayDecemberPoster from "../public/posters/2024/may_december.jpg"
 
+const getUniqueNominees = (nominees: number[]) => {
+    return Array.from(new Set(nominees))
+}
+
 const getMovieToNominationsMap = (
     awardsList: Award[],
 ): Map<number, string[]> => {
     const movieToNomsMap = new Map<number, string[]>()
     awardsList.forEach(award => {
-        award.nominees.forEach(nominee => {
+        getUniqueNominees(award.nominees).forEach(nominee => {
             const nominations = movieToNomsMap.get(nominee)
             if (nominations) {
                 nominations.push(award.name)
@@ -20,7 +24,7 @@ const getMovieToNominationsMap = (
 
 const getTotalNominations = (awardsList: Award[]) => {
     return awardsList.reduce((acc, award) => {
-        return acc + award.nominees.length
+        return acc + getUniqueNominees(award.nominees).length
     }, 0)
 }
 
