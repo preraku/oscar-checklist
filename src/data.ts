@@ -75,6 +75,23 @@ type Award = {
     nominees: number[]
 }
 
+const getPosterFileNameFromTitle = (title: string) => {
+    return `${title.replace(/[^\p{L}\p{N} -]/gu, "").trim()}.jpg`
+}
+
+const withPosterDefaults = (movies: Movie[], postersBaseUrl: string) => {
+    return movies.map(movie => {
+        if (typeof movie.poster === "string" && movie.poster.trim().length > 0) {
+            return movie
+        }
+
+        return {
+            ...movie,
+            poster: `${postersBaseUrl}/${getPosterFileNameFromTitle(movie.title)}`,
+        }
+    })
+}
+
 const movies2024: Movie[] = [
     {
         id: 0,
@@ -510,6 +527,7 @@ const awards2024: Award[] = [
 ]
 
 const POSTERS_URL_2025 = `${POSTERS_URL}/2025`
+const POSTERS_URL_2026 = `${POSTERS_URL}/2026`
 
 const movies2025: Movie[] = [
     {
@@ -1018,7 +1036,7 @@ const awards2025: Award[] = [
     },
 ]
 
-const movies2026: Movie[] = [
+const movies2026Base: Movie[] = [
     {
         id: 0,
         title: "Marty Supreme",
@@ -1409,6 +1427,8 @@ const movies2026: Movie[] = [
         "Original Song*": "Viva Verdi! - Music and Lyric by Nicholas Pike",
     },
 ]
+
+const movies2026: Movie[] = withPosterDefaults(movies2026Base, POSTERS_URL_2026)
 
 const awards2026: Award[] = [
     {
