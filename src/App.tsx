@@ -502,7 +502,7 @@ type AppProps = {
     year?: string
 }
 
-function App({ year = "2025" }: AppProps) {
+function App({ year = "2026" }: AppProps) {
     const { movies, awards, movieToNomsMap, totalNominations } = filmData[year]
     const awardSections = useMemo(
         () =>
