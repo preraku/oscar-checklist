@@ -38,6 +38,7 @@ export type Movie = {
     "Actress in a Supporting Role"?: string
     "Animated Feature Film"?: string
     "Animated Short Film"?: string
+    Casting?: string
     Cinematography?: string
     "Costume Design"?: string
     Directing?: string
@@ -1013,6 +1014,521 @@ const awards2025: Award[] = [
     },
 ]
 
+const movies2026: Movie[] = [
+    {
+        id: 0,
+        title: "Marty Supreme",
+        poster: "",
+        "Actor in a Leading Role": "Timothée Chalamet",
+        Casting: "Jennifer Venditti",
+        Cinematography: "Darius Khondji",
+        "Costume Design": "Miyako Bellizzi",
+        Directing: "Josh Safdie",
+        "Film Editing": "Ronald Bronstein and Josh Safdie",
+        "Production Design":
+            "Production Design: Jack Fisk; Set Decoration: Adam Willis",
+        "Writing (Original Screenplay)":
+            "Written by Ronald Bronstein & Josh Safdie",
+    },
+    {
+        id: 1,
+        title: "One Battle after Another",
+        poster: "",
+        "Actor in a Leading Role": "Leonardo DiCaprio",
+        "Actor in a Supporting Role": "Benicio del Toro & Sean Penn",
+        "Actress in a Supporting Role": "Teyana Taylor",
+        Casting: "Cassandra Kulukundis",
+        Cinematography: "Michael Bauman",
+        Directing: "Paul Thomas Anderson",
+        "Film Editing": "Andy Jurgensen",
+        "Music (Original Score)": "Jonny Greenwood",
+        "Production Design":
+            "Production Design: Florencia Martin; Set Decoration: Anthony Carlino",
+        Sound: "José Antonio García, Christopher Scarabosio and Tony Villaflor",
+        "Writing (Adapted Screenplay)": "Written by Paul Thomas Anderson",
+    },
+    {
+        id: 2,
+        title: "Blue Moon",
+        poster: "",
+        "Actor in a Leading Role": "Ethan Hawke",
+        "Writing (Original Screenplay)": "Written by Robert Kaplow",
+    },
+    {
+        id: 3,
+        title: "Sinners",
+        poster: "",
+        "Actor in a Leading Role": "Michael B. Jordan",
+        "Actor in a Supporting Role": "Delroy Lindo",
+        "Actress in a Supporting Role": "Wunmi Mosaku",
+        Casting: "Francine Maisler",
+        Cinematography: "Autumn Durald Arkapaw",
+        "Costume Design": "Ruth E. Carter",
+        Directing: "Ryan Coogler",
+        "Film Editing": "Michael P. Shawver",
+        "Makeup and Hairstyling": "Ken Diaz, Mike Fontaine and Shunika Terry",
+        "Music (Original Score)": "Ludwig Goransson",
+        "Original Song*":
+            "I Lied To You - Music and Lyric by Raphael Saadiq and Ludwig Goransson",
+        "Production Design":
+            "Production Design: Hannah Beachler; Set Decoration: Monique Champagne",
+        Sound: "Chris Welcker, Benjamin A. Burtt, Felipe Pacheco, Brandon Proctor and Steve Boeddeker",
+        "Visual Effects":
+            "Michael Ralla, Espen Nordahl, Guido Wolter and Donnie Dean",
+        "Writing (Original Screenplay)": "Written by Ryan Coogler",
+    },
+    {
+        id: 4,
+        title: "The Secret Agent",
+        poster: "",
+        "Actor in a Leading Role": "Wagner Moura",
+        Casting: "Gabriel Domingues",
+        "International Feature Film": "Brazil",
+    },
+    {
+        id: 5,
+        title: "Frankenstein",
+        poster: "",
+        "Actor in a Supporting Role": "Jacob Elordi",
+        Cinematography: "Dan Laustsen",
+        "Costume Design": "Kate Hawley",
+        "Makeup and Hairstyling": "Mike Hill, Jordan Samuel and Cliona Furey",
+        "Music (Original Score)": "Alexandre Desplat",
+        "Production Design":
+            "Production Design: Tamara Deverell; Set Decoration: Shane Vieau",
+        Sound: "Greg Chapman, Nathan Robitaille, Nelson Ferreira, Christian Cooke and Brad Zoern",
+        "Writing (Adapted Screenplay)":
+            "Written for the Screen by Guillermo del Toro",
+    },
+    {
+        id: 6,
+        title: "Sentimental Value",
+        poster: "",
+        "Actor in a Supporting Role": "Stellan Skarsgård",
+        "Actress in a Leading Role": "Renate Reinsve",
+        "Actress in a Supporting Role":
+            "Elle Fanning & Inga Ibsdotter Lilleaas",
+        Directing: "Joachim Trier",
+        "Film Editing": "Olivier Bugge Coutté",
+        "International Feature Film": "Norway",
+        "Writing (Original Screenplay)": "Written by Eskil Vogt, Joachim Trier",
+    },
+    {
+        id: 7,
+        title: "Hamnet",
+        poster: "",
+        "Actress in a Leading Role": "Jessie Buckley",
+        Casting: "Nina Gold",
+        "Costume Design": "Malgosia Turzanska",
+        Directing: "Chloé Zhao",
+        "Music (Original Score)": "Max Richter",
+        "Production Design":
+            "Production Design: Fiona Crombie; Set Decoration: Alice Felton",
+        "Writing (Adapted Screenplay)":
+            "Screenplay by Chloé Zhao & Maggie O'Farrell",
+    },
+    {
+        id: 8,
+        title: "If I Had Legs I'd Kick You",
+        poster: "",
+        "Actress in a Leading Role": "Rose Byrne",
+    },
+    {
+        id: 9,
+        title: "Song Sung Blue",
+        poster: "",
+        "Actress in a Leading Role": "Kate Hudson",
+    },
+    {
+        id: 10,
+        title: "Bugonia",
+        poster: "",
+        "Actress in a Leading Role": "Emma Stone",
+        "Music (Original Score)": "Jerskin Fendrix",
+        "Writing (Adapted Screenplay)": "Screenplay by Will Tracy",
+    },
+    {
+        id: 11,
+        title: "Weapons",
+        poster: "",
+        "Actress in a Supporting Role": "Amy Madigan",
+    },
+    {
+        id: 12,
+        title: "Arco",
+        poster: "",
+        "Animated Feature Film":
+            "Ugo Bienvenu, Félix de Givry, Sophie Mas and Natalie Portman",
+    },
+    {
+        id: 13,
+        title: "Elio",
+        poster: "",
+        "Animated Feature Film":
+            "Madeline Sharafian, Domee Shi, Adrian Molina and Mary Alice Drumm",
+    },
+    {
+        id: 14,
+        title: "KPop Demon Hunters",
+        poster: "",
+        "Animated Feature Film":
+            "Maggie Kang, Chris Appelhans and Michelle L.M. Wong",
+        "Original Song*":
+            "Golden -  Music and Lyric by EJAE, Mark Sonnenblick, Joong Gyu Kwak, Yu Han Lee, Hee Dong Nam, Jeong Hoon Seo and Teddy Park",
+    },
+    {
+        id: 15,
+        title: "Little Amélie or the Character of Rain",
+        poster: "",
+        "Animated Feature Film":
+            "Maïlys Vallade, Liane-Cho Han, Nidia Santiago and Henri Magalon",
+    },
+    {
+        id: 16,
+        title: "Zootopia 2",
+        poster: "",
+        "Animated Feature Film": "Jared Bush, Byron Howard and Yvett Merino",
+    },
+    {
+        id: 17,
+        title: "Butterfly",
+        poster: "",
+        "Animated Short Film": "Florence Miailhe and Ron Dyens",
+    },
+    {
+        id: 18,
+        title: "Forevergreen",
+        poster: "",
+        "Animated Short Film": "Nathan Engelhardt and Jeremy Spears",
+    },
+    {
+        id: 19,
+        title: "The Girl Who Cried Pearls",
+        poster: "",
+        "Animated Short Film": "Chris Lavis and Maciek Szczerbowski",
+    },
+    {
+        id: 20,
+        title: "Retirement Plan",
+        poster: "",
+        "Animated Short Film": "John Kelly and Andrew Freedman",
+    },
+    {
+        id: 21,
+        title: "The Three Sisters",
+        poster: "",
+        "Animated Short Film": "Konstantin Bronzit",
+    },
+    {
+        id: 22,
+        title: "Train Dreams",
+        poster: "",
+        Cinematography: "Adolpho Veloso",
+        "Writing (Adapted Screenplay)":
+            "Screenplay by Clint Bentley & Greg Kwedar",
+        "Original Song*":
+            "Train Dreams - Music by Nick Cave and Bryce Dessner; Lyric by Nick Cave",
+    },
+    {
+        id: 23,
+        title: "Avatar: Fire and Ash",
+        poster: "",
+        "Costume Design": "Deborah L. Scott",
+        "Visual Effects":
+            "Joe Letteri, Richard Baneham, Eric Saindon and Daniel Barrett",
+    },
+    {
+        id: 24,
+        title: "The Alabama Solution",
+        poster: "",
+        "Documentary Feature Film": "Andrew Jarecki and Charlotte Kaufman",
+    },
+    {
+        id: 25,
+        title: "Come See Me in the Good Light",
+        poster: "",
+        "Documentary Feature Film":
+            "Ryan White, Jessica Hargrave, Tig Notaro and Stef Willen",
+    },
+    {
+        id: 26,
+        title: "Cutting through Rocks",
+        poster: "",
+        "Documentary Feature Film": "Sara Khaki and Mohammadreza Eyni",
+    },
+    {
+        id: 27,
+        title: "Mr. Nobody against Putin",
+        poster: "",
+        "Documentary Feature Film": "Nominees to be determined",
+    },
+    {
+        id: 28,
+        title: "The Perfect Neighbor",
+        poster: "",
+        "Documentary Feature Film":
+            "Geeta Gandbhir, Alisa Payne, Nikon Kwantu and Sam Bisbee",
+    },
+    {
+        id: 29,
+        title: "All the Empty Rooms",
+        poster: "",
+        "Documentary Short Film": "Joshua Seftel and Conall Jones",
+    },
+    {
+        id: 30,
+        title: "Armed Only with a Camera: The Life and Death of Brent Renaud",
+        poster: "",
+        "Documentary Short Film": "Craig Renaud and Juan Arredondo",
+    },
+    {
+        id: 31,
+        title: 'Children No More: "Were and Are Gone"',
+        poster: "",
+        "Documentary Short Film": "Hilla Medalia and Sheila Nevins",
+    },
+    {
+        id: 32,
+        title: "The Devil Is Busy",
+        poster: "",
+        "Documentary Short Film": "Christalyn Hampton and Geeta Gandbhir",
+    },
+    {
+        id: 33,
+        title: "Perfectly a Strangeness",
+        poster: "",
+        "Documentary Short Film": "Alison McAlpine",
+    },
+    {
+        id: 34,
+        title: "F1",
+        poster: "",
+        "Film Editing": "Stephen Mirrione",
+        Sound: "Gareth John, Al Nelson, Gwendolyn Yates Whittle, Gary A. Rizzo and Juan Peralta",
+        "Visual Effects":
+            "Ryan Tudhope, Nicolas Chevallier, Robert Harrington and Keith Dawson",
+    },
+    {
+        id: 35,
+        title: "It Was Just an Accident",
+        poster: "",
+        "International Feature Film": "France",
+        "Writing (Original Screenplay)":
+            "Written by Jafar Panahi; Script collaborators - Nader Saïvar, Shadmehr Rastin, Mehdi Mahmoudian",
+    },
+    {
+        id: 36,
+        title: "Sirāt",
+        poster: "",
+        "International Feature Film": "Spain",
+        Sound: "Amanda Villavieja, Laia Casanovas and Yasmina Praderas",
+    },
+    {
+        id: 37,
+        title: "The Voice of Hind Rajab",
+        poster: "",
+        "International Feature Film": "Tunisia",
+    },
+    {
+        id: 38,
+        title: "Butcher's Stain",
+        poster: "",
+        "Live Action Short Film": "Meyer Levinson-Blount and Oron Caspi",
+    },
+    {
+        id: 39,
+        title: "A Friend of Dorothy",
+        poster: "",
+        "Live Action Short Film": "Lee Knight and James Dean",
+    },
+    {
+        id: 40,
+        title: "Jane Austen's Period Drama",
+        poster: "",
+        "Live Action Short Film": "Julia Aks and Steve Pinder",
+    },
+    {
+        id: 41,
+        title: "The Singers",
+        poster: "",
+        "Live Action Short Film": "Sam A. Davis and Jack Piatt",
+    },
+    {
+        id: 42,
+        title: "Two People Exchanging Saliva",
+        poster: "",
+        "Live Action Short Film": "Alexandre Singh and Natalie Musteata",
+    },
+    {
+        id: 43,
+        title: "Kokuho",
+        poster: "",
+        "Makeup and Hairstyling":
+            "Kyoko Toyokawa, Naomi Hibino and Tadashi Nishimatsu",
+    },
+    {
+        id: 44,
+        title: "The Smashing Machine",
+        poster: "",
+        "Makeup and Hairstyling": "Kazu Hiro, Glen Griffin and Bjoern Rehbein",
+    },
+    {
+        id: 45,
+        title: "The Ugly Stepsister",
+        poster: "",
+        "Makeup and Hairstyling": "Thomas Foldberg and Anne Cathrine Sauerberg",
+    },
+    {
+        id: 46,
+        title: "Jurassic World Rebirth",
+        poster: "",
+        "Visual Effects":
+            "David Vickery, Stephen Aplin, Charmaine Chan and Neil Corbould",
+    },
+    {
+        id: 47,
+        title: "The Lost Bus",
+        poster: "",
+        "Visual Effects":
+            "Charlie Noble, David Zaretti, Russell Bowen and Brandon K. McLaughlin",
+    },
+    {
+        id: 48,
+        title: "Diane Warren: Relentless",
+        poster: "",
+        "Original Song*": "Dear Me - Music and Lyric by Diane Warren",
+    },
+    {
+        id: 49,
+        title: "Sweet Dreams of Joy",
+        poster: "",
+        "Original Song*": "Viva Verdi! - Music and Lyric by Nicholas Pike",
+    },
+]
+
+const awards2026: Award[] = [
+    {
+        id: 0,
+        name: "Best Picture",
+        nominees: [10, 34, 5, 7, 0, 1, 4, 6, 3, 22],
+    },
+    {
+        id: 1,
+        name: "Actor in a Leading Role",
+        nominees: [0, 1, 2, 3, 4],
+    },
+    {
+        id: 2,
+        name: "Actor in a Supporting Role",
+        nominees: [1, 5, 3, 1, 6],
+    },
+    {
+        id: 3,
+        name: "Actress in a Leading Role",
+        nominees: [7, 8, 9, 6, 10],
+    },
+    {
+        id: 4,
+        name: "Actress in a Supporting Role",
+        nominees: [6, 6, 11, 3, 1],
+    },
+    {
+        id: 5,
+        name: "Animated Feature Film",
+        nominees: [12, 13, 14, 15, 16],
+    },
+    {
+        id: 6,
+        name: "Animated Short Film",
+        nominees: [17, 18, 19, 20, 21],
+    },
+    {
+        id: 7,
+        name: "Casting",
+        nominees: [7, 0, 1, 4, 3],
+    },
+    {
+        id: 8,
+        name: "Cinematography",
+        nominees: [5, 0, 1, 3, 22],
+    },
+    {
+        id: 9,
+        name: "Costume Design",
+        nominees: [23, 5, 7, 0, 3],
+    },
+    {
+        id: 10,
+        name: "Directing",
+        nominees: [7, 0, 1, 6, 3],
+    },
+    {
+        id: 11,
+        name: "Documentary Feature Film",
+        nominees: [24, 25, 26, 27, 28],
+    },
+    {
+        id: 12,
+        name: "Documentary Short Film",
+        nominees: [29, 30, 31, 32, 33],
+    },
+    {
+        id: 13,
+        name: "Film Editing",
+        nominees: [34, 0, 1, 6, 3],
+    },
+    {
+        id: 14,
+        name: "International Feature Film",
+        nominees: [4, 35, 6, 36, 37],
+    },
+    {
+        id: 15,
+        name: "Live Action Short Film",
+        nominees: [38, 39, 40, 41, 42],
+    },
+    {
+        id: 16,
+        name: "Makeup and Hairstyling",
+        nominees: [5, 43, 3, 44, 45],
+    },
+    {
+        id: 17,
+        name: "Music (Original Score)",
+        nominees: [10, 5, 7, 1, 3],
+    },
+    {
+        id: 18,
+        name: "Original Song*",
+        nominees: [3, 14, 22, 48, 49],
+    },
+    {
+        id: 19,
+        name: "Production Design",
+        nominees: [5, 7, 0, 1, 3],
+    },
+    {
+        id: 20,
+        name: "Sound",
+        nominees: [34, 5, 1, 3, 36],
+    },
+    {
+        id: 21,
+        name: "Visual Effects",
+        nominees: [23, 34, 46, 47, 3],
+    },
+    {
+        id: 22,
+        name: "Writing (Adapted Screenplay)",
+        nominees: [10, 5, 7, 1, 22],
+    },
+    {
+        id: 23,
+        name: "Writing (Original Screenplay)",
+        nominees: [2, 35, 0, 6, 3],
+    },
+]
+
 type AnnualFilmData = {
     movies: Movie[]
     awards: Award[]
@@ -1032,6 +1548,12 @@ const filmData: Record<string, AnnualFilmData> = {
         awards: awards2025,
         movieToNomsMap: getMovieToNominationsMap(awards2025),
         totalNominations: getTotalNominations(awards2025),
+    },
+    2026: {
+        movies: movies2026,
+        awards: awards2026,
+        movieToNomsMap: getMovieToNominationsMap(awards2026),
+        totalNominations: getTotalNominations(awards2026),
     },
 }
 

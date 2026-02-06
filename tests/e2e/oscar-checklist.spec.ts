@@ -1,6 +1,6 @@
 import { test, expect, type Page } from "@playwright/test"
 
-const YEAR = "2025"
+const YEAR = "2026"
 const BASE_PATH = `/oscar-checklist/#/years/${YEAR}`
 
 const getMoviesSeenCount = async (page: Page) => {
@@ -15,7 +15,7 @@ const getMoviesSeenCount = async (page: Page) => {
 }
 
 const getStoredWatchedCount = async (page: Page) => {
-    return page.evaluate((year) => {
+    return page.evaluate(year => {
         const raw = localStorage.getItem(`watchedMovies-${year}`)
         if (!raw) return 0
         try {
