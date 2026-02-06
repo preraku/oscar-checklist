@@ -44,7 +44,7 @@ const Movie = ({ id, award, movies, watchedMovies, toggleWatchedMovie }: MoviePr
     const watched = watchedMovies.has(id)
     const movie = movies[id]
     const baseClasses =
-        "group flex flex-[1_1_180px] flex-col gap-2 rounded-[18px] border px-4 py-4 text-left shadow-[0_14px_24px_rgba(34,24,16,0.12)] transition duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_18px_32px_rgba(34,24,16,0.18)] max-w-[230px] min-[961px]:flex-[1_1_150px] min-[961px]:max-w-[175px]"
+        "group flex flex-[1_1_180px] max-[640px]:flex-[0_1_calc(50%-0.5rem)] flex-col gap-2 rounded-[18px] border px-4 py-4 text-left shadow-[0_14px_24px_rgba(34,24,16,0.12)] transition duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_18px_32px_rgba(34,24,16,0.18)] max-w-[230px] max-[640px]:max-w-none min-[961px]:max-w-none"
     const unwatchedClasses =
         "border-[color:var(--border)] bg-[linear-gradient(180deg,#fff8ed_0%,#f3e7d6_100%)] text-[color:var(--ink)] hover:border-[#d8b070] dark:border-[#3a2e22] dark:bg-[linear-gradient(180deg,#2a2219_0%,#201913_100%)] dark:text-[#f1e8dc] dark:hover:border-[#7a5b2b]"
     const watchedClasses =
@@ -117,7 +117,7 @@ const Category = ({
                     ({watchedMoviesInCategory}/{totalMoviesInCategory})
                 </span>
             </h2>
-            <div className="flex flex-wrap gap-4 min-[961px]:gap-3 max-[960px]:justify-center">
+            <div className="flex flex-wrap gap-4 max-[960px]:justify-center min-[961px]:grid min-[961px]:grid-cols-5 min-[961px]:gap-3">
                 {nominees.map(nominee => {
                     return (
                         <Movie
@@ -557,9 +557,7 @@ function App({ year = "2026" }: AppProps) {
         if (typeof window === "undefined") return true
         return window.innerWidth > 960
     })
-    const [isYearMenuOpen, setIsYearMenuOpen] = useState(false)
     const headerRef = useRef<HTMLDivElement | null>(null)
-    const yearSelectorRef = useRef<HTMLDivElement | null>(null)
 
     const WATCHED_MOVIES_KEY = `watchedMovies-${year}`
 
@@ -596,32 +594,6 @@ function App({ year = "2026" }: AppProps) {
         window.addEventListener("resize", setHeaderHeight)
         return () => window.removeEventListener("resize", setHeaderHeight)
     }, [])
-
-    useEffect(() => {
-        if (!isYearMenuOpen || typeof document === "undefined") return
-
-        const handlePointerDown = (event: PointerEvent) => {
-            const target = event.target as Node | null
-            if (!target) return
-            if (!yearSelectorRef.current?.contains(target)) {
-                setIsYearMenuOpen(false)
-            }
-        }
-
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === "Escape") {
-                setIsYearMenuOpen(false)
-            }
-        }
-
-        document.addEventListener("pointerdown", handlePointerDown)
-        document.addEventListener("keydown", handleKeyDown)
-
-        return () => {
-            document.removeEventListener("pointerdown", handlePointerDown)
-            document.removeEventListener("keydown", handleKeyDown)
-        }
-    }, [isYearMenuOpen])
 
     useEffect(() => {
         const handleResize = () => {
@@ -815,7 +787,6 @@ function App({ year = "2026" }: AppProps) {
 
     const toggleToc = () => setIsTocOpen(prev => !prev)
     const handleYearSelect = (selectedYear: string) => {
-        setIsYearMenuOpen(false)
         if (selectedYear === year) return
         window.location.hash = `/years/${selectedYear}`
     }
@@ -835,7 +806,7 @@ function App({ year = "2026" }: AppProps) {
                         Oscars Checklist
                     </h1>
                 </div>
-                <div className="relative z-10 flex flex-wrap items-center gap-3">
+                    <div className="relative z-10 flex flex-wrap items-center gap-3">
                     {token ? (
                         <button className={headerButtonClass} onClick={handleLogout}>
                             Logout
@@ -848,44 +819,23 @@ function App({ year = "2026" }: AppProps) {
                             Login to Save
                         </button>
                     )}
-                    <div className="relative" ref={yearSelectorRef}>
-                        <button
-                            className={headerButtonClass}
-                            onClick={() =>
-                                setIsYearMenuOpen(prev => !prev)
-                            }
-                            aria-haspopup="listbox"
-                            aria-expanded={isYearMenuOpen}
+                    <label
+                        className={`${headerButtonClass} inline-flex items-center cursor-pointer`}
+                    >
+                        Year:
+                        <select
+                            value={year}
+                            onChange={event => handleYearSelect(event.target.value)}
+                            aria-label="Select awards year"
+                            className="ml-2 bg-transparent text-[color:var(--ink)] focus:outline-none"
                         >
-                            Year: {year}
-                        </button>
-                        {isYearMenuOpen && (
-                            <div
-                                className="absolute right-0 top-[calc(100%+0.5rem)] z-20 grid min-w-[8rem] gap-1 rounded-[14px] border border-[color:var(--border)] bg-[color:var(--card)] p-1.5 shadow-[0_18px_26px_rgba(30,21,13,0.16)]"
-                                role="listbox"
-                                aria-label="Select awards year"
-                            >
-                                {availableYears.map(availableYear => (
-                                    <button
-                                        key={availableYear}
-                                        type="button"
-                                        className={`w-full rounded-[10px] border px-3 py-2 text-left text-sm transition ${
-                                            availableYear === year
-                                                ? "border-[color:var(--accent)] bg-[rgba(209,154,42,0.12)] text-[color:var(--accent-ink)]"
-                                                : "border-transparent text-[color:var(--ink)] hover:border-[color:var(--accent)] hover:text-[color:var(--accent-ink)]"
-                                        }`}
-                                        role="option"
-                                        aria-selected={availableYear === year}
-                                        onClick={() =>
-                                            handleYearSelect(availableYear)
-                                        }
-                                    >
-                                        {availableYear}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-                    </div>
+                            {availableYears.map(availableYear => (
+                                <option key={availableYear} value={availableYear}>
+                                    {availableYear}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
                     <button className={headerButtonClass} onClick={toggleToc}>
                         {isTocOpen ? "Hide Awards List" : "Show Awards List"}
                     </button>
