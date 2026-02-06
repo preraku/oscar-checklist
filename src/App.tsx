@@ -468,11 +468,23 @@ const loadWatchedMovies = async (year: string): Promise<Set<number>> => {
                 },
             },
         )
+        if (!response.ok) {
+            throw new Error(`Movies request failed: ${response.status}`)
+        }
         const movies = await response.json()
+        if (!Array.isArray(movies)) {
+            throw new Error("Movies response was not an array")
+        }
         return new Set(movies)
     } catch (error) {
         console.error("Error loading user movies:", error)
-        return new Set()
+        const localMovies = localStorage.getItem(`watchedMovies-${year}`)
+        if (!localMovies) return new Set()
+        try {
+            return new Set(JSON.parse(localMovies) as number[])
+        } catch {
+            return new Set()
+        }
     }
 }
 
@@ -504,14 +516,22 @@ type AppProps = {
 
 function App({ year = "2026" }: AppProps) {
     const { movies, awards, movieToNomsMap, totalNominations } = filmData[year]
-    const awardSections = useMemo(
+    const normalizedAwards = useMemo(
         () =>
             awards.map(award => ({
+                ...award,
+                nominees: Array.from(new Set(award.nominees)),
+            })),
+        [awards],
+    )
+    const awardSections = useMemo(
+        () =>
+            normalizedAwards.map(award => ({
                 id: `award-${slugify(award.name)}`,
                 name: award.name,
                 count: award.nominees.length,
             })),
-        [awards],
+        [normalizedAwards],
     )
     const [watchedMovies, setWatchedMovies] = useState<Set<number>>(new Set())
     const [nominationsCleared, setNominationsCleared] = useState(0)
@@ -550,7 +570,8 @@ function App({ year = "2026" }: AppProps) {
             setWatchedMovies(movies)
             setNominationsCleared(
                 [...movies].reduce((acc, movieId) => {
-                    return acc + (movieToNomsMap.get(movieId)!.length)
+                    const nominations = movieToNomsMap.get(movieId)
+                    return nominations ? acc + nominations.length : acc
                 }, 0),
             )
         } finally {
@@ -688,12 +709,14 @@ function App({ year = "2026" }: AppProps) {
             if (newWatchedMovies.has(id)) {
                 newWatchedMovies.delete(id)
                 setNominationsCleared(
-                    nominationsCleared - movieToNomsMap.get(id)!.length,
+                    nominationsCleared -
+                        (movieToNomsMap.get(id)?.length ?? 0),
                 )
             } else {
                 newWatchedMovies.add(id)
                 setNominationsCleared(
-                    nominationsCleared + movieToNomsMap.get(id)!.length,
+                    nominationsCleared +
+                        (movieToNomsMap.get(id)?.length ?? 0),
                 )
             }
             localStorage.setItem(
@@ -962,7 +985,7 @@ function App({ year = "2026" }: AppProps) {
                         suppressConfetti={isHydrating}
                     />
                     <div className="flex flex-col gap-6">
-                        {awards.map((award, index) => {
+                        {normalizedAwards.map((award, index) => {
                             const section = awardSections[index]
                             return (
                                 <Category
