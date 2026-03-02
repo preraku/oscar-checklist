@@ -11,5 +11,5 @@ export default defineConfig(() => ({
             plugins: [tailwindcss(), autoprefixer()],
         },
     },
-    base: process.env.VITE_BASE || "/oscar-checklist/",
+    base: process.env.VITE_BASE || "/",
 }))

@@ -111,7 +111,7 @@ const Category = ({
         >
             <h2 className="mb-3 flex items-center gap-2 text-[1.45rem]">
                 <img
-                    src="/oscar-checklist/oscar_gold.svg"
+                    src={`${import.meta.env.BASE_URL}oscar_gold.svg`}
                     alt=""
                     className="h-[1em] w-auto translate-y-[-0.1em]"
                 />

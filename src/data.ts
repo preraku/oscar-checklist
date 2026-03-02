@@ -1,4 +1,4 @@
-import mayDecemberPoster from "../public/posters/2024/may_december.jpg"
+const mayDecemberPoster = `${import.meta.env.BASE_URL}posters/2024/may_december.jpg`
 
 const getUniqueNominees = (nominees: number[]) => {
     return Array.from(new Set(nominees))
