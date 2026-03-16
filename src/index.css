@@ -142,6 +142,27 @@
     animation-delay: var(--d, 0ms);
 }
 
+@keyframes badge-pop {
+    0% {
+        scale: 0;
+        opacity: 0;
+    }
+
+    60% {
+        scale: 1.18;
+        opacity: 1;
+    }
+
+    100% {
+        scale: 1;
+        opacity: 1;
+    }
+}
+
+.winner-badge {
+    animation: badge-pop 400ms ease-out;
+}
+
 @keyframes confetti-pop {
     0% {
         transform: translate(-50%, -50%) scale(0.7);

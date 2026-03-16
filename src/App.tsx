@@ -8,10 +8,11 @@ import {
     type CSSProperties,
 } from "react"
 import { availableYears, filmData } from "./data.ts"
-import type { Movie } from "./data.ts"
+import type { Movie, Award } from "./data.ts"
 
 // const API_URL = "http://localhost:8787"
 const API_URL = "https://my-app.preraku.workers.dev"
+const OSCAR_ICON_URL = `${import.meta.env.BASE_URL}oscar_gold.svg`
 
 const slugify = (value: string) => {
     return value
@@ -38,20 +39,36 @@ type MovieProps = {
     movies: Movie[]
     watchedMovies: Set<number>
     toggleWatchedMovie: (id: number) => void
+    isWinner?: boolean
 }
 
-const Movie = ({ id, award, movies, watchedMovies, toggleWatchedMovie }: MovieProps) => {
+const Movie = ({ id, award, movies, watchedMovies, toggleWatchedMovie, isWinner }: MovieProps) => {
     const watched = watchedMovies.has(id)
     const movie = movies[id]
     const baseClasses =
-        "group flex flex-[1_1_180px] max-[640px]:flex-[0_1_calc(50%-0.5rem)] flex-col gap-2 rounded-[18px] border px-4 py-4 text-left shadow-[0_14px_24px_rgba(34,24,16,0.12)] transition duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_18px_32px_rgba(34,24,16,0.18)] max-w-[230px] max-[640px]:max-w-none min-[961px]:max-w-none"
+        "group relative flex flex-[1_1_180px] max-[640px]:flex-[0_1_calc(50%-0.5rem)] flex-col gap-2 rounded-[18px] border px-4 py-4 text-left shadow-[0_14px_24px_rgba(34,24,16,0.12)] transition duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_18px_32px_rgba(34,24,16,0.18)] max-w-[230px] max-[640px]:max-w-none min-[961px]:max-w-none"
     const unwatchedClasses =
         "border-[color:var(--border)] bg-[linear-gradient(180deg,#fff8ed_0%,#f3e7d6_100%)] text-[color:var(--ink)] hover:border-[#d8b070] dark:border-[#3a2e22] dark:bg-[linear-gradient(180deg,#2a2219_0%,#201913_100%)] dark:text-[#f1e8dc] dark:hover:border-[#7a5b2b]"
     const watchedClasses =
         "border-[#9cc4aa] bg-[linear-gradient(180deg,#e3f3ea_0%,#d4eadf_100%)] text-[#1f5a3a] line-through hover:border-[#6fb08e] dark:border-[#2f4a3a] dark:bg-[linear-gradient(180deg,#23382c_0%,#1c2c22_100%)] dark:text-[#bde1c8] dark:hover:border-[#3b5c48]"
+    const winnerUnwatchedClasses =
+        "border-[#d4a843] bg-[linear-gradient(180deg,#fff9e0_0%,#f5e4b0_100%)] text-[color:var(--ink)] hover:border-[#c49530] shadow-[0_10px_28px_rgba(190,150,40,0.35)] hover:shadow-[0_14px_36px_rgba(190,150,40,0.45)] dark:border-[#5a4a20] dark:bg-[linear-gradient(180deg,#2a2410_0%,#211d0e_100%)] dark:text-[#f5ecd0] dark:hover:border-[#7a6530] dark:shadow-[0_10px_28px_rgba(200,160,40,0.25)] dark:hover:shadow-[0_14px_36px_rgba(200,160,40,0.35)]"
+    const winnerWatchedClasses =
+        "border-[#b8c87a] bg-[linear-gradient(180deg,#f0f5d8_0%,#e2eac2_100%)] text-[#3a5a1f] line-through hover:border-[#a0b060] shadow-[0_10px_28px_rgba(160,150,40,0.3)] hover:shadow-[0_14px_36px_rgba(160,150,40,0.4)] dark:border-[#3a4a28] dark:bg-[linear-gradient(180deg,#242e1c_0%,#1c2416_100%)] dark:text-[#c8dea8] dark:hover:border-[#4a5a34] dark:shadow-[0_10px_28px_rgba(180,150,40,0.2)] dark:hover:shadow-[0_14px_36px_rgba(180,150,40,0.3)]"
+
+    const stateClasses = isWinner
+        ? (watched ? winnerWatchedClasses : winnerUnwatchedClasses)
+        : (watched ? watchedClasses : unwatchedClasses)
 
     return (
-        <label className={`${baseClasses} ${watched ? watchedClasses : unwatchedClasses}`}>
+        <label className={`${baseClasses} ${stateClasses}`}>
+            {isWinner && (
+                <img
+                    src={OSCAR_ICON_URL}
+                    alt="Winner"
+                    className="winner-badge pointer-events-none absolute -top-[8px] -right-[6px] z-10 w-[20px] rotate-12 drop-shadow-[0_2px_3px_rgba(0,0,0,0.3)]"
+                />
+            )}
             <div className="flex flex-col gap-2">
                 <input
                     type="checkbox"
@@ -87,6 +104,7 @@ type CategoryProps = {
     id: string
     name: string
     nominees: number[]
+    winner?: number | number[]
     movies: Movie[]
     watchedMovies: Set<number>
     toggleWatchedMovie: (id: number) => void
@@ -96,6 +114,7 @@ const Category = ({
     id,
     name,
     nominees,
+    winner,
     movies,
     watchedMovies,
     toggleWatchedMovie,
@@ -111,7 +130,7 @@ const Category = ({
         >
             <h2 className="mb-3 flex items-center gap-2 text-[1.45rem]">
                 <img
-                    src={`${import.meta.env.BASE_URL}oscar_gold.svg`}
+                    src={OSCAR_ICON_URL}
                     alt=""
                     className="h-[1em] w-auto translate-y-[-0.1em]"
                 />
@@ -130,6 +149,7 @@ const Category = ({
                             movies={movies}
                             watchedMovies={watchedMovies}
                             toggleWatchedMovie={toggleWatchedMovie}
+                            isWinner={Array.isArray(winner) ? winner.includes(nominee) : winner === nominee}
                         />
                     )
                 })}
@@ -140,6 +160,7 @@ const Category = ({
 
 type StatsProps = {
     movies: Movie[]
+    awards: Award[]
     totalNominations: number
     watchedMovies: Set<number>
     nominationsCleared: number
@@ -150,6 +171,7 @@ type StatsProps = {
 
 const Stats = ({
     movies,
+    awards,
     totalNominations,
     watchedMovies,
     nominationsCleared,
@@ -157,6 +179,18 @@ const Stats = ({
     divRef,
     suppressConfetti,
 }: StatsProps) => {
+    const winnerStats = useMemo(() => {
+        const awardsWithWinners = awards.filter(a => a.winner !== undefined)
+        const totalWinnerAwards = awardsWithWinners.length
+        const winnerAwardsSeen = awardsWithWinners.filter(a => {
+            const w = a.winner!
+            return Array.isArray(w) ? w.every(id => watchedMovies.has(id)) : watchedMovies.has(w)
+        }).length
+        const uniqueWinnerMovieIds = new Set(awardsWithWinners.flatMap(a => Array.isArray(a.winner!) ? a.winner! : [a.winner!]))
+        const totalWinnerMovies = uniqueWinnerMovieIds.size
+        const winnerMoviesSeen = [...uniqueWinnerMovieIds].filter(id => watchedMovies.has(id)).length
+        return { totalWinnerAwards, winnerAwardsSeen, totalWinnerMovies, winnerMoviesSeen }
+    }, [awards, watchedMovies])
     const createConfettiPieces = (count: number, palette: string[]) => {
         return Array.from({ length: count }, (_, index) => {
             const angle = Math.random() * Math.PI * 2
@@ -328,14 +362,14 @@ const Stats = ({
                 className="flex flex-wrap items-center justify-center gap-5 rounded-2xl border border-[color:var(--border)] bg-[linear-gradient(120deg,#fff5e6_0%,#f7e7cc_100%)] px-5 py-4 text-center shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)] dark:bg-[linear-gradient(120deg,#2b2219_0%,#241b14_100%)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]"
             >
                 {renderStat(
-                    "Movies Seen:",
+                    "Movies:",
                     `${watchedMovies.size}/${movies.length}`,
                     showStatic && movieBurstMode === "static" ? movieBurst : 0,
                     "confetti-movies",
                     moviePieces,
                 )}
                 {renderStat(
-                    "Nominations Seen*:",
+                    "Nominations*:",
                     `${nominationsCleared}/${totalNominations}`,
                     showStatic && nominationsBurstMode === "static"
                         ? nominationsBurst
@@ -343,11 +377,25 @@ const Stats = ({
                     "confetti-noms",
                     nominationsPieces,
                 )}
+                {winnerStats.totalWinnerMovies > 0 && renderStat(
+                    "Winners (Movies):",
+                    `${winnerStats.winnerMoviesSeen}/${winnerStats.totalWinnerMovies}`,
+                    0,
+                    "",
+                    [],
+                )}
+                {winnerStats.totalWinnerAwards > 0 && renderStat(
+                    "Winners (Awards):",
+                    `${winnerStats.winnerAwardsSeen}/${winnerStats.totalWinnerAwards}`,
+                    0,
+                    "",
+                    [],
+                )}
             </div>
             {isScrolled && (
                 <div className="fixed left-0 top-0 z-[998] flex w-full flex-wrap items-center justify-center gap-5 border-b border-[color:var(--border)] bg-[rgba(255,248,236,0.96)] px-4 py-3 text-center shadow-[0_10px_16px_rgba(28,19,12,0.12)] dark:bg-[rgba(27,21,16,0.96)] dark:shadow-[0_10px_16px_rgba(0,0,0,0.45)]">
                     {renderStat(
-                        "Movies Seen:",
+                        "Movies:",
                         `${watchedMovies.size}/${movies.length}`,
                         showFloating && movieBurstMode === "floating"
                             ? movieBurst
@@ -356,13 +404,27 @@ const Stats = ({
                         moviePieces,
                     )}
                     {renderStat(
-                        "Nominations Seen*:",
+                        "Nominations*:",
                         `${nominationsCleared}/${totalNominations}`,
                         showFloating && nominationsBurstMode === "floating"
                             ? nominationsBurst
                             : 0,
                         "confetti-noms",
                         nominationsPieces,
+                    )}
+                    {winnerStats.totalWinnerMovies > 0 && renderStat(
+                        "Winners (Movies):",
+                        `${winnerStats.winnerMoviesSeen}/${winnerStats.totalWinnerMovies}`,
+                        0,
+                        "",
+                        [],
+                    )}
+                    {winnerStats.totalWinnerAwards > 0 && renderStat(
+                        "Winners (Awards):",
+                        `${winnerStats.winnerAwardsSeen}/${winnerStats.totalWinnerAwards}`,
+                        0,
+                        "",
+                        [],
                     )}
                 </div>
             )}
@@ -930,6 +992,7 @@ function App({ year = "2026" }: AppProps) {
                 <main className="flex flex-col gap-6 rounded-[20px] border border-[color:var(--border)] bg-[color:var(--card)] p-6 shadow-[0_20px_30px_rgba(24,17,10,0.12)]">
                     <Stats
                         movies={movies}
+                        awards={normalizedAwards}
                         totalNominations={totalNominations}
                         watchedMovies={watchedMovies}
                         nominationsCleared={nominationsCleared}
@@ -946,6 +1009,7 @@ function App({ year = "2026" }: AppProps) {
                                     id={section.id}
                                     name={award.name}
                                     nominees={award.nominees}
+                                    winner={award.winner}
                                     movies={movies}
                                     watchedMovies={watchedMovies}
                                     toggleWatchedMovie={toggleWatchedMovie}

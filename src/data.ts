@@ -69,10 +69,11 @@ export type Movie = {
     "International Feature"?: string
 }
 
-type Award = {
+export type Award = {
     id: number
     name: string
     nominees: number[]
+    winner?: number | number[]
 }
 
 const getPosterFileNameFromTitle = (title: string) => {
@@ -501,29 +502,29 @@ const movies2024: Movie[] = [
 ]
 
 const awards2024: Award[] = [
-    { id: 0, name: "Best Picture", nominees: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
-    { id: 1, name: "Best Director", nominees: [1, 4, 6, 8, 9] },
-    { id: 2, name: "Best Actor", nominees: [0, 3, 5, 6, 10] },
-    { id: 3, name: "Best Actress", nominees: [1, 4, 5, 8, 11] },
-    { id: 4, name: "Best Supporting Actor", nominees: [0, 2, 4, 6, 8] },
-    { id: 5, name: "Best Supporting Actress", nominees: [2, 3, 6, 11, 12] },
-    { id: 6, name: "Original Screenplay", nominees: [1, 3, 19, 5, 7] },
-    { id: 7, name: "Adapted Screenplay", nominees: [0, 2, 6, 8, 9] },
-    { id: 8, name: "Animated Feature", nominees: [20, 21, 22, 23, 24] },
-    { id: 9, name: "Production Design", nominees: [2, 4, 25, 6, 8] },
-    { id: 10, name: "Costume Design", nominees: [2, 4, 25, 6, 8] },
-    { id: 11, name: "Cinematography", nominees: [26, 4, 5, 6, 8] },
-    { id: 12, name: "Editing", nominees: [1, 3, 4, 6, 8] },
-    { id: 13, name: "Makeup and Hairstyling", nominees: [27, 5, 6, 8, 15] },
-    { id: 14, name: "Sound", nominees: [28, 5, 29, 8, 9] },
-    { id: 15, name: "Visual Effects", nominees: [28, 30, 31, 29, 25] },
-    { id: 16, name: "Original Score", nominees: [0, 32, 4, 6, 8] },
-    { id: 17, name: "Original Song*", nominees: [17, 2, 18, 4] },
-    { id: 18, name: "Documentary Feature", nominees: [33, 34, 35, 36, 37] },
-    { id: 19, name: "International Feature", nominees: [13, 14, 15, 16, 9] },
-    { id: 20, name: "Animated Short", nominees: [38, 39, 40, 41, 42] },
-    { id: 21, name: "Documentary Short", nominees: [43, 44, 45, 46, 47] },
-    { id: 22, name: "Live Action Short", nominees: [48, 49, 50, 51, 52] },
+    { id: 0, name: "Best Picture", nominees: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], winner: 6 },
+    { id: 1, name: "Best Director", nominees: [1, 4, 6, 8, 9], winner: 6 },
+    { id: 2, name: "Best Actor", nominees: [0, 3, 5, 6, 10], winner: 6 },
+    { id: 3, name: "Best Actress", nominees: [1, 4, 5, 8, 11], winner: 8 },
+    { id: 4, name: "Best Supporting Actor", nominees: [0, 2, 4, 6, 8], winner: 6 },
+    { id: 5, name: "Best Supporting Actress", nominees: [2, 3, 6, 11, 12], winner: 3 },
+    { id: 6, name: "Original Screenplay", nominees: [1, 3, 19, 5, 7], winner: 1 },
+    { id: 7, name: "Adapted Screenplay", nominees: [0, 2, 6, 8, 9], winner: 0 },
+    { id: 8, name: "Animated Feature", nominees: [20, 21, 22, 23, 24], winner: 20 },
+    { id: 9, name: "Production Design", nominees: [2, 4, 25, 6, 8], winner: 8 },
+    { id: 10, name: "Costume Design", nominees: [2, 4, 25, 6, 8], winner: 8 },
+    { id: 11, name: "Cinematography", nominees: [26, 4, 5, 6, 8], winner: 6 },
+    { id: 12, name: "Editing", nominees: [1, 3, 4, 6, 8], winner: 6 },
+    { id: 13, name: "Makeup and Hairstyling", nominees: [27, 5, 6, 8, 15], winner: 8 },
+    { id: 14, name: "Sound", nominees: [28, 5, 29, 8, 9], winner: 9 },
+    { id: 15, name: "Visual Effects", nominees: [28, 30, 31, 29, 25], winner: 30 },
+    { id: 16, name: "Original Score", nominees: [0, 32, 4, 6, 8], winner: 6 },
+    { id: 17, name: "Original Song*", nominees: [17, 2, 18, 4], winner: 2 },
+    { id: 18, name: "Documentary Feature", nominees: [33, 34, 35, 36, 37], winner: 37 },
+    { id: 19, name: "International Feature", nominees: [13, 14, 15, 16, 9], winner: 9 },
+    { id: 20, name: "Animated Short", nominees: [38, 39, 40, 41, 42], winner: 42 },
+    { id: 21, name: "Documentary Short", nominees: [43, 44, 45, 46, 47], winner: 46 },
+    { id: 22, name: "Live Action Short", nominees: [48, 49, 50, 51, 52], winner: 52 },
 ]
 
 const POSTERS_URL_2025 = `${POSTERS_URL}/2025`
@@ -923,116 +924,139 @@ const awards2025: Award[] = [
         id: 0,
         name: "Best Picture",
         nominees: [5, 0, 1, 3, 21, 8, 10, 38, 9, 7],
+        winner: 5,
     },
     {
         id: 1,
         name: "Actor in a Leading Role",
         nominees: [0, 1, 2, 3, 4],
+        winner: 0,
     },
     {
         id: 2,
         name: "Actor in a Supporting Role",
         nominees: [5, 6, 1, 0, 4],
+        winner: 6,
     },
     {
         id: 3,
         name: "Actress in a Leading Role",
         nominees: [7, 8, 5, 9, 10],
+        winner: 5,
     },
     {
         id: 4,
         name: "Actress in a Supporting Role",
         nominees: [1, 7, 0, 3, 8],
+        winner: 8,
     },
     {
         id: 5,
         name: "Animated Feature Film",
         nominees: [11, 12, 13, 14, 15],
+        winner: 11,
     },
     {
         id: 6,
         name: "Animated Short Film",
         nominees: [16, 17, 18, 19, 20],
+        winner: 17,
     },
     {
         id: 7,
         name: "Cinematography",
         nominees: [0, 21, 8, 22, 23],
+        winner: 0,
     },
     {
         id: 8,
         name: "Costume Design",
         nominees: [1, 3, 24, 23, 7],
+        winner: 7,
     },
     {
         id: 9,
         name: "Directing",
         nominees: [5, 0, 1, 8, 9],
+        winner: 5,
     },
     {
         id: 10,
         name: "Documentary Feature Film",
         nominees: [25, 26, 27, 28, 29],
+        winner: 26,
     },
     {
         id: 11,
         name: "Documentary Short Film",
         nominees: [30, 31, 32, 33, 34],
+        winner: 34,
     },
     {
         id: 12,
         name: "Film Editing",
         nominees: [5, 0, 3, 8, 7],
+        winner: 5,
     },
     {
         id: 13,
         name: "International Feature Film",
         nominees: [10, 35, 8, 36, 11],
+        winner: 10,
     },
     {
         id: 14,
         name: "Makeup and Hairstyling",
         nominees: [37, 8, 23, 9, 7],
+        winner: 9,
     },
     {
         id: 15,
         name: "Music (Original Score)",
         nominees: [0, 3, 8, 7, 15],
+        winner: 0,
     },
     {
         id: 16,
         name: "Production Design",
         nominees: [0, 3, 21, 23, 7],
+        winner: 7,
     },
     {
         id: 17,
         name: "Live Action Short Film",
         nominees: [39, 40, 41, 42, 43],
+        winner: 41,
     },
     {
         id: 18,
         name: "Sound",
         nominees: [1, 21, 8, 7, 15],
+        winner: 21,
     },
     {
         id: 19,
         name: "Visual Effects",
         nominees: [44, 45, 21, 46, 7],
+        winner: 21,
     },
     {
         id: 20,
         name: "Writing (Adapted Screenplay)",
         nominees: [1, 3, 8, 38, 2],
+        winner: 3,
     },
     {
         id: 21,
         name: "Writing (Original Screenplay)",
         nominees: [5, 0, 6, 47, 9],
+        winner: 5,
     },
     {
         id: 22,
         name: "Music (Original Song)*",
         nominees: [8, 48, 2, 49],
+        winner: 8,
     },
 ]
 
@@ -1435,121 +1459,145 @@ const awards2026: Award[] = [
         id: 0,
         name: "Best Picture",
         nominees: [10, 34, 5, 7, 0, 1, 4, 6, 3, 22],
+        winner: 1,
     },
     {
         id: 1,
         name: "Actor in a Leading Role",
         nominees: [0, 1, 2, 3, 4],
+        winner: 3,
     },
     {
         id: 2,
         name: "Actor in a Supporting Role",
         nominees: [1, 5, 3, 1, 6],
+        winner: 1,
     },
     {
         id: 3,
         name: "Actress in a Leading Role",
         nominees: [7, 8, 9, 6, 10],
+        winner: 7,
     },
     {
         id: 4,
         name: "Actress in a Supporting Role",
         nominees: [6, 6, 11, 3, 1],
+        winner: 11,
     },
     {
         id: 5,
         name: "Animated Feature Film",
         nominees: [12, 13, 14, 15, 16],
+        winner: 14,
     },
     {
         id: 6,
         name: "Animated Short Film",
         nominees: [17, 18, 19, 20, 21],
+        winner: 19,
     },
     {
         id: 7,
         name: "Casting",
         nominees: [7, 0, 1, 4, 3],
+        winner: 1,
     },
     {
         id: 8,
         name: "Cinematography",
         nominees: [5, 0, 1, 3, 22],
+        winner: 3,
     },
     {
         id: 9,
         name: "Costume Design",
         nominees: [23, 5, 7, 0, 3],
+        winner: 5,
     },
     {
         id: 10,
         name: "Directing",
         nominees: [7, 0, 1, 6, 3],
+        winner: 1,
     },
     {
         id: 11,
         name: "Documentary Feature Film",
         nominees: [24, 25, 26, 27, 28],
+        winner: 27,
     },
     {
         id: 12,
         name: "Documentary Short Film",
         nominees: [29, 30, 31, 32, 33],
+        winner: 29,
     },
     {
         id: 13,
         name: "Film Editing",
         nominees: [34, 0, 1, 6, 3],
+        winner: 1,
     },
     {
         id: 14,
         name: "International Feature Film",
         nominees: [4, 35, 6, 36, 37],
+        winner: 6,
     },
     {
         id: 15,
         name: "Live Action Short Film",
         nominees: [38, 39, 40, 41, 42],
+        winner: [41, 42],
     },
     {
         id: 16,
         name: "Makeup and Hairstyling",
         nominees: [5, 43, 3, 44, 45],
+        winner: 5,
     },
     {
         id: 17,
         name: "Music (Original Score)",
         nominees: [10, 5, 7, 1, 3],
+        winner: 3,
     },
     {
         id: 18,
         name: "Original Song*",
         nominees: [3, 14, 22, 48, 49],
+        winner: 14,
     },
     {
         id: 19,
         name: "Production Design",
         nominees: [5, 7, 0, 1, 3],
+        winner: 5,
     },
     {
         id: 20,
         name: "Sound",
         nominees: [34, 5, 1, 3, 36],
+        winner: 34,
     },
     {
         id: 21,
         name: "Visual Effects",
         nominees: [23, 34, 46, 47, 3],
+        winner: 23,
     },
     {
         id: 22,
         name: "Writing (Adapted Screenplay)",
         nominees: [10, 5, 7, 1, 22],
+        winner: 1,
     },
     {
         id: 23,
         name: "Writing (Original Screenplay)",
         nominees: [2, 35, 0, 6, 3],
+        winner: 3,
     },
 ]
 

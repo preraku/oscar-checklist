@@ -25,3 +25,6 @@ playwright-report
 *.sln
 *.sw?
 tmp/
+
+# Agents
+.codex/
