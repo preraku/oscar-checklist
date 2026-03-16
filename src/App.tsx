@@ -359,7 +359,7 @@ const Stats = ({
         <>
             <div
                 ref={divRef}
-                className="flex flex-wrap items-center justify-center gap-5 rounded-2xl border border-[color:var(--border)] bg-[linear-gradient(120deg,#fff5e6_0%,#f7e7cc_100%)] px-5 py-4 text-center shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)] dark:bg-[linear-gradient(120deg,#2b2219_0%,#241b14_100%)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]"
+                className="flex flex-wrap items-center justify-center gap-5 border-b-2 border-[color:var(--accent)] px-1 pb-6 text-center"
             >
                 {renderStat(
                     "Movies:",
@@ -862,16 +862,13 @@ function App({ year = "2026" }: AppProps) {
     return (
         <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 px-4 py-6 text-left sm:px-6">
             <header
-                className="relative flex flex-col gap-4 overflow-hidden rounded-[20px] border border-[color:var(--border)] bg-[linear-gradient(140deg,#fffaf2_0%,#f5e7d5_100%)] p-5 shadow-[0_24px_36px_rgba(27,18,11,0.16)] dark:bg-[linear-gradient(140deg,#2a2219_0%,#19130e_100%)]"
+                className="flex flex-col gap-3 border-b-2 border-[color:var(--accent)] pb-6"
                 ref={headerRef}
             >
-                <div className="pointer-events-none absolute -right-20 -top-28 h-60 w-60 rounded-full bg-[radial-gradient(circle,rgba(210,155,42,0.3),transparent_70%)] opacity-80" />
-                <div className="relative z-10">
-                    <h1 className="m-0 text-[clamp(2.2rem,3vw,3rem)]">
-                        Oscars Checklist
-                    </h1>
-                </div>
-                    <div className="relative z-10 flex flex-wrap items-center gap-3">
+                <h1 className="m-0 text-[clamp(2.2rem,3vw,3rem)]">
+                    Oscars Checklist
+                </h1>
+                <div className="flex flex-wrap items-center gap-3">
                     {token ? (
                         <button className={headerButtonClass} onClick={handleLogout}>
                             Logout
@@ -912,6 +909,7 @@ function App({ year = "2026" }: AppProps) {
                     </button>
                 </div>
             </header>
+
             {isAuthMenuOpen && !token && (
                 <div className="fixed inset-0 z-[999] flex items-center justify-center bg-[rgba(18,12,8,0.55)] px-4 dark:bg-[rgba(6,4,2,0.7)]">
                     <div className="relative w-full max-w-[420px] rounded-[20px] border border-[color:var(--border)] bg-[color:var(--card)] p-8 shadow-[0_24px_44px_rgba(20,14,8,0.25)] dark:shadow-[0_24px_44px_rgba(0,0,0,0.55)]">
@@ -989,7 +987,7 @@ function App({ year = "2026" }: AppProps) {
                         showCloseButton={isMobileView}
                     />
                 )}
-                <main className="flex flex-col gap-6 rounded-[20px] border border-[color:var(--border)] bg-[color:var(--card)] p-6 shadow-[0_20px_30px_rgba(24,17,10,0.12)]">
+                <main className="flex flex-col gap-6">
                     <Stats
                         movies={movies}
                         awards={normalizedAwards}
