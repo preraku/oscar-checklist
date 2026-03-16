@@ -2,7 +2,7 @@
 
 # Project Deployment
 
-- This project is deployed on Github Pages. The workflow is contained at `.github/workflows/github-pages.yml`
+- This project is deployed on Cloudflare Pages. Deployment is managed from the Cloudflare Dashboard.
 
 ## Project Structure & Module Organization
 
@@ -13,12 +13,12 @@
 
 ## Build, Test, and Development Commands
 
-- `bun install` (or `npm install`) pulls dependencies before working on the project.
-- `bun run dev` starts Vite’s dev server on port 5173 with HMR.
-- `bun run expose` is the Vite dev server bound to all interfaces for LAN testing.
-- `bun run build` produces the static output in `dist/` for deployment.
-- `bun run preview` serves the production build locally so you can smoke-test the output.
-- `bun run lint` runs `eslint . --ext js,jsx` with zero warning tolerance—fix any reported issues before merging.
+- `npm install` pulls dependencies before working on the project.
+- `npm run dev` starts Vite’s dev server on port 5173 with HMR.
+- `npm run expose` is the Vite dev server bound to all interfaces for LAN testing.
+- `npm run build` produces the static output in `dist/` for deployment.
+- `npm run preview` serves the production build locally so you can smoke-test the output.
+- `npm run lint` runs `eslint . --ext js,jsx` with zero warning tolerance—fix any reported issues before merging.
 
 ## Coding Style & Naming Conventions
 
@@ -30,21 +30,16 @@
 ## Testing Guidelines
 
 - End-to-end tests live in `tests/e2e` and run via Playwright.
-- Install browser binaries once with `bunx playwright install`.
-- Run the suite with `bun run test:e2e` (spins up `bun run dev` for the web server).
-- Use `bun run lint` to validate syntax and catch unused vars before pushing.
+- Install browser binaries once with `npx playwright install`.
+- Run the suite with `npm run test:e2e` (spins up `npm run dev` for the web server).
+- Use `npm run lint` to validate syntax and catch unused vars before pushing.
 
 ## Commit & Pull Request Guidelines
 
 - Follow the existing pattern: short, imperative commit messages that describe what changed (for example, “Update Vite to 6” or “Add TypeScript types”).
 - PRs should include a concise description, list of manual steps (if any), and mention which commands were run locally. Link related issues when applicable and attach screenshots only if UI changes are visible.
-- Include the status of `bun run lint` (pass/fail) so reviewers know whether automated checks have already run.
+- Include the status of `npm run lint` (pass/fail) so reviewers know whether automated checks have already run.
 
 ## Configuration & Environment Notes
 
 - The frontend hits a configurable `API_URL` in `src/App.tsx`; switch it to `http://localhost:8787` if pairing with the local backend.
-- The repository ships with `bun.lock`, but npm users can rely on `package-lock.json`; be consistent with whichever package manager you chose for the session.
-
-## Workflow Notes
-
-- The Cloudflare Pages PR preview job lives in `.github/workflows/cloudflare-pages-preview.yml` and the cleanup job in `.github/workflows/cloudflare-pages-preview-cleanup.yml`; previews build with a root base (`/`) and fail if `/oscar-checklist/` assets appear to avoid blank deploys.

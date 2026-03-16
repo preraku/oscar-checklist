@@ -226,8 +226,13 @@ const Stats = ({
     const prevNominationsRef = useRef(nominationsCleared)
     const hasInitializedRef = useRef(false)
     const prevSuppressConfettiRef = useRef(suppressConfetti)
+    const isScrolledRef = useRef(isScrolled)
     const movieBurstTimeout = useRef<number | null>(null)
     const nominationsBurstTimeout = useRef<number | null>(null)
+
+    useEffect(() => {
+        isScrolledRef.current = isScrolled
+    }, [isScrolled])
 
     useEffect(() => {
         if (suppressConfetti) {
@@ -253,11 +258,11 @@ const Stats = ({
 
         if (watchedMovies.size > prevMoviesRef.current) {
             setMovieBurst(prev => prev + 1)
-            setMovieBurstMode(isScrolled ? "floating" : "static")
+            setMovieBurstMode(isScrolledRef.current ? "floating" : "static")
         }
         if (nominationsCleared > prevNominationsRef.current) {
             setNominationsBurst(prev => prev + 1)
-            setNominationsBurstMode(isScrolled ? "floating" : "static")
+            setNominationsBurstMode(isScrolledRef.current ? "floating" : "static")
         }
 
         prevMoviesRef.current = watchedMovies.size
@@ -299,6 +304,7 @@ const Stats = ({
         }
     }, [nominationsBurst])
 
+    /* eslint-disable react-hooks/exhaustive-deps -- burst counters force new random positions per burst */
     const moviePieces = useMemo(
         () =>
             createConfettiPieces(10, [
@@ -322,6 +328,7 @@ const Stats = ({
             ]),
         [nominationsBurst],
     )
+    /* eslint-enable react-hooks/exhaustive-deps */
 
     const renderStat = (
         label: string,
@@ -600,9 +607,6 @@ function App({ year = "2026" }: AppProps) {
     )
     const [watchedMovies, setWatchedMovies] = useState<Set<number>>(new Set())
     const [nominationsCleared, setNominationsCleared] = useState(0)
-    const [username, setUsername] = useState(
-        localStorage.getItem("username") || "",
-    )
     const [token, setToken] = useState(localStorage.getItem("token") || "")
     const [isLoginMode, setIsLoginMode] = useState(true)
     const [error, setError] = useState("")
@@ -787,7 +791,7 @@ function App({ year = "2026" }: AppProps) {
         if (timeoutId.current !== null) {
             clearTimeout(timeoutId.current)
         }
-        timeoutId.current = setTimeout(() => {
+        timeoutId.current = window.setTimeout(() => {
             setIsCopied(false)
         }, 3000)
     }
@@ -810,7 +814,6 @@ function App({ year = "2026" }: AppProps) {
             const data = await response.json()
 
             if (response.ok) {
-                setUsername(username as string)
                 setToken(data.token)
                 localStorage.setItem("username", username as string)
                 localStorage.setItem("token", data.token)
@@ -830,7 +833,6 @@ function App({ year = "2026" }: AppProps) {
     }
 
     const handleLogout = () => {
-        setUsername("")
         setToken("")
         setError("")
         localStorage.removeItem("username")
