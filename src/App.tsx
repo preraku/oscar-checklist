@@ -158,6 +158,126 @@ const Category = ({
     )
 }
 
+type MovieGroupProps = {
+    movieId: number
+    nominations: string[]
+    winnedCategories: Set<string>
+    movies: Movie[]
+    watchedMovies: Set<number>
+    toggleWatchedMovie: (id: number) => void
+}
+
+const MovieGroup = ({
+    movieId,
+    nominations,
+    winnedCategories,
+    movies,
+    watchedMovies,
+    toggleWatchedMovie,
+}: MovieGroupProps) => {
+    const movie = movies[movieId]
+    const watched = watchedMovies.has(movieId)
+    return (
+        <div className="pt-2 pb-6">
+            <div className="flex items-start gap-4">
+                <label
+                    className={`group relative flex w-[200px] shrink-0 max-[640px]:w-[80px] flex-col gap-2 rounded-[18px] border px-4 py-4 max-[640px]:px-2 max-[640px]:py-2 text-left shadow-[0_14px_24px_rgba(34,24,16,0.12)] transition duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_18px_32px_rgba(34,24,16,0.18)] ${
+                        watched
+                            ? "border-[#9cc4aa] bg-[linear-gradient(180deg,#e3f3ea_0%,#d4eadf_100%)] text-[#1f5a3a] line-through hover:border-[#6fb08e] dark:border-[#2f4a3a] dark:bg-[linear-gradient(180deg,#23382c_0%,#1c2c22_100%)] dark:text-[#bde1c8] dark:hover:border-[#3b5c48]"
+                            : "border-[color:var(--border)] bg-[linear-gradient(180deg,#fff8ed_0%,#f3e7d6_100%)] text-[color:var(--ink)] hover:border-[#d8b070] dark:border-[#3a2e22] dark:bg-[linear-gradient(180deg,#2a2219_0%,#201913_100%)] dark:text-[#f1e8dc] dark:hover:border-[#7a5b2b]"
+                    }`}
+                >
+                    <div className="flex flex-col gap-2">
+                        <input
+                            type="checkbox"
+                            checked={watched}
+                            onChange={() => toggleWatchedMovie(movieId)}
+                            aria-label={`Toggle ${movie.title} as watched`}
+                            className="h-4 w-4 accent-[color:var(--accent)]"
+                        />
+                        {movie.poster && (
+                            <img
+                                src={movie.poster}
+                                alt={`${movie.title} poster`}
+                                onError={event => {
+                                    event.currentTarget.style.display = "none"
+                                }}
+                                className="w-[80%] max-[640px]:w-full rounded-[10px] border-2 border-[#e1d2bf] shadow-[0_8px_16px_rgba(25,18,12,0.15)] transition duration-200 ease-out group-hover:scale-[1.04] dark:border-[#3a2e22] dark:shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
+                            />
+                        )}
+                    </div>
+                </label>
+                <div className="flex flex-1 flex-col gap-1 py-2">
+                    <h2 className="mb-0 text-[1.45rem] max-[640px]:text-[1.1rem]">
+                        {movie.title}
+                    </h2>
+                    <span className="text-sm text-[color:var(--muted)] dark:text-[#c0b4a5]">
+                        ({nominations.length} {nominations.length === 1 ? "nomination" : "nominations"})
+                    </span>
+                    <ul className="m-0 hidden max-[640px]:hidden min-[641px]:flex list-none flex-col gap-1 p-0 mt-2">
+                        {nominations.map(category => {
+                            const isWinner = winnedCategories.has(category)
+                            const detail = movie[category as keyof Movie]
+                            return (
+                                <li
+                                    key={category}
+                                    className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-[color:var(--ink)] dark:text-[#f1e8dc]"
+                                >
+                                    <span className="inline-flex w-[1em] shrink-0 items-center justify-center">
+                                        {isWinner && (
+                                            <img
+                                                src={OSCAR_ICON_URL}
+                                                alt="Winner"
+                                                className="h-[1em] w-auto"
+                                            />
+                                        )}
+                                    </span>
+                                    <span className="font-semibold">{category}</span>
+                                    {typeof detail === "string" && detail && (
+                                        <span className="text-[color:var(--muted)] dark:text-[#c0b4a5]">
+                                            — {detail}
+                                        </span>
+                                    )}
+                                </li>
+                            )
+                        })}
+                    </ul>
+                </div>
+            </div>
+            <ul className="m-0 flex list-none flex-col gap-1 p-0 mt-2 min-[641px]:hidden">
+                {nominations.map(category => {
+                    const isWinner = winnedCategories.has(category)
+                    const detail = movie[category as keyof Movie]
+                    return (
+                        <li
+                            key={category}
+                            className="flex items-start gap-2 rounded-lg px-3 py-1.5 text-sm text-[color:var(--ink)] dark:text-[#f1e8dc]"
+                        >
+                            <span className="inline-flex w-[1em] shrink-0 items-center justify-center mt-0.5">
+                                {isWinner && (
+                                    <img
+                                        src={OSCAR_ICON_URL}
+                                        alt="Winner"
+                                        className="h-[1em] w-auto"
+                                    />
+                                )}
+                            </span>
+                            <span className="flex flex-col">
+                                <span className="font-semibold">{category}</span>
+                                {typeof detail === "string" && detail && (
+                                    <span className="text-[color:var(--muted)] dark:text-[#c0b4a5]">
+                                        {detail}
+                                    </span>
+                                )}
+                            </span>
+                        </li>
+                    )
+                })}
+            </ul>
+        </div>
+    )
+}
+
 type StatsProps = {
     movies: Movie[]
     awards: Award[]
@@ -626,6 +746,30 @@ function App({ year = "2026" }: AppProps) {
         if (typeof window === "undefined") return true
         return window.innerWidth > 960
     })
+    const [viewMode, setViewMode] = useState<"category" | "movie">("category")
+
+    const movieGroups = useMemo(() => {
+        const groups = Array.from(movieToNomsMap.entries()).map(([movieId, nominations]) => {
+            const winnedCategories = new Set<string>()
+            normalizedAwards.forEach(award => {
+                if (nominations.includes(award.name)) {
+                    const w = award.winner
+                    if (Array.isArray(w) ? w.includes(movieId) : w === movieId) {
+                        winnedCategories.add(award.name)
+                    }
+                }
+            })
+            return { movieId, nominations, winnedCategories }
+        })
+        groups.sort((a, b) => {
+            if (b.nominations.length !== a.nominations.length) {
+                return b.nominations.length - a.nominations.length
+            }
+            return movies[a.movieId].title.localeCompare(movies[b.movieId].title)
+        })
+        return groups
+    }, [movieToNomsMap, normalizedAwards, movies])
+
     const headerRef = useRef<HTMLDivElement | null>(null)
 
     const WATCHED_MOVIES_KEY = `watchedMovies-${year}`
@@ -900,9 +1044,17 @@ function App({ year = "2026" }: AppProps) {
                             ))}
                         </select>
                     </label>
-                    <button className={headerButtonClass} onClick={toggleToc}>
-                        {isTocOpen ? "Hide Awards List" : "Show Awards List"}
+                    <button
+                        className={headerButtonClass}
+                        onClick={() => setViewMode(viewMode === "category" ? "movie" : "category")}
+                    >
+                        {viewMode === "category" ? "By Movie" : "By Category"}
                     </button>
+                    {viewMode === "category" && (
+                        <button className={headerButtonClass} onClick={toggleToc}>
+                            {isTocOpen ? "Hide Awards List" : "Show Awards List"}
+                        </button>
+                    )}
                     <button className={headerButtonClass} onClick={clearWatched}>
                         Reset
                     </button>
@@ -975,12 +1127,12 @@ function App({ year = "2026" }: AppProps) {
 
             <div
                 className={`grid gap-5 ${
-                    isTocOpen
+                    isTocOpen && viewMode === "category"
                         ? "grid-cols-[minmax(240px,280px)_1fr]"
                         : "grid-cols-1"
                 } max-[960px]:grid-cols-1`}
             >
-                {isTocOpen && (
+                {isTocOpen && viewMode === "category" && (
                     <TableOfContents
                         awards={awardSections}
                         activeAwardId={activeAwardId}
@@ -1000,23 +1152,39 @@ function App({ year = "2026" }: AppProps) {
                         divRef={divRef}
                         suppressConfetti={isHydrating}
                     />
-                    <div className="flex flex-col gap-6">
-                        {normalizedAwards.map((award, index) => {
-                            const section = awardSections[index]
-                            return (
-                                <Category
-                                    key={section.id}
-                                    id={section.id}
-                                    name={award.name}
-                                    nominees={award.nominees}
-                                    winner={award.winner}
+                    {viewMode === "category" ? (
+                        <div className="flex flex-col gap-6">
+                            {normalizedAwards.map((award, index) => {
+                                const section = awardSections[index]
+                                return (
+                                    <Category
+                                        key={section.id}
+                                        id={section.id}
+                                        name={award.name}
+                                        nominees={award.nominees}
+                                        winner={award.winner}
+                                        movies={movies}
+                                        watchedMovies={watchedMovies}
+                                        toggleWatchedMovie={toggleWatchedMovie}
+                                    />
+                                )
+                            })}
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-6 divide-y-2 divide-[#d8c9b0] dark:divide-[#4a3d2e]">
+                            {movieGroups.map(({ movieId, nominations, winnedCategories }) => (
+                                <MovieGroup
+                                    key={movieId}
+                                    movieId={movieId}
+                                    nominations={nominations}
+                                    winnedCategories={winnedCategories}
                                     movies={movies}
                                     watchedMovies={watchedMovies}
                                     toggleWatchedMovie={toggleWatchedMovie}
                                 />
-                            )
-                        })}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                     {originalSongDisclaimers[year] && (
                         <p className="m-0 text-sm text-[color:var(--muted)] dark:text-[#c0b4a5]">
                             *{originalSongDisclaimers[year]}
@@ -1036,7 +1204,7 @@ function App({ year = "2026" }: AppProps) {
                     </footer>
                 </main>
             </div>
-            {!isTocOpen && (
+            {!isTocOpen && viewMode === "category" && (
                 <button
                     className="fixed bottom-4 right-4 z-[997] inline-flex items-center rounded-full border border-[color:var(--accent)] bg-[color:var(--card)] px-4 py-2 text-sm font-semibold text-[color:var(--ink)] shadow-[0_16px_24px_rgba(24,17,10,0.14)] transition hover:-translate-y-0.5 hover:border-[color:var(--accent-ink)] max-[960px]:inline-flex min-[961px]:hidden"
                     onClick={() => setIsTocOpen(true)}
