@@ -4,14 +4,15 @@ const YEAR = "2026"
 const BASE_PATH = `/oscar-checklist/#/years/${YEAR}`
 
 const getMoviesSeenCount = async (page: Page) => {
-    const statsRow = page.locator(".stats-row").first()
-    const moviesStat = statsRow
-        .locator(".stat-metric")
-        .filter({ hasText: /Movies Seen:/ })
-    await expect(moviesStat).toBeVisible()
-    const valueText = await moviesStat.locator(".stat-value").innerText()
-    const [seenText, totalText] = valueText.split("/").map(part => part.trim())
-    return { seen: Number(seenText), total: Number(totalText) }
+    const stat = page
+        .locator("p")
+        .filter({ hasText: /^Movies:/ })
+        .first()
+    await expect(stat).toBeVisible()
+    const text = await stat.innerText()
+    const match = text.match(/(\d+)\s*\/\s*(\d+)/)
+    if (!match) throw new Error(`Could not parse movies stat from: ${text}`)
+    return { seen: Number(match[1]), total: Number(match[2]) }
 }
 
 const getStoredWatchedCount = async (page: Page) => {
@@ -74,7 +75,11 @@ test("reset clears watched movies", async ({ page }) => {
 
 test("toc navigation updates the url and scrolls", async ({ page }) => {
     await page.goto(BASE_PATH)
-    const tocButton = page.locator(".toc-list button").first()
+    // TOC is open by default on desktop viewports (>960px)
+    const tocButton = page
+        .getByRole("complementary", { name: "Awards table of contents" })
+        .getByRole("button")
+        .first()
     await expect(tocButton).toBeVisible()
     await tocButton.click()
     await expect(page).toHaveURL(/award=award-/)
@@ -89,8 +94,8 @@ test("toc navigation updates the url and scrolls", async ({ page }) => {
 
 test("year menu switches the route", async ({ page }) => {
     await page.goto(BASE_PATH)
-    await page.getByRole("button", { name: `Year: ${YEAR}` }).click()
-    await page.getByRole("option", { name: "2024" }).click()
+    const select = page.getByLabel("Select awards year")
+    await select.selectOption("2024")
     await expect(page).toHaveURL(/#\/years\/2024/)
 })
 
