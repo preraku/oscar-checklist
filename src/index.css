@@ -1,6 +1,46 @@
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Space+Grotesk:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
+@theme {
+    --font-sans: "Space Grotesk", "Segoe UI", sans-serif;
+    --font-display: "Fraunces", "Times New Roman", serif;
+
+    --color-accent: var(--accent);
+    --color-accent-ink: var(--accent-ink);
+    --color-ink: var(--ink);
+    --color-muted: var(--muted);
+    --color-paper: var(--paper);
+    --color-card: var(--card);
+    --color-border: var(--border);
+    --color-border-strong: var(--border-strong);
+    --color-input-bg: var(--input-bg);
+
+    --shadow-card: 0 14px 24px rgba(34, 24, 16, 0.12);
+    --shadow-card-hover: 0 18px 32px rgba(34, 24, 16, 0.18);
+    --shadow-btn: 0 10px 18px rgba(21, 14, 8, 0.12);
+    --shadow-btn-hover: 0 14px 24px rgba(21, 14, 8, 0.16);
+    --shadow-modal: 0 24px 44px rgba(20, 14, 8, 0.25);
+    --shadow-modal-dark: 0 24px 44px rgba(0, 0, 0, 0.55);
+    --shadow-poster: 0 8px 16px rgba(25, 18, 12, 0.15);
+    --shadow-poster-dark: 0 10px 18px rgba(0, 0, 0, 0.45);
+    --shadow-toc: 0 18px 26px rgba(28, 19, 12, 0.14);
+    --shadow-floating: 0 10px 16px rgba(28, 19, 12, 0.12);
+    --shadow-floating-dark: 0 10px 16px rgba(0, 0, 0, 0.45);
+    --shadow-fab: 0 16px 24px rgba(24, 17, 10, 0.14);
+
+    --animate-fade-up: fade-up 400ms ease forwards;
+    --animate-float-in: float-in 450ms ease;
+
+    @keyframes fade-up {
+        0% { opacity: 0; transform: translateY(8px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float-in {
+        0% { opacity: 0; transform: translateY(12px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+}
+
 :root {
     --accent: #d19a2a;
     --accent-ink: #b06f12;

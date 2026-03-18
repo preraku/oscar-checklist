@@ -6,10 +6,12 @@
 
 ## Project Structure & Module Organization
 
-- `src/` is the heart of the SPA: `main.tsx` boots the Vite/React app, `App.tsx` contains the checklist UI, and `types/`, `data.ts`, and `assets/` host shared typings, seed data, and static assets.
+- `src/` is the heart of the SPA: `main.tsx` boots the Vite/React app, `App.tsx` is the top-level orchestrator (state, routing, auth), and `types/`, `data.ts`, and `assets/` host shared typings, seed data, and static assets.
+- `src/components/` holds extracted UI components (`Category`, `MovieCard`, `MovieGroup`, `Stats`, `TableOfContents`).
+- `src/constants.ts`, `src/utils.ts`, and `src/api.ts` hold shared constants, helper functions, and API calls respectively.
 - `public/` mirrors Vite’s static directory, so place icons or manifest files here.
 - `scraping/` collects the backend helpers used to gather nominee data—treat it as a standalone utility space that complements the frontend dataset.
-- Global styles live in `src/index.css` and `src/App.css`; keep component-specific styles co-located with their React modules when practical (e.g., `src/components/` if you add one later).
+- Global styles live in `src/index.css`; keep component-specific styles co-located with their React modules when practical.
 
 ## Build, Test, and Development Commands
 
@@ -42,4 +44,4 @@
 
 ## Configuration & Environment Notes
 
-- The frontend hits a configurable `API_URL` in `src/App.tsx`; switch it to `http://localhost:8787` if pairing with the local backend.
+- The frontend hits a configurable `API_URL` in `src/constants.ts`; switch it to `http://localhost:8787` if pairing with the local backend.
